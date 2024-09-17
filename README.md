@@ -1,7 +1,7 @@
 # HTAN2 Synapse Project Setup
 
 > [!NOTE]
-> These scripts are intended for internal use by the HTAN DCC. 
+> These scripts are intended for internal use by the HTAN DCC.  
 > Resulting projects will not be publically accessible
 
 ## create_project.py
