@@ -15,7 +15,12 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s - %(message)s")
 load_dotenv()
 
 syn = synapseclient.Synapse()
-syn.login()
+# Add error handling for Synapse login
+try:
+    syn.login()
+except Exception as e:
+    logger.error(f"Failed to login to Synapse: {e}")
+    sys.exit(1)
 
 
 # Login to snowflake with PAT
