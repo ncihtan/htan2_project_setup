@@ -527,7 +527,7 @@ Since you indicated that you need access to the Synapse platform, we've reviewed
         )
 
     if "not_certified" in issues:
-        body += f"🎓 **Certification Step**: To gain data upload permissionms you must pass a quiz on the technical and ethical aspects of sharing data in our system.\n"
+        body += f"🎓 **Certification Step**: To gain data upload permissions you must pass a quiz on the technical and ethical aspects of sharing data in our system.\n"
         action_items.append("Complete the Synapse user certification quiz")
 
     if "no_2fa" in issues:
