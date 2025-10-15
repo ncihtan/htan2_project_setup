@@ -74,3 +74,85 @@ After running the script, the `projects.yml` file will contain project names and
 #### Troubleshooting
 - If you encounter a `SynapseHTTPError`, ensure that your Synapse credentials are correct and you have the necessary permissions to create and manage the projects.
 - Verify that the team IDs are accurate by checking the Synapse web interface.
+
+## check_airtable_synapse_users.py
+
+This script cross-references HTAN community member registration data from Airtable with Synapse account information to validate user accounts and generate customized onboarding emails. It performs comprehensive checks for account existence, certification status, Multi-Factor Authentication (2FA), and Terms of Service (TOS) compliance.
+
+### Script Features
+
+- **Airtable Integration**: Fetches user registration data from HTAN Airtable forms
+- **Snowflake Data Warehouse**: Queries Synapse user data efficiently using Snowflake instead of individual API calls
+- **Comprehensive Account Validation**: Checks for:
+  - Username existence in Synapse
+  - Certification status
+  - 2FA enablement
+  - TOS agreement (version 1.0.1)
+- **Smart Email Detection**: Identifies when users provide email addresses instead of usernames
+- **Customized Email Generation**: Creates personalized emails based on each user's specific issues
+- **Clean Output Management**: Automatically cleans and recreates output directories for fresh runs
+- **Detailed Reporting**: Provides comprehensive statistics and breakdowns
+
+### Script Prerequisites
+
+- Python 3.x
+- Required packages: `synapseclient`, `pyairtable`, `pandas`, `tqdm`, `snowflake-connector-python`, `python-dotenv`
+- Environment variables in `.env` file:
+  - `AIRTABLE_PAT`: Airtable Personal Access Token
+  - `SNOWFLAKE_USER`: Snowflake username
+  - `SNOWFLAKE_ACCOUNT`: Snowflake account identifier
+  - `SNOWFLAKE_PAT`: Snowflake Personal Access Token
+
+### Install Script Dependencies
+
+```bash
+pip install synapseclient pyairtable pandas tqdm snowflake-connector-python python-dotenv
+```
+
+### Script Usage
+
+1. Ensure your `.env` file contains the required environment variables
+2. Run the script:
+
+```bash
+python3 check_airtable_synapse_users.py
+```
+
+### Script Output Files
+
+The script generates:
+
+- **`outputs/airtable_synapse_crosscheck.csv`**: Complete user data with validation results
+- **`outputs/emails/`**: Directory containing customized email files for users needing action
+
+### Generated Email Categories
+
+The script generates targeted emails for various scenarios:
+
+- **Username Issues**: Missing username, email provided instead, username not found
+- **Compliance Issues**: Missing certification, no 2FA, TOS not agreed
+- **Combined Issues**: Multiple problems requiring different actions
+
+### CSV Report Data Columns
+
+- `Username Exists`: Whether the Synapse username was found
+- `Is Certified`: Certification status
+- `Has 2FA`: Multi-Factor Authentication status
+- `TOS 1.0.1 Agreed`: Terms of Service agreement status
+- User details: Name, institution, atlas, contact email, etc.
+
+### Email Customization Features
+
+- **Personalized greetings** with user name and project details
+- **Issue-specific descriptions** with clear problem identification
+- **Numbered action steps** in logical order
+- **Conditional instructions** showing only relevant tasks
+- **Professional formatting** with checkboxes and links
+- **Consistent messaging** across all HTAN Phase 2 communications
+
+#### Script Troubleshooting
+
+- Verify Snowflake credentials and database access permissions
+- Ensure Airtable PAT has read access to the user registration table
+- Check that Synapse login credentials are valid
+- Confirm network connectivity to all external services

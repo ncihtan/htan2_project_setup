@@ -1,0 +1,88 @@
+projects:
+  HTAN2: 
+    project_synid: syn63296487
+    project_name: HTAN2
+    grant_number: CA294459
+    center: MD Anderson
+    shortname: HTAN2_Ovarian
+    grant_name: 3D Spatial Multi-Omics Profiling of Ovarian Cancer
+
+  HTAN2_CRC: 
+    project_synid: syn63298073
+    project_name: HTAN2_CRC
+    grant_number: CA294527
+    center: Vanderbilt
+    shortname: HTAN2_CRC
+    grant_name: A Multimodal 3D grant_name of Colorectal Cancer Across Ages of Onset
+
+  HTAN2_Gastric: 
+    project_synid: syn63298051
+    project_name: HTAN2_Gastric
+    grant_number: CA294518
+    center: MD Anderson
+    shortname: GAME3D
+    grant_name: Center for Gastric Pre-Cancer grant_name of Multidimensional Evolution in 3D (GAME3D)
+
+  HTAN2_Glioma: 
+    project_synid: syn63298048
+    project_name: HTAN2_Glioma
+    grant_number: CA294551
+    center: CalTech
+    shortname: HTAN2_Glioma
+    grant_name: Understanding the role of tumor microenvironment in low grade glioma progression to malignancy.
+
+  HTAN2_Lymphoma: 
+    project_synid: syn63298076
+    project_name: HTAN2_Lymphoma
+    grant_number: CA294514
+    center: Yale
+    shortname: HuLymSTA
+    grant_name: Center for Human Lymphoma Spatiotemporal grant_name (HuLymSTA)
+
+  HTAN2_Myeloma: 
+    project_synid: syn63298063
+    project_name: HTAN2_Myeloma
+    grant_number: CA294507
+    center: DFCI
+    shortname: HTAN2_Myeloma
+    grant_name: Myeloma multidimensional precancer grant_name
+
+  HTAN2_Ovarian: 
+    project_synid: syn63298044
+    project_name: HTAN2_Ovarian
+    grant_number: CA294459
+    center: MD Anderson
+    shortname: HTAN2_Ovarian
+    grant_name: 3D Spatial Multi-Omics Profiling of Ovarian Cancer
+
+  HTAN2_Pancreatic: 
+    project_synid: syn63298065
+    project_name: HTAN2_Pancreatic
+    grant_number: CA294548
+    center: OHSU
+    shortname: BForePC
+    grant_name: An grant_name of pancreatic tumorigenesis in the context of altered DNA repair occurring in high‐risk individuals
+
+  HTAN2_Pediatric: 
+    project_synid: syn63298059
+    project_name: HTAN2_Pediatric
+    grant_number: CA294552
+    center: USC/CHLA
+    shortname: HTAN2_Pediatric
+    grant_name: Pediatric Solid Tumor Microenvironment grant_name
+
+  HTAN2_Prostate: 
+    project_synid: syn63298068
+    project_name: HTAN2_Prostate
+    grant_number: CA294532
+    center: WUSTL
+    shortname: HTAN2_Prostate
+    grant_name: Human Prostate Tumor grant_name Center
+
+  HTAN2_Skin: 
+    project_synid: syn63298054
+    project_name: HTAN2_Skin
+    grant_number: CA294536
+    center: UCSF
+    shortname: HTAN2_Skin
+    grant_name: Pre-cancer grant_name of skin cancer
