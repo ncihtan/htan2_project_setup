@@ -43,7 +43,27 @@ except yaml.YAMLError as e:
 #     shortname: HuLymSTA
 # grant_name: Center for Human Lymphoma Spatiotemporal grant_name (HuLymSTA)
 
+# Add validation
+def validate_project_data(project_data):
+    """Validate that all required fields are present in the project data"""
+    if 'projects' not in project_data:
+        raise ValueError("Missing 'projects' key in YAML file")
+    
+    required_fields = ['project_synid', 'grant_number', 'center', 'shortname', 'grant_name']
+    for project_name, project_details in project_data['projects'].items():
+        for field in required_fields:
+            if field not in project_details:
+                raise ValueError(f"Missing required field '{field}' in project '{project_name}'")
+        logger.info(f"Project '{project_name}' validation passed")
 
+# Validate the data
+try:
+    validate_project_data(project_data)
+    logger.info("All project data validation passed")
+except ValueError as e:
+    logger.error(f"Data validation error: {e}")
+    sys.exit(1)
+    
 # Function to add annotations to a project
 def add_project_annotations(project_synid, annotations):
     project = syn.get(project_synid)
@@ -52,12 +72,21 @@ def add_project_annotations(project_synid, annotations):
 
 
 # Loop through each project and add annotations
-for project_name, project_details in project_info["projects"].items():
-    project_synid = project_details["project_synid"]
-    annotations = {
-        "grantNumber": project_details["grant_number"],
-        "center": project_details["center"],
-        "shortname": project_details["shortname"],
-        "grantName": project_details["grant_name"],
-    }
-    add_project_annotations(project_synid, annotations)
+try:
+    for project_name, project_details in project_data["projects"].items():
+        project_synid = project_details["project_synid"]
+        annotations = {
+            "grantNumber": project_details["grant_number"],
+            "center": project_details["center"],
+            "shortname": project_details["shortname"],
+            "grantName": project_details["grant_name"],
+        }
+        
+        logger.info(f"Processing project: {project_name} ({project_synid})")
+        add_project_annotations(project_synid, annotations)
+    
+    logger.info("Successfully processed all projects")
+    
+except Exception as e:
+    logger.error(f"Error processing projects: {e}")
+    sys.exit(1)
