@@ -221,6 +221,24 @@ table = api.table(appExampleBaseId, tblExampleTableId)
 records = table.all()
 syn.logger.info(f"Total records fetched from Airtable: {len(records)}")
 
+# Filter for only users who need Synapse access
+records_needing_synapse = []
+for record in records:
+    fields = record.get("fields", {})
+    synapse_needed = fields.get("Synapse Access Needed?", False)
+
+    # Convert to boolean if it's a string
+    if isinstance(synapse_needed, str):
+        synapse_needed = synapse_needed.lower() == "yes"
+
+    if synapse_needed:
+        records_needing_synapse.append(record)
+
+print(
+    f"📊 Filtered to {len(records_needing_synapse)} records needing Synapse access (from {len(records)} total)"
+)
+records = records_needing_synapse  # Use filtered records for all subsequent processing
+
 # Create a list to store the simplified report data
 report_data = []
 
@@ -352,78 +370,6 @@ df.to_csv("outputs/airtable_synapse_crosscheck.csv", index=False)
 print(f"\nReport generated with {len(df)} records")
 print(f"Saved to: outputs/airtable_synapse_crosscheck.csv")
 
-# Calculate statistics
-total_records = len(df)
-records_with_usernames = len(
-    df[df["Synapse Username"].notna() & (df["Synapse Username"] != "")]
-)
-
-# Count usernames that exist (True values, excluding N/A)
-usernames_exist = len(df[df["Username Exists"] == True])
-
-# Count certified users (True values among those that exist)
-certified_users = len(df[df["Is Certified"] == True])
-
-print(f"\n=== USERNAME STATISTICS ===")
-print(f"Total records: {total_records}")
-print(f"Records with usernames: {records_with_usernames}")
-
-if records_with_usernames > 0:
-    exist_proportion = usernames_exist / records_with_usernames
-    print(
-        f"Usernames that exist: {usernames_exist}/{records_with_usernames} ({exist_proportion:.1%})"
-    )
-else:
-    print(f"Usernames that exist: 0/0 (N/A)")
-
-if usernames_exist > 0:
-    certified_proportion = certified_users / usernames_exist
-    print(
-        f"Existing users that are certified: {certified_users}/{usernames_exist} ({certified_proportion:.1%})"
-    )
-
-    # Count 2FA and TOS statistics for existing users
-    users_with_2fa = len(df[df["Has 2FA"] == True])
-    users_with_tos = len(df[df["TOS 1.0.1 Agreed"] == True])
-
-    tfa_proportion = users_with_2fa / usernames_exist
-    tos_proportion = users_with_tos / usernames_exist
-
-    print(
-        f"Existing users with 2FA enabled: {users_with_2fa}/{usernames_exist} ({tfa_proportion:.1%})"
-    )
-    print(
-        f"Existing users with TOS 1.0.1 agreed: {users_with_tos}/{usernames_exist} ({tos_proportion:.1%})"
-    )
-else:
-    print(f"Existing users that are certified: 0/0 (N/A)")
-    print(f"Existing users with 2FA enabled: 0/0 (N/A)")
-    print(f"Existing users with TOS 1.0.1 agreed: 0/0 (N/A)")
-
-# Show breakdown by status
-print(f"\n=== USERNAME STATUS BREAKDOWN ===")
-status_counts = df["Username Exists"].value_counts()
-for status, count in status_counts.items():
-    print(f"{status}: {count}")
-
-print(f"\n=== CERTIFICATION STATUS BREAKDOWN ===")
-cert_counts = df["Is Certified"].value_counts()
-for status, count in cert_counts.items():
-    print(f"{status}: {count}")
-
-print(f"\n=== 2FA STATUS BREAKDOWN ===")
-tfa_counts = df["Has 2FA"].value_counts()
-for status, count in tfa_counts.items():
-    print(f"{status}: {count}")
-
-print(f"\n=== TOS AGREEMENT STATUS BREAKDOWN ===")
-tos_counts = df["TOS 1.0.1 Agreed"].value_counts()
-for status, count in tos_counts.items():
-    print(f"{status}: {count}")
-
-# Generate email files for users who need Synapse account action
-print(f"\n=== GENERATING EMAIL NOTIFICATIONS ===")
-
 
 # Helper function to check if username is effectively empty or NA-like
 def is_username_empty_or_na(username):
@@ -464,10 +410,57 @@ def analyze_user_issues(user_row):
             issues.append("no_2fa")
         if tos_agreed == False:
             issues.append("tos_not_agreed")
-        if in_community_team == False:
-            issues.append("not_in_community_team")
+
+    # Check community team membership for all users with valid usernames
+    if username_exists == True and in_community_team == False:
+        issues.append("not_in_community_team")
 
     return issues
+
+
+# Calculate and display issue breakdown for all users
+print(f"\n=== ISSUE BREAKDOWN (ALL USERS) ===")
+
+# Count issues for all users
+all_issue_counts = {}
+issue_names = {
+    "email_instead_of_username": "Email provided instead of username",
+    "no_username_provided": "No username provided",
+    "username_not_found": "Username not found in Synapse",
+    "not_certified": "Not certified",
+    "no_2fa": "No 2FA enabled",
+    "tos_not_agreed": "TOS not agreed to",
+    "not_in_community_team": "Not in HTAN2 Community team",
+}
+
+for _, user in df.iterrows():
+    issues = analyze_user_issues(user)
+    for issue in issues:
+        all_issue_counts[issue] = all_issue_counts.get(issue, 0) + 1
+
+for issue, count in all_issue_counts.items():
+    print(f"{issue_names.get(issue, issue)}: {count} users")
+
+# Calculate and display issue breakdown for community team members only
+print(f"\n=== ISSUE BREAKDOWN (COMMUNITY TEAM MEMBERS ONLY) ===")
+
+# Count issues for community team members only
+community_issue_counts = {}
+community_members = df[df["In HTAN2_Community team"] == True]
+
+for _, user in community_members.iterrows():
+    issues = analyze_user_issues(user)
+    for issue in issues:
+        community_issue_counts[issue] = community_issue_counts.get(issue, 0) + 1
+
+for issue, count in community_issue_counts.items():
+    print(f"{issue_names.get(issue, issue)}: {count} users")
+
+print(f"\nTotal users: {len(df)}")
+print(f"Community team members: {len(community_members)}")
+
+# Generate email files for users who need Synapse account action
+print(f"\n=== GENERATING EMAIL NOTIFICATIONS ===")
 
 
 def generate_customized_email(user_row, issues):
@@ -534,11 +527,11 @@ Since you indicated that you need access to the Synapse platform, we've reviewed
         )
 
     if "not_certified" in issues:
-        body += f'🎓 **Certification Step**: Your account "{synapse_username}" just needs to complete the certification process.\n'
+        body += f"🎓 **Certification Step**: To gain data upload permissionms you must pass a quiz on the technical and ethical aspects of sharing data in our system.\n"
         action_items.append("Complete the Synapse user certification quiz")
 
     if "no_2fa" in issues:
-        body += f'🔐 **Security Enhancement**: Let\'s add Multi-Factor Authentication to your account "{synapse_username}" for enhanced security.\n'
+        body += f"🔐 **Security Enhancement**: Let's add Multi-Factor Authentication to your account for enhanced security.\n"
         action_items.append("Enable Multi-Factor Authentication (2FA) on your account")
 
     if "tos_not_agreed" in issues:
@@ -605,11 +598,12 @@ HTAN Data Coordination Team"""
     return filename, issues
 
 
-# Find all users who need action
+# Find all users who need action (only those already in community team)
 users_needing_action = df[
     (df["Synapse Access Needed"] == True)
     & (df["Contact Email"].notna())
     & (df["Contact Email"] != "")
+    & (df["In HTAN2_Community team"] == True)  # Only users already in community team
     & (
         (df["Username Exists"] == False)  # Username not found
         | (df["Username Exists"] == "Email Provided")  # Email instead of username
@@ -621,7 +615,7 @@ users_needing_action = df[
     )
 ]
 
-print(f"Total users needing action: {len(users_needing_action)}")
+print(f"Total users needing action (in community team): {len(users_needing_action)}")
 
 # Generate customized emails
 email_count_by_issue = {}
