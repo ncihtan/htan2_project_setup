@@ -81,26 +81,48 @@ def check_synapse_usernames_snowflake(usernames_to_check):
 
     # Build the Snowflake query
     query = f"""
+    WITH team_users AS (
+    SELECT DISTINCT
+        TRY_TO_NUMBER(member_id) AS user_id               -- use TRY_TO_NUMBER only if upl.id is numeric
+    FROM synapse_data_warehouse.synapse.teammember_latest
+    WHERE team_id = '3518522'
+        AND member_id IS NOT NULL
+    ),
+    base AS (
+    SELECT *
+    FROM synapse_data_warehouse.synapse.userprofile_latest
+    WHERE user_name IN ({username_list})
+    ),
+    upl_flat AS (
     SELECT
-      upl.user_name,
-      upl.id,
-      upl.first_name,
-      upl.last_name,
-      upl.company,
-      upl.is_two_factor_auth_enabled,
-      cql.certified,
-      COALESCE(BOOLOR_AGG(t.value:version::string = '1.0.1'), FALSE) AS tos_101_agreed
-    FROM synapse_data_warehouse.synapse.userprofile_latest AS upl
+        b.*,
+        t.value AS tos_item
+    FROM base b,
+        LATERAL FLATTEN(
+            input => TRY_PARSE_JSON(b.tos_agreements),
+            OUTER => TRUE
+        ) t
+    )
+    SELECT
+    uf.user_name,
+    uf.id,
+    uf.first_name,
+    uf.last_name,
+    uf.company,
+    (tu.user_id IS NOT NULL)       AS IN_HTAN2_Community,
+    uf.is_two_factor_auth_enabled,
+    COALESCE(cql.certified, FALSE) AS certified,
+    COALESCE(BOOLOR_AGG(uf.tos_item:version::string = '1.0.1'), FALSE) AS tos_101_agreed
+    FROM upl_flat AS uf
     LEFT JOIN synapse_data_warehouse.synapse.certifiedquiz_latest AS cql
-      ON upl.id = cql.user_id
-    , LATERAL FLATTEN(
-        input => TRY_PARSE_JSON(upl.tos_agreements),
-        OUTER => TRUE
-      ) AS t
-    WHERE upl.user_name IN ({username_list})
+    ON cql.user_id = uf.id
+    LEFT JOIN team_users AS tu
+    ON tu.user_id = uf.id
     GROUP BY
-      upl.user_name, upl.id, upl.first_name, upl.last_name, upl.company,
-      upl.is_two_factor_auth_enabled, upl.tos_agreements, cql.certified
+    uf.user_name, uf.id, uf.first_name, uf.last_name,
+    uf.company, uf.is_two_factor_auth_enabled,
+    COALESCE(cql.certified, FALSE),
+    (tu.user_id IS NOT NULL);
     """
 
     # Execute query
@@ -126,6 +148,7 @@ def check_synapse_usernames_snowflake(usernames_to_check):
                 "first_name": row["FIRST_NAME"],
                 "last_name": row["LAST_NAME"],
                 "company": row["COMPANY"],
+                "in_htan2_community": bool(row["IN_HTAN2_COMMUNITY"]),
                 "is_two_factor_auth_enabled": (
                     bool(row["IS_TWO_FACTOR_AUTH_ENABLED"])
                     if pd.notna(row["IS_TWO_FACTOR_AUTH_ENABLED"])
@@ -267,7 +290,9 @@ for processed_record in tqdm(processed_records, desc="Building report"):
 
     # Initialize report entry
     report_entry = {
+        "Synapse Username": username,
         "Username Exists": None,
+        "In HTAN2_Community team": None,
         "Is Certified": None,
         "Has 2FA": None,
         "TOS 1.0.1 Agreed": None,
@@ -278,13 +303,15 @@ for processed_record in tqdm(processed_records, desc="Building report"):
         "Institution": fields.get("Institution", ""),
         "Atlas": fields.get("Atlas", ""),
         "Contact Email": fields.get("Contact Email", ""),
-        "Synapse Username": username,
     }
 
     # Set results based on pre-computed data
     if should_check_synapse:
         result = username_results[username]
         report_entry["Username Exists"] = result["exists"]
+        report_entry["In HTAN2_Community team"] = result.get("snowflake_data", {}).get(
+            "in_htan2_community", False
+        )
         report_entry["Is Certified"] = result["certified"]
         if result["exists"] and "snowflake_data" in result:
             snowflake_data = result["snowflake_data"]
@@ -416,6 +443,7 @@ def analyze_user_issues(user_row):
     is_certified = user_row["Is Certified"]
     has_2fa = user_row["Has 2FA"]
     tos_agreed = user_row["TOS 1.0.1 Agreed"]
+    in_community_team = user_row["In HTAN2_Community team"]
     synapse_username = user_row["Synapse Username"]
 
     # Check for account existence issues
@@ -436,6 +464,8 @@ def analyze_user_issues(user_row):
             issues.append("no_2fa")
         if tos_agreed == False:
             issues.append("tos_not_agreed")
+        if in_community_team == False:
+            issues.append("not_in_community_team")
 
     return issues
 
@@ -448,6 +478,10 @@ def generate_customized_email(user_row, issues):
     synapse_username = user_row["Synapse Username"]
     institution = user_row["Institution"]
     atlas = user_row["Atlas"]
+
+    # Clean email address to remove any extra characters
+    if isinstance(email, str):
+        email = email.strip().strip("<>;").strip()
 
     # Create filename based on issues
     name_part = f"{first_name}_{last_name}".replace(" ", "_").replace(".", "")
@@ -472,47 +506,47 @@ def generate_customized_email(user_row, issues):
     # Build the email body
     body = f"""Dear {first_name} {last_name},
 
-Thank you for registering as a HTAN community member through the Airtable form. As you indicated that you needed access to the Synapse platform we are now reviewing your account information in preparation for onboarding.
+Thank you for registering as a member of the HTAN community! We're excited to have you join us for the HTAN Phase 2 project "{atlas}" at {institution}.
 
-We are working to set up Synapse access for your participation in the HTAN Phase 2 project "{atlas}" at {institution}.
+Since you indicated that you need access to the Synapse platform, we've reviewed your account information to help streamline your onboarding process. We want to ensure you have everything set up properly for seamless collaboration.
 
-{problem_description}. Here's what we found and what needs to be addressed:
+{problem_description}. Here's what we found and the simple steps to get you fully set up:
 
 """
 
-    # Add specific issue descriptions
+    # Add specific next steps
     action_items = []
 
     if "email_instead_of_username" in issues:
-        body += f'❌ **Username Issue**: You provided an email address ("{synapse_username}") instead of a Synapse username.\n'
+        body += f'📋 **Username Setup**: We see you provided an email address ("{synapse_username}") - we just need your Synapse username to complete the setup.\n'
         action_items.append(
             "Provide your actual Synapse username (not your email address)"
         )
 
     if "no_username_provided" in issues:
-        body += f"❌ **Username Issue**: No Synapse username was provided in your registration.\n"
+        body += f"📋 **Username Setup**: We'll need your Synapse username to get you connected to the platform.\n"
         action_items.append("Provide your Synapse username")
 
     if "username_not_found" in issues:
-        body += f'❌ **Username Issue**: The username "{synapse_username}" was not found in the Synapse system.\n'
+        body += f"📋 **Username Setup**: We couldn't locate the username \"{synapse_username}\" in the Synapse system - let's get this sorted out together.\n"
         action_items.append(
             "Verify your Synapse username is correct, or create a new account if needed"
         )
 
     if "not_certified" in issues:
-        body += f'❌ **Certification Issue**: Your account "{synapse_username}" is not certified.\n'
+        body += f'🎓 **Certification Step**: Your account "{synapse_username}" just needs to complete the certification process.\n'
         action_items.append("Complete the Synapse user certification quiz")
 
     if "no_2fa" in issues:
-        body += f'❌ **Security Issue**: Your account "{synapse_username}" does not have Multi-Factor Authentication (2FA) enabled.\n'
+        body += f'🔐 **Security Enhancement**: Let\'s add Multi-Factor Authentication to your account "{synapse_username}" for enhanced security.\n'
         action_items.append("Enable Multi-Factor Authentication (2FA) on your account")
 
     if "tos_not_agreed" in issues:
-        body += f'❌ **Terms Issue**: Your account "{synapse_username}" has not agreed to the latest Terms of Service (version 1.0.1).\n'
+        body += f'📄 **Terms Update**: Your account "{synapse_username}" needs to accept the latest Terms of Service (version 1.0.1) to stay current.\n'
         action_items.append("Accept the current Synapse Terms and Conditions of Use")
 
     # Add action steps
-    body += f"\n**Required Actions:**\n"
+    body += f"\n**Next Steps to Get You Set Up:**\n"
 
     # First, account creation/verification steps
     if any(
@@ -524,40 +558,40 @@ We are working to set up Synapse access for your participation in the HTAN Phase
         ]
     ):
         body += f"""
-1. **Synapse Account Setup**:
-   - If you don't have a Synapse account, create one at: https://www.synapse.org/#!RegisterAccount:0
-   - If you have an account, verify your username at: https://www.synapse.org/
-   - Reply to this email with your correct Synapse username
+1. **Getting Your Synapse Account Ready**:
+   - If you don't have a Synapse account yet, you can create one at: https://www.synapse.org/#!RegisterAccount:0
+   - If you already have an account, you can verify your username at: https://www.synapse.org/
+   - Just reply to this email with your correct Synapse username when you're ready
 
 """
 
     # Then, account compliance steps
     if any(issue in issues for issue in ["not_certified", "no_2fa", "tos_not_agreed"]):
-        body += f"""2. **Account Compliance** (visit https://accounts.synapse.org/authenticated/myaccount?appId=synapse.org):
+        body += f"""2. **Final Setup Steps** (visit https://accounts.synapse.org/authenticated/myaccount?appId=synapse.org):
 """
         if "tos_not_agreed" in issues:
             body += f"   - ✅ Accept the Synapse Terms and Conditions of Use (version 1.0.1)\n"
         if "no_2fa" in issues:
-            body += f"   - ✅ Enable Multi-Factor Authentication (2FA) - required for all accounts\n"
+            body += f"   - ✅ Enable Multi-Factor Authentication (2FA) for account security\n"
         if "not_certified" in issues:
-            body += f"   - ✅ Complete the Synapse user certification quiz on data sharing ethics\n"
-        body += f"   - ✅ Ensure your profile is complete with full name and institution\n\n"
+            body += f"   - ✅ Complete the Synapse user certification quiz (quick and informative!)\n"
+        body += f"   - ✅ Make sure your profile is complete with your full name and institution\n\n"
     else:
-        body += f"""2. **Once you have a Synapse account** (visit https://accounts.synapse.org/authenticated/myaccount?appId=synapse.org):
-   - ✅ Accept the Synapse Terms and Conditions of Use (version 1.0.1)
-   - ✅ Enable Multi-Factor Authentication (2FA) - required for all accounts
-   - ✅ Complete the Synapse user certification quiz on data sharing ethics
-   - ✅ Ensure your profile is complete with full name and institution
+        body += f"""2. **Complete Your Synapse Setup** (visit https://accounts.synapse.org/authenticated/myaccount?appId=synapse.org):
+   - ✅ Accept the Synapse Terms and Conditions of Use (version 1.0.1) [REQUIRED] 
+   - ✅ Enable Multi-Factor Authentication (2FA) for account security [REQUIRED] 
+   - ✅ Complete the Synapse user certification quiz on ethics and data use [REQUIRED FOR UPLOAD PERMISSIONS] 
+   - ✅ Make sure your profile is complete with your full name and institution [PREFERRED] 
 
 """
 
-    body += f"""3. **Confirm Completion**:
-   - Reply to this email once all requirements are met
-   - We will then add you to the appropriate HTAN project teams
+    body += f"""3. **Let Us Know When You're Ready**:
+   - Just reply to this email once you've completed the steps above
+   - You'll then be all set and we will onboard you into your Synapse projects and teams in the coming months
 
-**Need Help?**
+**We're Here to Help!**
 - Synapse documentation: https://help.synapse.org/
-- Contact us if you have questions about any of these requirements
+- Feel free to reach out if you have any questions - we're happy to assist you through this process
 
 Best regards,
 HTAN Data Coordination Team"""
@@ -628,6 +662,76 @@ issue_names = {
 
 for issue, count in email_count_by_issue.items():
     print(f"{issue_names.get(issue, issue)}: {count} users")
+
+# Create issue co-occurrence visualization
+print(f"\n=== ISSUE CO-OCCURRENCE MATRIX ===")
+
+# Collect all issue combinations
+issue_combinations = {}
+all_issues = list(issue_names.keys())
+
+# Count co-occurrences
+for email_info in generated_emails:
+    user_issues = set(email_info["issues"])
+    for issue1 in all_issues:
+        for issue2 in all_issues:
+            if issue1 in user_issues and issue2 in user_issues:
+                key = (issue1, issue2)
+                issue_combinations[key] = issue_combinations.get(key, 0) + 1
+
+# Create ASCII grid
+if issue_combinations:
+    # Short names for display
+    short_names = {
+        "email_instead_of_username": "Email",
+        "no_username_provided": "NoUser",
+        "username_not_found": "NotFnd",
+        "not_certified": "NoCert",
+        "no_2fa": "No2FA",
+        "tos_not_agreed": "NoTOS",
+    }
+
+    # Filter to issues that actually occurred
+    present_issues = [
+        issue
+        for issue in all_issues
+        if any(issue in email_info["issues"] for email_info in generated_emails)
+    ]
+
+    if present_issues:
+        # Print header
+        print("Co-occurrence counts (how many users have both issues):")
+        print()
+
+        # Print column headers
+        header = "        "
+        for issue in present_issues:
+            header += f"{short_names[issue]:>7}"
+        print(header)
+
+        # Print separator
+        print("        " + "─" * (7 * len(present_issues)))
+
+        # Print each row
+        for issue1 in present_issues:
+            row = f"{short_names[issue1]:>7} │"
+            for issue2 in present_issues:
+                count = issue_combinations.get((issue1, issue2), 0)
+                if issue1 == issue2:
+                    # Diagonal - total count for this issue
+                    row += f"{count:>6} "
+                else:
+                    # Off-diagonal - co-occurrence count
+                    row += f"{count:>6} "
+            print(row)
+
+        print()
+        print("Legend:")
+        print("- Diagonal values: Total users with that issue")
+        print("- Off-diagonal values: Users with BOTH issues")
+        for issue, name in short_names.items():
+            if issue in present_issues:
+                print(f"- {name}: {issue_names[issue]}")
 
 # Show some examples of generated emails
 if generated_emails:
