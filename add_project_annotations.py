@@ -12,8 +12,15 @@ syn = synapseclient.Synapse()
 syn.login()
 
 # Read project info from YAML file
-with open("project_details.yaml", "r") as file:
-    project_info = yaml.safe_load(file)
+try:
+    with open("project_details.yml", "r") as file:  # Fixed extension
+        project_data = yaml.safe_load(file)
+except FileNotFoundError:
+    logger.error("project_details.yml file not found")
+    sys.exit(1)
+except yaml.YAMLError as e:
+    logger.error(f"Error parsing YAML file: {e}")
+    sys.exit(1)
 
 # The projects dir contains a list of project_names with their annotations
 # The entityId of the project is stored as project_synid
