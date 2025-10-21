@@ -1,9 +1,0 @@
-adam@adamjtaylor.org
-Testing Synapse Account Checkin Emails
-Hi Adam
-
-This is a test email as we figure out some stuff about automating community management.
-
-Best wishes
-
-Adam

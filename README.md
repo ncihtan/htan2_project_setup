@@ -4,8 +4,26 @@
 > These scripts are intended for internal use by the HTAN DCC.  
 > Resulting projects will not be publically accessible
 
-## create_project.py
+## Overview
 
+This repository contains a collection of Python scripts for automating HTAN2 project setup in Synapse. The scripts handle project creation, team management, permissions, annotations, and integration with Jira for user onboarding.
+
+## Prerequisites
+
+- Python 3.x
+- Synapse Python Client (`synapseclient`)
+- PyYAML (`pyyaml`)
+- Additional dependencies listed in `requirements.txt`
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+## Scripts
+
+### create_projects.py
 
 This script automates the creation of projects in Synapse and sets permissions for specific teams. If a project already exists, it resets the permissions for that project. After execution, the script saves the created or updated project names and their corresponding Synapse IDs in a `projects.yml` file.
 
@@ -72,87 +90,296 @@ After running the script, the `projects.yml` file will contain project names and
   - The current setup adds admin permissions to the **HTAN DCC Admins** and **ACT** teams, while the **HTAN DCC** team gets edit and delete permissions.
 
 #### Troubleshooting
+
 - If you encounter a `SynapseHTTPError`, ensure that your Synapse credentials are correct and you have the necessary permissions to create and manage the projects.
 - Verify that the team IDs are accurate by checking the Synapse web interface.
 
-## check_airtable_synapse_users.py
+---
 
-This script cross-references HTAN community member registration data from Airtable with Synapse account information to validate user accounts and generate customized onboarding emails. It performs comprehensive checks for account existence, certification status, Multi-Factor Authentication (2FA), and Terms of Service (TOS) compliance.
+### create_teams.py
 
-### Script Features
+Creates contributor and user teams for each HTAN2 project and sets appropriate permissions.
 
-- **Airtable Integration**: Fetches user registration data from HTAN Airtable forms
-- **Snowflake Data Warehouse**: Queries Synapse user data efficiently using Snowflake instead of individual API calls
-- **Comprehensive Account Validation**: Checks for:
-  - Username existence in Synapse
-  - Certification status
-  - 2FA enablement
-  - TOS agreement (version 1.0.1)
-- **Smart Email Detection**: Identifies when users provide email addresses instead of usernames
-- **Customized Email Generation**: Creates personalized emails based on each user's specific issues
-- **Clean Output Management**: Automatically cleans and recreates output directories for fresh runs
-- **Detailed Reporting**: Provides comprehensive statistics and breakdowns
+#### Features
 
-### Script Prerequisites
+- Creates `{project_name}_contributors` teams with edit permissions
+- Creates `{project_name}_users` teams with read/download permissions
+- Checks for existing teams before creating new ones
+- Sets up permissions for HTAN DCC Admins, HTAN DCC, and ACT teams
+- Updates `projects.yml` with project information
 
-- Python 3.x
-- Required packages: `synapseclient`, `pyairtable`, `pandas`, `tqdm`, `snowflake-connector-python`, `python-dotenv`
-- Environment variables in `.env` file:
-  - `AIRTABLE_PAT`: Airtable Personal Access Token
-  - `SNOWFLAKE_USER`: Snowflake username
-  - `SNOWFLAKE_ACCOUNT`: Snowflake account identifier
-  - `SNOWFLAKE_PAT`: Snowflake Personal Access Token
-
-### Install Script Dependencies
+#### Usage
 
 ```bash
-pip install synapseclient pyairtable pandas tqdm snowflake-connector-python python-dotenv
+python create_teams.py
 ```
 
-### Script Usage
+The script will:
+1. Create or verify projects exist
+2. Create contributor and user teams for each project
+3. Set appropriate permissions for all teams
+4. Save project information to `projects.yml`
 
-1. Ensure your `.env` file contains the required environment variables
-2. Run the script:
+---
+
+### add_project_annotations.py
+
+Adds standardized annotations to HTAN2 projects based on metadata from `project_details.yml`.
+
+#### Features
+
+- Reads project metadata from `project_details.yml`
+- Validates required fields (project_synid, grant_number, center, shortname, grant_name)
+- Adds schema.org compliant annotations to projects
+- Includes error handling and validation
+
+#### Required YAML Structure
+
+The `project_details.yml` file should follow this format:
+
+```yaml
+projects:
+  HTAN2_Glioma:
+    project_synid: syn63298048
+    project_name: HTAN2_Glioma
+    grant_number: CA294551
+    center: CalTech
+    shortname: HTAN2_Glioma
+    grant_name: Understanding the role of tumor microenvironment in low grade glioma progression to malignancy.
+```
+
+#### Usage
 
 ```bash
-python3 check_airtable_synapse_users.py
+python add_project_annotations.py
 ```
 
-### Script Output Files
+---
 
-The script generates:
+### create_fileview.py
 
-- **`outputs/airtable_synapse_crosscheck.csv`**: Complete user data with validation results
-- **`outputs/emails/`**: Directory containing customized email files for users needing action
+Creates a unified file view across all HTAN2 projects for centralized file browsing and querying.
 
-### Generated Email Categories
+#### Features
 
-The script generates targeted emails for various scenarios:
+- Queries project metadata from a Synapse table
+- Creates an EntityViewSchema scoped to all project files
+- Sets permissions for HTAN DCC teams
+- Adds read/download permissions for project-specific contributor and user teams
+- Includes default file view columns automatically
 
-- **Username Issues**: Missing username, email provided instead, username not found
-- **Compliance Issues**: Missing certification, no 2FA, TOS not agreed
-- **Combined Issues**: Multiple problems requiring different actions
+#### Configuration
 
-### CSV Report Data Columns
+Update the following variables in the script:
+- `project_table_id`: Synapse ID of the table containing project metadata (default: syn63300517)
+- Parent project for the file view (default: HTAN2 project)
 
-- `Username Exists`: Whether the Synapse username was found
-- `Is Certified`: Certification status
-- `Has 2FA`: Multi-Factor Authentication status
-- `TOS 1.0.1 Agreed`: Terms of Service agreement status
-- User details: Name, institution, atlas, contact email, etc.
+#### Usage
 
-### Email Customization Features
+```bash
+python create_fileview.py
+```
 
-- **Personalized greetings** with user name and project details
-- **Issue-specific descriptions** with clear problem identification
-- **Numbered action steps** in logical order
-- **Conditional instructions** showing only relevant tasks
-- **Professional formatting** with checkboxes and links
-- **Consistent messaging** across all HTAN Phase 2 communications
+---
 
-#### Script Troubleshooting
+### create_team_table.py
 
-- Verify Snowflake credentials and database access permissions
-- Ensure Airtable PAT has read access to the user registration table
-- Check that Synapse login credentials are valid
-- Confirm network connectivity to all external services
+Maintains a Synapse table of all HTAN2 teams with their metadata.
+
+#### Features
+
+- Searches for all teams with "HTAN2" in the name
+- Handles paginated results from the Synapse API
+- Checks for existing teams to avoid duplicates
+- Captures team creation date, modification date, and owner information
+- Updates an existing Synapse table with new teams only
+
+#### Configuration
+
+Update the `htan_teams_table_id` variable with your Synapse table ID (default: syn63714328)
+
+#### Usage
+
+```bash
+python create_team_table.py
+```
+
+---
+
+### add_team_admin.py
+
+Promotes a specified user to admin status across all HTAN2 teams.
+
+#### Features
+
+- Fetches team IDs from a Synapse table
+- Checks user membership status in each team
+- Sends team invitations if user is not yet a member
+- Includes error handling for HTTP errors
+- Can be modified to promote different users
+
+#### Configuration
+
+Update the following variables:
+- `user_id`: The Synapse user ID to promote (default: "3429359")
+- Table query to fetch team information (default: syn63714328)
+
+#### Usage
+
+```bash
+python add_team_admin.py
+```
+
+**Note**: Users must accept team invitations before they can be promoted to admin.
+
+---
+
+### raise_user_jira_tickets.py
+
+Creates Jira Service Management requests for user onboarding from a formatted text file.
+
+#### Features
+
+- Parses email/subject/body blocks from an input file
+- Creates Jira requests on behalf of users
+- Adds public comments with customizable intro/footer
+- Supports dry-run mode for testing
+- Includes retry logic for rate limiting and errors
+- Automatically assigns tickets to the creator
+- Rich CLI with colorful help output
+
+#### Configuration
+
+Set the following environment variables (or use command-line options):
+- `JIRA_URL`: Base URL for your Jira instance
+- `JIRA_EMAIL`: Agent email address
+- `JIRA_API_TOKEN`: API token for authentication
+- `SERVICE_DESK_ID`: Service desk identifier
+- `REQUEST_TYPE_ID`: Request type identifier
+- `ADD_PARTICIPANTS`: Comma-separated list of participant emails
+- `SUBJECT_PREFIX`: Optional prefix for subjects (e.g., "HTAN – ")
+- `INTRO_LINE`: Optional introduction line for emails
+- `FOOTER_LINE`: Optional footer/signature line
+
+#### Input File Format
+
+Create a text file with blocks formatted as:
+
+```
+user@example.com
+Email Subject Line
+Email body content goes here.
+Can span multiple lines.
+
+another.user@example.com
+Another Subject
+Another email body...
+```
+
+#### Usage
+
+```bash
+# Basic usage
+python raise_user_jira_tickets.py input_file.txt
+
+# Dry run to test without creating tickets
+python raise_user_jira_tickets.py --dry-run input_file.txt
+
+# With custom options
+python raise_user_jira_tickets.py \
+  --subject-prefix "HTAN – " \
+  --delay 2 \
+  --max-requests 5 \
+  input_file.txt
+
+# View all options
+python raise_user_jira_tickets.py --help
+```
+
+#### Command-line Options
+
+- `--dry-run`: Test mode - shows what would be created without making API calls
+- `--delay SECONDS`: Sleep time between requests (default: 0)
+- `--max-requests N`: Limit number of requests to process
+- `--timeout SECONDS`: HTTP request timeout (default: 30)
+- `--skip-customer`: Don't create customer accounts before raising requests
+- `--assign-to-creator`: Assign tickets to authenticated agent (default: True)
+- `--verbose`: Enable debug logging
+
+---
+
+### scratch.py
+
+A scratch/testing file used for exploring Synapse REST API endpoints. Not intended for production use.
+
+#### Contains Examples Of
+
+- Fetching team information by ID
+- Listing team members
+- Retrieving team ACLs (Access Control Lists)
+- Looking up user profiles from principal IDs
+
+---
+
+## Configuration Files
+
+### projects.yml
+
+Generated by `create_projects.py` and `create_teams.py`. Contains mappings of project names to Synapse IDs.
+
+### project_details.yml
+
+Used by `add_project_annotations.py`. Contains detailed metadata for each project including grant information, center affiliations, and project descriptions.
+
+### requirements.txt
+
+Lists all Python package dependencies required by the scripts.
+
+### test_email.txt
+
+Example input file for `raise_user_jira_tickets.py` demonstrating the email/subject/body format.
+
+---
+
+## Workflow
+
+Typical setup workflow for new HTAN2 projects:
+
+1. **Create Projects**: Run `create_projects.py` to create Synapse projects and set base permissions
+2. **Create Teams**: Run `create_teams.py` to create project-specific teams with appropriate permissions
+3. **Add Annotations**: Run `add_project_annotations.py` to add metadata annotations to projects
+4. **Create File View**: Run `create_fileview.py` to create a unified view of all project files
+5. **Update Team Table**: Run `create_team_table.py` to maintain the central team registry
+6. **Onboard Users**: Use `raise_user_jira_tickets.py` to create onboarding tickets for new users
+7. **Promote Admins**: Use `add_team_admin.py` to promote users to team admin roles as needed
+
+---
+
+## Security Notes
+
+- Never commit credentials or API tokens to version control
+- Use environment variables or `.env` files for sensitive configuration
+- Ensure proper Synapse permissions before running scripts
+- Test with `--dry-run` flags when available before production runs
+
+---
+
+## Troubleshooting
+
+### SynapseHTTPError
+
+- Verify your Synapse credentials are correct
+- Ensure you have necessary permissions for the operations
+- Check that team IDs and project IDs are accurate
+
+### Jira API Errors
+
+- Verify JIRA_URL, JIRA_EMAIL, and JIRA_API_TOKEN are set correctly
+- Ensure the service desk ID and request type ID are valid
+- Check that you have permissions to create requests on behalf of users
+
+### YAML Parsing Errors
+
+- Validate YAML syntax using an online validator
+- Ensure consistent indentation (use spaces, not tabs)
+- Check that all required fields are present in configuration files
