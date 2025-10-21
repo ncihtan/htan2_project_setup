@@ -1,0 +1,8 @@
+synapseclient
+pandas
+pyairtable
+tqdm
+python-dotenv
+rich
+rich-click
+snowflake-connector-python
