@@ -1,8 +1,6 @@
 name: Bind Schemas to HTAN2 Projects
 
 on:
-  repository_dispatch:
-    types: [schema-release]
   workflow_dispatch:
     inputs:
       schema_version:
