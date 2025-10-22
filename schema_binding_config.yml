@@ -7,9 +7,9 @@ schema_bindings:
   file_based:
     BulkWESLevel1:
       projects:
-        - name: "HTAN2_Ovarian"
+        - name: "htan2-testing1"
           subfolder: "WES_Level_1"
-          synapse_id: "syn69630475"
+          synapse_id: "syn63834783"
         # Add more projects as subfolders are created
         # - name: "HTAN2_Glioma"
         #   subfolder: "WES_Level_1" 
