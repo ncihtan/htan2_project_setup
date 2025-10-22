@@ -333,7 +333,7 @@ Files uploaded to this folder will automatically appear in the fileview with the
     except Exception as e:
         print(f"❌ Error creating wiki: {e}")
    
-def get_schema_from_url(url: str, path: str) -> tuple[any, str, str, str]:
+def get_schema_from_url(url: str, path: str) -> tuple[dict, str, str, str]:
     """Access a JSON schema via a provided path or URL.
     Return request JSON and parsed schema name elements.
 
