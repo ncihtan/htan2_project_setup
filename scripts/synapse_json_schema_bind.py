@@ -1,6 +1,7 @@
 """synapse_json_schema_bind.py
 
-This script will create and bind a JSON schema to an entity
+This script will bind an existing registered JSON schema to an entity.
+The schema must already be registered in Synapse before running this script.
 
 Usage: python synapse_json_schema_bind.py -t [Entity Synapse Id] -l [JSON Schema URL] -p [JSON Schema File Path] -n [Organization Name] -ar --no_bind
 -t Synapse Id of an entity to which a schema will be bound.
@@ -119,9 +120,8 @@ def get_schema_organization(service, org_name: str) -> tuple:
     return service, schema_org, org_name
 
 
-def register_json_schema(org, schema_type: str, schema_json: json, version: str, schema_org_name: str) -> str:
-    """Register or access a previously registered JSON schema and return the uri.
-    If the schema was previously registered, the constructed uri will be returned.
+def get_existing_schema_uri(org, schema_type: str, version: str, schema_org_name: str) -> str:
+    """Look up an existing registered JSON schema and return the uri.
     uri format: [schema_org_name]-[schema_type]-[num_version]
     Example uri: ExampleOrganization-CA987654AccessRequirement-2.0.0
     """
@@ -132,15 +132,17 @@ def register_json_schema(org, schema_type: str, schema_json: json, version: str,
     else:
         num_version = version
 
-    uri = "-".join([schema_org_name.replace(" ", ""), schema_type,num_version])
+    uri = "-".join([schema_org_name.replace(" ", ""), schema_type, num_version])
 
     try:
-        schema = org.create_json_schema(schema_json, schema_type, semantic_version=num_version)
-        uri = schema.uri
-        print(f"JSON schema {uri} was successfully registered.")
+        # Try to get the existing schema
+        schema = org.get_json_schema(uri)
+        print(f"Found existing JSON schema {uri}")
+        return uri
     except synapseclient.core.exceptions.SynapseHTTPError as error:
-        print(error)
-        print(f"JSON schema {uri} was previously registered and will not be updated.")
+        print(f"❌ Error: Schema {uri} not found. Please register the schema first.")
+        print(f"Error details: {error}")
+        raise Exception(f"Schema {uri} is not registered. Please register it first before binding.")
     
     print(f"\nSchema is available at https://repo-prod.prod.sagebase.org/repo/v1/schema/type/registered/{uri}\nThe schema can be referenced using the id: {uri}\n")
     
@@ -376,13 +378,13 @@ def get_schema_from_url(url: str, path: str) -> tuple[dict, str, str, str]:
     return schema_json, component, base_component, version
 
 
-def get_register_bind_schema(syn, target: str, schema_org_name: str, org, service, path, url, includes_ar: bool, no_bind: bool, create_fileview: bool):
-    """Access JSON from URL, register the JSON schema, and bind the schema to the target entity."""
+def get_bind_existing_schema(syn, target: str, schema_org_name: str, org, service, path, url, includes_ar: bool, no_bind: bool, create_fileview: bool):
+    """Look up an existing registered JSON schema and bind it to the target entity."""
 
     schema_json, component_adjusted, base_component, version = get_schema_from_url(url, path)
-    print(f"Registering JSON schema {component_adjusted} {version}")
+    print(f"Looking up existing JSON schema {component_adjusted} {version}")
 
-    uri = register_json_schema(org, component_adjusted, schema_json, version, schema_org_name)
+    uri = get_existing_schema_uri(org, component_adjusted, version, schema_org_name)
 
     if no_bind is None:
         bind_schema_to_entity(syn, service, uri, target, base_component, includes_ar)
@@ -427,7 +429,7 @@ def main():
         service, org, schema_org_name = get_schema_organization(schema_service, org_name)
     
     if no_bind is None:
-        get_register_bind_schema(syn, target, schema_org_name, org, service, path, url, includes_ar, no_bind, create_fileview)
+        get_bind_existing_schema(syn, target, schema_org_name, org, service, path, url, includes_ar, no_bind, create_fileview)
     else:
         print(f"✅ Schema processing completed (no binding due to --no_bind flag)")
     
