@@ -342,7 +342,7 @@ def get_schema_from_url(url: str, path: str) -> tuple[any, str, str, str]:
     AR schema example: MC2.AccessRequirement-CA000001-v3.0.2-schema.json
     """
 
-    if url or path is not None:
+    if url is not None or path is not None:
         if url is not None:
             schema = url
             source_schema = requests.get(url)
