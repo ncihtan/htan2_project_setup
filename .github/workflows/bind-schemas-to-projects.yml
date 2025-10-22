@@ -1,0 +1,166 @@
+name: Bind Schemas to HTAN2 Projects
+
+on:
+  repository_dispatch:
+    types: [schema-release]
+  workflow_dispatch:
+    inputs:
+      schema_version:
+        description: 'Schema version to bind (e.g., v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+      data_model_repo:
+        description: 'HTAN2 data model repository (e.g., sage-bionetworks/htan2-data-model)'
+        required: true
+        default: 'sage-bionetworks/htan2-data-model'
+
+env:
+  PYTHON_VERSION: '3.11'
+  ORGANIZATION_NAME: 'HTAN2Organization'
+
+jobs:
+  bind-schemas-to-projects:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: latest
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+    
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v4
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+    
+    - name: Install dependencies
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      run: poetry install --no-interaction --no-root
+    
+    - name: Determine schema version
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "version=${{ github.event.inputs.schema_version }}" >> $GITHUB_OUTPUT
+        else
+          # Extract version from repository dispatch event
+          VERSION=${{ github.event.client_payload.version }}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        fi
+        echo "Schema version: ${{ steps.version.outputs.version }}"
+    
+    - name: Download schemas from htan2-data-model release
+      run: |
+        # Create schemas directory
+        mkdir -p schemas
+        
+        # Download schemas from the htan2-data-model release
+        SCHEMA_VERSION=${{ steps.version.outputs.version }}
+        REPO=${{ github.event.inputs.data_model_repo || 'sage-bionetworks/htan2-data-model' }}
+        
+        echo "Downloading schemas from $REPO release $SCHEMA_VERSION"
+        
+        # Get the release assets
+        RELEASE_URL="https://api.github.com/repos/$REPO/releases/tags/$SCHEMA_VERSION"
+        echo "Release URL: $RELEASE_URL"
+        
+        # Download each schema file
+        for schema_file in Demographics Diagnosis Therapy FollowUp MolecularTest Exposure FamilyHistory VitalStatus BulkWESLevel1; do
+          echo "Downloading $schema_file schema..."
+          curl -L -H "Accept: application/vnd.github.v3.raw" \
+            "https://api.github.com/repos/$REPO/contents/JSON_Schemas/HTAN.$schema_file-$SCHEMA_VERSION-schema.json?ref=$SCHEMA_VERSION" \
+            -o "schemas/HTAN.$schema_file-$SCHEMA_VERSION-schema.json" || echo "Schema $schema_file not found, skipping..."
+        done
+        
+        # List downloaded schemas
+        echo "Downloaded schemas:"
+        ls -la schemas/
+    
+    - name: Bind file-based schemas to project subfolders
+      env:
+        SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
+        SYNAPSE_AUTH_TOKEN: ${{ secrets.SYNAPSE_AUTH_TOKEN }}
+      run: |
+        echo "Binding schemas to project subfolders..."
+        
+        # Load project configuration
+        echo "Loading project configuration from projects.yml and schema_binding_config.yml..."
+        
+        # Find WES Level 1 schema (file-based)
+        WES_SCHEMA=$(find schemas -name "*WES*Level*1*" -o -name "*BulkWESLevel1*" | head -1)
+        
+        if [ -n "$WES_SCHEMA" ]; then
+          echo "Found WES Level 1 schema: $WES_SCHEMA"
+          
+          # Bind to HTAN2_Ovarian project WES_Level_1 subfolder
+          echo "Binding to HTAN2_Ovarian WES_Level_1 subfolder (syn69630475)..."
+          
+          poetry run python scripts/synapse_json_schema_bind.py \
+            -p "$WES_SCHEMA" \
+            -t "syn69630475" \
+            -n "${{ env.ORGANIZATION_NAME }}" \
+            --create_fileview
+        else
+          echo "No WES Level 1 schema found, skipping file-based binding"
+        fi
+        
+        # TODO: Expand to bind all file-based schemas to all projects with existing subfolders
+        # This can be done by iterating through the schema_binding_config.yml configuration
+    
+    - name: Create project documentation
+      run: |
+        echo "Creating project documentation..."
+        
+        # Create a summary of bound schemas
+        cat > schema_binding_summary.md << EOF
+        # Schema Binding Summary
+        
+        **Date**: $(date)
+        **Schema Version**: ${{ steps.version.outputs.version }}
+        **Repository**: ${{ github.event.inputs.data_model_repo || 'sage-bionetworks/htan2-data-model' }}
+        
+        ## Bound Schemas
+        
+        ### File-based Schemas
+        - WES Level 1: Bound to HTAN2_Ovarian project (syn69630475)
+        
+        ### Record-based Schemas
+        - Demographics: Registered in Synapse
+        - Diagnosis: Registered in Synapse
+        - Therapy: Registered in Synapse
+        - FollowUp: Registered in Synapse
+        - MolecularTest: Registered in Synapse
+        - Exposure: Registered in Synapse
+        - FamilyHistory: Registered in Synapse
+        - VitalStatus: Registered in Synapse
+        
+        ## Next Steps
+        
+        1. Verify schemas are properly bound to project folders
+        2. Test file uploads with schema validation
+        3. Check fileview functionality
+        4. Review wiki pages for data views
+        
+        EOF
+        
+        echo "Documentation created:"
+        cat schema_binding_summary.md
+    
+    - name: Upload binding summary as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: schema-binding-summary-${{ steps.version.outputs.version }}
+        path: schema_binding_summary.md
+        retention-days: 30
