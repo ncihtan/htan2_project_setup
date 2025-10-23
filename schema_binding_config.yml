@@ -34,3 +34,4 @@ organization:
 schema_patterns:
   file_based: "HTAN.{schema_name}-{version}-schema.json"
   record_based: "HTAN.{schema_name}-{version}-schema.json"
+

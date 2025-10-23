@@ -101,59 +101,8 @@ jobs:
         # Process file-based schemas from config
         echo "Processing file-based schemas from configuration..."
         
-        # Read config and process each file-based schema
-        python -c "
-import yaml
-import subprocess
-import os
-
-# Load configuration
-with open('schema_binding_config.yml', 'r') as f:
-    config = yaml.safe_load(f)
-
-file_based_schemas = config['schema_bindings']['file_based']
-
-for schema_name, schema_config in file_based_schemas.items():
-    print(f'Processing schema: {schema_name}')
-    
-    # Find the schema file
-    schema_file = None
-    for file in os.listdir('schemas'):
-        if schema_name.lower() in file.lower() or schema_name.replace('Level', 'Level').lower() in file.lower():
-            schema_file = f'schemas/{file}'
-            break
-    
-    if not schema_file:
-        print(f'❌ Schema file for {schema_name} not found')
-        continue
-        
-    print(f'✅ Found schema file: {schema_file}')
-    
-    # Process each project for this schema
-    for project in schema_config['projects']:
-        project_name = project['name']
-        synapse_id = project['synapse_id']
-        subfolder = project['subfolder']
-        
-        print(f'Binding {schema_name} to {project_name} ({synapse_id})')
-        
-        # Run the binding script
-        cmd = [
-            'poetry', 'run', 'python', 'scripts/synapse_json_schema_bind.py',
-            '-p', schema_file,
-            '-t', synapse_id,
-            '-n', '${{ env.ORGANIZATION_NAME }}',
-            '--create_fileview'
-        ]
-        
-        try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-            print(f'✅ Successfully bound {schema_name} to {project_name}')
-            print(result.stdout)
-        except subprocess.CalledProcessError as e:
-            print(f'❌ Failed to bind {schema_name} to {project_name}: {e}')
-            print(f'Error output: {e.stderr}')
-"
+        # Process file-based schemas using the dedicated script
+        python scripts/bind_schemas_workflow.py
         
         # TODO: Expand to bind all file-based schemas to all projects with existing subfolders
         # This can be done by iterating through the schema_binding_config.yml configuration
