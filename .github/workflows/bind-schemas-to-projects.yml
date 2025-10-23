@@ -1,0 +1,205 @@
+name: Bind Schemas to HTAN2 Projects
+
+on:
+  workflow_dispatch:
+    inputs:
+      schema_version:
+        description: 'Schema version to bind (e.g., v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+      data_model_repo:
+        description: 'HTAN2 data model repository (e.g., sage-bionetworks/htan2-data-model)'
+        required: true
+        default: 'sage-bionetworks/htan2-data-model'
+
+env:
+  PYTHON_VERSION: '3.11'
+  ORGANIZATION_NAME: 'HTAN2Organization'
+
+jobs:
+  bind-schemas-to-projects:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: pip install --upgrade pip && pip install -r requirements.txt
+    
+    - name: Determine schema version
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "version=${{ github.event.inputs.schema_version }}" >> $GITHUB_OUTPUT
+        else
+          # Extract version from repository dispatch event
+          VERSION=${{ github.event.client_payload.version }}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        fi
+        echo "Schema version: ${{ steps.version.outputs.version }}"
+    
+    - name: Download schemas from htan2-data-model release
+      run: |
+        # Create schemas directory
+        mkdir -p schemas
+        
+        # Download schemas from the htan2-data-model release
+        SCHEMA_VERSION=${{ steps.version.outputs.version }}
+        REPO=${{ github.event.inputs.data_model_repo || 'sage-bionetworks/htan2-data-model' }}
+        
+        echo "Downloading schemas from $REPO release $SCHEMA_VERSION"
+        
+        # Get the release assets
+        RELEASE_URL="https://api.github.com/repos/$REPO/releases/tags/$SCHEMA_VERSION"
+        echo "Release URL: $RELEASE_URL"
+        
+        # First, get the list of available schema files from the repository
+        echo "Fetching available schema files from repository..."
+        SCHEMA_FILES=$(curl -s "https://api.github.com/repos/$REPO/contents/JSON_Schemas?ref=$SCHEMA_VERSION" | \
+          jq -r '.[].name | select(endswith("-schema.json")) | sub("-schema.json$"; "")' | \
+          sort)
+        
+        echo "Available schema files:"
+        echo "$SCHEMA_FILES"
+        
+        # Download each schema file
+        for schema_file in $SCHEMA_FILES; do
+          echo "Downloading $schema_file schema..."
+          curl -L -H "Accept: application/vnd.github.v3.raw" \
+            "https://api.github.com/repos/$REPO/contents/JSON_Schemas/$schema_file-schema.json?ref=$SCHEMA_VERSION" \
+            -o "schemas/$schema_file-schema.json" || echo "Schema $schema_file not found, skipping..."
+        done
+        
+        # List downloaded schemas
+        echo "Downloaded schemas:"
+        ls -la schemas/
+        
+        # Create a list of available schema names for later use
+        echo "$SCHEMA_FILES" > available_schemas.txt
+        echo "Available schemas saved to available_schemas.txt"
+    
+    - name: Bind file-based schemas to project subfolders
+      env:
+        SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
+        SYNAPSE_AUTH_TOKEN: ${{ secrets.SYNAPSE_AUTH_TOKEN }}
+      run: |
+        echo "Binding schemas to project subfolders..."
+        
+        # Load project configuration
+        echo "Loading project configuration from projects.yml and schema_binding_config.yml..."
+        
+        # Read available schemas from the downloaded list
+        AVAILABLE_SCHEMAS=$(cat available_schemas.txt)
+        echo "Available schemas from repository: $AVAILABLE_SCHEMAS"
+        
+        # Process file-based schemas from config
+        echo "Processing file-based schemas from configuration..."
+        
+        # Read config and process each file-based schema
+        python -c "
+import yaml
+import subprocess
+import os
+
+# Load configuration
+with open('schema_binding_config.yml', 'r') as f:
+    config = yaml.safe_load(f)
+
+file_based_schemas = config['schema_bindings']['file_based']
+
+for schema_name, schema_config in file_based_schemas.items():
+    print(f'Processing schema: {schema_name}')
+    
+    # Find the schema file
+    schema_file = None
+    for file in os.listdir('schemas'):
+        if schema_name.lower() in file.lower() or schema_name.replace('Level', 'Level').lower() in file.lower():
+            schema_file = f'schemas/{file}'
+            break
+    
+    if not schema_file:
+        print(f'❌ Schema file for {schema_name} not found')
+        continue
+        
+    print(f'✅ Found schema file: {schema_file}')
+    
+    # Process each project for this schema
+    for project in schema_config['projects']:
+        project_name = project['name']
+        synapse_id = project['synapse_id']
+        subfolder = project['subfolder']
+        
+        print(f'Binding {schema_name} to {project_name} ({synapse_id})')
+        
+        # Run the binding script
+        cmd = [
+            'poetry', 'run', 'python', 'scripts/synapse_json_schema_bind.py',
+            '-p', schema_file,
+            '-t', synapse_id,
+            '-n', '${{ env.ORGANIZATION_NAME }}',
+            '--create_fileview'
+        ]
+        
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            print(f'✅ Successfully bound {schema_name} to {project_name}')
+            print(result.stdout)
+        except subprocess.CalledProcessError as e:
+            print(f'❌ Failed to bind {schema_name} to {project_name}: {e}')
+            print(f'Error output: {e.stderr}')
+"
+        
+        # TODO: Expand to bind all file-based schemas to all projects with existing subfolders
+        # This can be done by iterating through the schema_binding_config.yml configuration
+    
+    - name: Create project documentation
+      run: |
+        echo "Creating project documentation..."
+        
+        # Create a summary of bound schemas
+        cat > schema_binding_summary.md << EOF
+        # Schema Binding Summary
+        
+        **Date**: $(date)
+        **Schema Version**: ${{ steps.version.outputs.version }}
+        **Repository**: ${{ github.event.inputs.data_model_repo || 'sage-bionetworks/htan2-data-model' }}
+        
+        ## Bound Schemas
+        
+        ### File-based Schemas
+        - WES Level 1: Bound to HTAN2_Ovarian project (syn69630475)
+        
+        ### Record-based Schemas
+        - Demographics: Registered in Synapse
+        - Diagnosis: Registered in Synapse
+        - Therapy: Registered in Synapse
+        - FollowUp: Registered in Synapse
+        - MolecularTest: Registered in Synapse
+        - Exposure: Registered in Synapse
+        - FamilyHistory: Registered in Synapse
+        - VitalStatus: Registered in Synapse
+        
+        ## Next Steps
+        
+        1. Verify schemas are properly bound to project folders
+        2. Test file uploads with schema validation
+        3. Check fileview functionality
+        4. Review wiki pages for data views
+        
+        EOF
+        
+        echo "Documentation created:"
+        cat schema_binding_summary.md
+    
+    - name: Upload binding summary as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: schema-binding-summary-${{ steps.version.outputs.version }}
+        path: schema_binding_summary.md
+        retention-days: 30

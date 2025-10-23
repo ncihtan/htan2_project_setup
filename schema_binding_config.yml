@@ -1,0 +1,36 @@
+# Schema Binding Configuration for HTAN2 Projects
+# This file defines which schemas should be bound to which project subfolders
+
+# Schema to project subfolder mappings
+schema_bindings:
+  # File-based schemas (bound to project subfolders)
+  file_based:
+    BulkWESLevel1:
+      projects:
+        - name: "htan2-testing1"
+          subfolder: "WES_Level_1"
+          synapse_id: "syn63834783"
+        # Add more projects as subfolders are created
+        # - name: "HTAN2_Glioma"
+        #   subfolder: "WES_Level_1" 
+        #   synapse_id: "synXXXXXXX"
+  
+  # Record-based schemas (registered but not bound to specific folders)
+  record_based:
+    - "Demographics"
+    - "Diagnosis" 
+    - "Therapy"
+    - "FollowUp"
+    - "MolecularTest"
+    - "Exposure"
+    - "FamilyHistory"
+    - "VitalStatus"
+
+# Organization settings
+organization:
+  name: "HTAN2Organization"
+  
+# Schema file naming patterns
+schema_patterns:
+  file_based: "HTAN.{schema_name}-{version}-schema.json"
+  record_based: "HTAN.{schema_name}-{version}-schema.json"
