@@ -25,10 +25,36 @@ def main():
         
         # Find the schema file
         schema_file = None
-        for file in os.listdir('schemas'):
-            if schema_name.lower() in file.lower() or schema_name.replace('Level', 'Level').lower() in file.lower():
+        print(f'Looking for schema files matching: {schema_name}')
+        print(f'Available files in schemas directory:')
+        try:
+            files = os.listdir('schemas')
+            for file in files:
+                print(f'  - {file}')
+        except FileNotFoundError:
+            print('  schemas directory not found!')
+            continue
+        
+        for file in files:
+            # Try multiple matching strategies
+            file_lower = file.lower()
+            schema_lower = schema_name.lower()
+            
+            # Direct match
+            if schema_lower in file_lower:
                 schema_file = f'schemas/{file}'
                 break
+            
+            # Match with variations (Level -> level, etc.)
+            if schema_lower.replace('level', 'level') in file_lower:
+                schema_file = f'schemas/{file}'
+                break
+            
+            # Match common variations
+            if 'bulk' in schema_lower and 'bulk' in file_lower:
+                if 'wes' in schema_lower and 'wes' in file_lower:
+                    schema_file = f'schemas/{file}'
+                    break
         
         if not schema_file:
             print(f'❌ Schema file for {schema_name} not found')

@@ -59,21 +59,24 @@ jobs:
         RELEASE_URL="https://api.github.com/repos/$REPO/releases/tags/$SCHEMA_VERSION"
         echo "Release URL: $RELEASE_URL"
         
-        # First, get the list of available schema files from the repository
-        echo "Fetching available schema files from repository..."
-        SCHEMA_FILES=$(curl -s "https://api.github.com/repos/$REPO/contents/JSON_Schemas?ref=$SCHEMA_VERSION" | \
-          jq -r '.[].name | select(endswith("-schema.json")) | sub("-schema.json$"; "")' | \
-          sort)
+        # Get the list of release assets (JSON schema files)
+        echo "Fetching release assets..."
+        ASSETS=$(curl -s "$RELEASE_URL" | jq -r '.assets[] | select(.name | endswith(".json")) | .name' | sort)
         
-        echo "Available schema files:"
-        echo "$SCHEMA_FILES"
+        echo "Available schema assets:"
+        echo "$ASSETS"
         
-        # Download each schema file
-        for schema_file in $SCHEMA_FILES; do
-          echo "Downloading $schema_file schema..."
-          curl -L -H "Accept: application/vnd.github.v3.raw" \
-            "https://api.github.com/repos/$REPO/contents/JSON_Schemas/$schema_file-schema.json?ref=$SCHEMA_VERSION" \
-            -o "schemas/$schema_file-schema.json" || echo "Schema $schema_file not found, skipping..."
+        # Download each schema asset
+        for asset_name in $ASSETS; do
+          echo "Downloading $asset_name..."
+          # Get the download URL for this asset
+          DOWNLOAD_URL=$(curl -s "$RELEASE_URL" | jq -r ".assets[] | select(.name == \"$asset_name\") | .browser_download_url")
+          if [ "$DOWNLOAD_URL" != "null" ] && [ -n "$DOWNLOAD_URL" ]; then
+            curl -L -H "Accept: application/octet-stream" "$DOWNLOAD_URL" -o "schemas/$asset_name"
+            echo "✅ Downloaded $asset_name"
+          else
+            echo "❌ Could not get download URL for $asset_name"
+          fi
         done
         
         # List downloaded schemas
@@ -81,7 +84,7 @@ jobs:
         ls -la schemas/
         
         # Create a list of available schema names for later use
-        echo "$SCHEMA_FILES" > available_schemas.txt
+        echo "$ASSETS" > available_schemas.txt
         echo "Available schemas saved to available_schemas.txt"
     
     - name: Bind file-based schemas to project subfolders
