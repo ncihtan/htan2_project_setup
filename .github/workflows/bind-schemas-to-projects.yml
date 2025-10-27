@@ -61,14 +61,34 @@ jobs:
         
         # debug to see what the API returns
         echo "API Response:"
-        curl -s "https://api.github.com/repos/$REPO/contents/JSON_Schemas?ref=$SCHEMA_VERSION" | jq '.'
+        API_RESPONSE=$(curl -s "https://api.github.com/repos/$REPO/contents/JSON_Schemas?ref=$SCHEMA_VERSION")
+        echo "$API_RESPONSE" | jq '.'
         
-        SCHEMA_FILES=$(curl -s "https://api.github.com/repos/$REPO/contents/JSON_Schemas?ref=$SCHEMA_VERSION" | \
-          jq -r '.[].name | select(endswith(".json"))' | \
-          sort)
+        # Check if API call was successful
+        if [ $? -ne 0 ]; then
+          echo "❌ Failed to fetch API response"
+          exit 1
+        fi
+        
+        # Check if the response contains an error
+        if echo "$API_RESPONSE" | jq -e '.message' > /dev/null; then
+          echo "❌ API Error:"
+          echo "$API_RESPONSE" | jq -r '.message'
+          exit 1
+        fi
+        
+        SCHEMA_FILES=$(echo "$API_RESPONSE" | jq -r '.[].name | select(endswith(".json"))' | sort)
         
         echo "Available schema files:"
         echo "$SCHEMA_FILES"
+        
+        # Check if any schema files were found
+        if [ -z "$SCHEMA_FILES" ]; then
+          echo "❌ No JSON schema files found in JSON_Schemas directory"
+          echo "Available files in JSON_Schemas:"
+          echo "$API_RESPONSE" | jq -r '.[].name' | sort
+          exit 1
+        fi
         
         # Download each schema file
         for schema_file in $SCHEMA_FILES; do
