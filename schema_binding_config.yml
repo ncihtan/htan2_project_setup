@@ -9,7 +9,7 @@ schema_bindings:
       projects:
         - name: "htan2-testing1"
           subfolder: "WES_Level_1"
-          synapse_id: "syn63834783"
+          synapse_id: "syn70775693"
         # Add more projects as subfolders are created
         # - name: "HTAN2_Glioma"
         #   subfolder: "WES_Level_1" 
