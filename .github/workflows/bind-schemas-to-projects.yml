@@ -49,70 +49,27 @@ jobs:
         # Create schemas directory
         mkdir -p schemas
         
-        # Download schemas from the htan2-data-model release
+        # Download schemas from the htan2-data-model repository
         SCHEMA_VERSION=${{ steps.version.outputs.version }}
-        REPO=${{ github.event.inputs.data_model_repo || 'sage-bionetworks/htan2-data-model' }}
+        REPO="ncihtan/htan2-data-model"
         
-        echo "Downloading schemas from $REPO release $SCHEMA_VERSION"
-        
-        # First, let's check what's actually in the repository root
-        echo "Checking repository root contents..."
-        ROOT_RESPONSE=$(curl -s "https://api.github.com/repos/$REPO/contents?ref=$SCHEMA_VERSION")
-        echo "Root contents:"
-        echo "$ROOT_RESPONSE" | jq -r '.[].name' | sort
-        
-        # Check if JSON_Schemas directory exists
-        echo "Checking if JSON_Schemas directory exists..."
-        if echo "$ROOT_RESPONSE" | jq -e '.[] | select(.name == "JSON_Schemas")' > /dev/null; then
-          echo "✅ JSON_Schemas directory found"
-        else
-          echo "❌ JSON_Schemas directory not found in repository root"
-          echo "Available directories:"
-          echo "$ROOT_RESPONSE" | jq -r '.[] | select(.type == "dir") | .name' | sort
-          exit 1
-        fi
+        echo "Downloading schemas from $REPO version $SCHEMA_VERSION"
         
         # Get the list of available schema files from the JSON_Schemas directory
-        echo "Fetching available schema files from JSON_Schemas directory..."
-        echo "API URL: https://api.github.com/repos/$REPO/contents/JSON_Schemas?ref=$SCHEMA_VERSION"
-        
-        # debug to see what the API returns
-        echo "API Response:"
-        API_RESPONSE=$(curl -s "https://api.github.com/repos/$REPO/contents/JSON_Schemas?ref=$SCHEMA_VERSION")
-        echo "$API_RESPONSE" | jq '.'
-        
-        # Check if API call was successful
-        if [ $? -ne 0 ]; then
-          echo "❌ Failed to fetch API response"
-          exit 1
-        fi
-        
-        # Check if the response contains an error
-        if echo "$API_RESPONSE" | jq -e '.message' > /dev/null; then
-          echo "❌ API Error:"
-          echo "$API_RESPONSE" | jq -r '.message'
-          exit 1
-        fi
-        
-        SCHEMA_FILES=$(echo "$API_RESPONSE" | jq -r '.[].name | select(endswith(".json"))' | sort)
+        echo "Fetching available schema files from JSON_Schemas/$SCHEMA_VERSION..."
+        SCHEMA_FILES=$(curl -s "https://api.github.com/repos/$REPO/contents/JSON_Schemas/$SCHEMA_VERSION" | \
+          jq -r '.[].name | select(endswith(".json"))' | \
+          sort)
         
         echo "Available schema files:"
         echo "$SCHEMA_FILES"
-        
-        # Check if any schema files were found
-        if [ -z "$SCHEMA_FILES" ]; then
-          echo "❌ No JSON schema files found in JSON_Schemas directory"
-          echo "Available files in JSON_Schemas:"
-          echo "$API_RESPONSE" | jq -r '.[].name' | sort
-          exit 1
-        fi
         
         # Download each schema file
         for schema_file in $SCHEMA_FILES; do
           echo "Downloading $schema_file schema..."
           curl -L -H "Accept: application/vnd.github.v3.raw" \
-            "https://api.github.com/repos/$REPO/contents/JSON_Schemas/$schema_file?ref=$SCHEMA_VERSION" \
-            -o "schemas/$schema_file" || echo "Schema $schema_file not found, skipping..."
+            "https://api.github.com/repos/$REPO/contents/JSON_Schemas/$SCHEMA_VERSION/$schema_file" \
+            -o "schemas/$schema_file"
         done
         
         # List downloaded schemas
