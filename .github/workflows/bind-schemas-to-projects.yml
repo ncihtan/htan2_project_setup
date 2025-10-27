@@ -61,10 +61,17 @@ jobs:
         
         # Get the list of release assets (JSON schema files)
         echo "Fetching release assets..."
+        echo "Release API response:"
+        curl -s "$RELEASE_URL" | jq '.'
+        
         ASSETS=$(curl -s "$RELEASE_URL" | jq -r '.assets[] | select(.name | endswith(".json")) | .name' | sort)
         
         echo "Available schema assets:"
         echo "$ASSETS"
+        
+        # Also try to get all assets (not just .json files)
+        echo "All release assets:"
+        curl -s "$RELEASE_URL" | jq -r '.assets[] | .name' | sort
         
         # Download each schema asset
         for asset_name in $ASSETS; do
