@@ -422,7 +422,18 @@ def main():
     else:
         # Only login if we're actually going to bind
         print(f"Logging in to production stack...")
-        syn.login()
+        
+        # Use credentials from environment variables if available
+        username = os.environ.get('SYNAPSE_USERNAME')
+        auth_token = os.environ.get('SYNAPSE_PAT')
+        
+        if username and auth_token:
+            print(f"Using username and auth token for authentication")
+            syn.login(username, authToken=auth_token)
+        else:
+            print("No credentials found in environment, attempting default login")
+            syn.login()
+            
         print(f"Connected to production stack: {syn.repoEndpoint}")
         syn.get_available_services()
         schema_service = syn.service("json_schema")

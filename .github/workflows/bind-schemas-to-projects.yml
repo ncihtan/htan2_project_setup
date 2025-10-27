@@ -82,8 +82,8 @@ jobs:
     
     - name: Bind file-based schemas to project subfolders
       env:
+        SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
         SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
-        SYNAPSE_AUTH_TOKEN: ${{ secrets.SYNAPSE_AUTH_TOKEN }}
       run: |
         echo "Binding schemas to project subfolders..."
         
