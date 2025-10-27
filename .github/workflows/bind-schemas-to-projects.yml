@@ -55,35 +55,21 @@ jobs:
         
         echo "Downloading schemas from $REPO release $SCHEMA_VERSION"
         
-        # Get the release assets
-        RELEASE_URL="https://api.github.com/repos/$REPO/releases/tags/$SCHEMA_VERSION"
-        echo "Release URL: $RELEASE_URL"
+        # Get the list of available schema files from the JSON_Schemas directory
+        echo "Fetching available schema files from JSON_Schemas directory..."
+        SCHEMA_FILES=$(curl -s "https://api.github.com/repos/$REPO/contents/JSON_Schemas?ref=$SCHEMA_VERSION" | \
+          jq -r '.[].name | select(endswith(".json"))' | \
+          sort)
         
-        # Get the list of release assets (JSON schema files)
-        echo "Fetching release assets..."
-        echo "Release API response:"
-        curl -s "$RELEASE_URL" | jq '.'
+        echo "Available schema files:"
+        echo "$SCHEMA_FILES"
         
-        ASSETS=$(curl -s "$RELEASE_URL" | jq -r '.assets[] | select(.name | endswith(".json")) | .name' | sort)
-        
-        echo "Available schema assets:"
-        echo "$ASSETS"
-        
-        # Also try to get all assets (not just .json files)
-        echo "All release assets:"
-        curl -s "$RELEASE_URL" | jq -r '.assets[] | .name' | sort
-        
-        # Download each schema asset
-        for asset_name in $ASSETS; do
-          echo "Downloading $asset_name..."
-          # Get the download URL for this asset
-          DOWNLOAD_URL=$(curl -s "$RELEASE_URL" | jq -r ".assets[] | select(.name == \"$asset_name\") | .browser_download_url")
-          if [ "$DOWNLOAD_URL" != "null" ] && [ -n "$DOWNLOAD_URL" ]; then
-            curl -L -H "Accept: application/octet-stream" "$DOWNLOAD_URL" -o "schemas/$asset_name"
-            echo "✅ Downloaded $asset_name"
-          else
-            echo "❌ Could not get download URL for $asset_name"
-          fi
+        # Download each schema file
+        for schema_file in $SCHEMA_FILES; do
+          echo "Downloading $schema_file schema..."
+          curl -L -H "Accept: application/vnd.github.v3.raw" \
+            "https://api.github.com/repos/$REPO/contents/JSON_Schemas/$schema_file?ref=$SCHEMA_VERSION" \
+            -o "schemas/$schema_file" || echo "Schema $schema_file not found, skipping..."
         done
         
         # List downloaded schemas
@@ -91,7 +77,7 @@ jobs:
         ls -la schemas/
         
         # Create a list of available schema names for later use
-        echo "$ASSETS" > available_schemas.txt
+        echo "$SCHEMA_FILES" > available_schemas.txt
         echo "Available schemas saved to available_schemas.txt"
     
     - name: Bind file-based schemas to project subfolders
