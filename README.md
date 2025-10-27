@@ -104,13 +104,50 @@ htan2-project-setup (schema binding)
 Synapse Projects (with bound schemas and fileviews)
 ```
 
-### Schema Binding Workflow
+### Complete Schema Binding Workflow
+
+The schema binding process involves multiple steps across two repositories. Here's the complete workflow:
+
+#### Step 1: Create and Push Tagged Release
+```bash
+# In htan2-data-model repository
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+#### Step 2: Schema Generation and Registration
+- **Action runs on GitHub** in `htan2-data-model` repository
+- **Creates and registers JSON Schemas** in Synapse
+- **Attaches schemas as release assets** to the GitHub release
+- **Opens PR** to store JSON Schemas in `htan2-data-model` repository under JSON_Schemas/
+
+#### Step 3: Merge PR and Configure Binding
+- **Merge the PR** in htan2-project-setup to get the latest schemas (htan2_project_setup pulls from this folder, so merging must be done before proceeding to the next step)
+- **Specify folder binding targets** for the schemas in `schema_binding_config.yml`:
+```yaml
+schema_bindings:
+  file_based:
+    BulkWESLevel1:
+      projects:
+        - name: "htan2-testing1"
+          subfolder: "WES_Level_1"
+          synapse_id: "syn70775693"
+```
+
+#### Step 4: Bind Schemas to Folders
+- **Manually trigger** "Bind Schemas to HTAN2 Projects" action in `htan2_project_setup`
+- **Specify version number** (e.g., v1.0.0)
+- **Schemas are then bound** to the specified folders in Synapse
+- **Fileviews and wiki pages** are automatically created
+
+### High Level Workflow Steps
 
 1. **Schema Release**: htan2-data-model publishes schemas as GitHub release artifacts
-2. **Trigger**: This repository is triggered via repository dispatch or manual workflow
-3. **Download**: Schemas are downloaded from the htan2-data-model release
-4. **Bind**: Schemas are bound to appropriate project subfolders
-5. **Create Views**: Fileviews and wiki pages are created
+2. **Schema Registration**: Schemas are registered in Synapse during the release process
+3. **PR Creation for new JSON Schemas**: Schemas are committed to a folder like JSON_Schemas/v*.*.*
+4. **Trigger**: This repository is triggered via manual workflow dispatch, specifying release version v*.*.*
+5. **Download**: Schemas are downloaded from the htan2-data-model JSON_Schemas/v*.*.*
+6. **Bind**: Schemas are bound to appropriate project subfolders as specified in the config file in `htan2_project_setup`
 
 ### Schema Binding Configuration
 
@@ -185,6 +222,39 @@ Required secrets in GitHub repository:
 
 - [htan2-data-model](https://github.com/sage-bionetworks/htan2-data-model) - Schema definition and generation
 - [htan2-project-setup](https://github.com/sage-bionetworks/htan2-project-setup) - This repository
+
+### Schema Binding Troubleshooting
+
+#### Common Issues
+
+**1. Authentication Errors (403 Client Error)**
+- **Problem**: "Anonymous users have only READ access permission"
+- **Solution**: Add Synapse credentials as GitHub secrets:
+  - `SYNAPSE_USERNAME`: Your Synapse username
+  - `SYNAPSE_AUTH_TOKEN`: Your Synapse Personal Access Token
+
+**2. Schema Not Found (404 Client Error)**
+- **Problem**: "JSON Schema not found for organizationName: 'HTAN2Organization'"
+- **Solution**: Ensure schemas are registered in Synapse first:
+  - Check that htan2-data-model workflow registered schemas (not using `--no_bind`)
+  - Verify the schema version exists in Synapse
+
+**3. Schema Files Not Downloaded**
+- **Problem**: "Schema file for BulkWESLevel1 not found"
+- **Solution**: Check that:
+  - The version tag exists in htan2-data-model repository
+  - JSON_Schemas/{version} directory contains the schema files
+  - The repository path is correct (ncihtan/htan2-data-model)
+
+**4. Folder Not Found**
+- **Problem**: Target folder doesn't exist in Synapse
+- **Solution**: Create the target folder in Synapse before running the workflow
+
+#### Required GitHub Secrets
+
+Add these secrets to your repository settings:
+- `SYNAPSE_USERNAME`: Your Synapse username
+- `SYNAPSE_AUTH_TOKEN`: Your Synapse Personal Access Token
 
 ### Schema Binding Contributing
 
