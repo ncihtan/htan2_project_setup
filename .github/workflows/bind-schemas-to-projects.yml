@@ -57,6 +57,12 @@ jobs:
         
         # Get the list of available schema files from the JSON_Schemas directory
         echo "Fetching available schema files from JSON_Schemas directory..."
+        echo "API URL: https://api.github.com/repos/$REPO/contents/JSON_Schemas?ref=$SCHEMA_VERSION"
+        
+        # debug to see what the API returns
+        echo "API Response:"
+        curl -s "https://api.github.com/repos/$REPO/contents/JSON_Schemas?ref=$SCHEMA_VERSION" | jq '.'
+        
         SCHEMA_FILES=$(curl -s "https://api.github.com/repos/$REPO/contents/JSON_Schemas?ref=$SCHEMA_VERSION" | \
           jq -r '.[].name | select(endswith(".json"))' | \
           sort)
