@@ -4,7 +4,6 @@ Utilities for creating and managing Synapse folders.
 
 import synapseclient
 from typing import Optional
-from synapseclient.core.exceptions import SynapseHTTPError
 
 
 def create_folder(syn, parent_id: str, folder_name: str) -> Optional[str]:
