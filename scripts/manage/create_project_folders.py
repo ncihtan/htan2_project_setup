@@ -7,7 +7,7 @@ Creates folders for all modules (file-based and record-based) with proper access
 import synapseclient
 import yaml
 import argparse
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 # Import shared utilities
 import sys
