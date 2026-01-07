@@ -7,7 +7,6 @@ This script can be used to update permissions for folders that were already crea
 import synapseclient
 import yaml
 import argparse
-from typing import Dict, Optional
 
 # Import shared utilities
 from htan2_synapse import (
