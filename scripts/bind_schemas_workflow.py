@@ -97,19 +97,93 @@ def find_schema_file(schema_name: str, files: List[str], schema_version: str = "
     return None
 
 
+def filter_projects_by_folder_type(projects: List[Dict], folder_types: List[str]) -> List[Dict]:
+    """Filter projects list to only include specified folder types."""
+    if not folder_types:
+        return projects
+    filtered = []
+    for project in projects:
+        subfolder = project.get('subfolder', '')
+        if any(subfolder.startswith(ft) for ft in folder_types):
+            filtered.append(project)
+    return filtered
+
+
 def main():
     """Main function to process schema bindings."""
+    import argparse
+    
+    parser = argparse.ArgumentParser(
+        description="Bind schemas to project subfolders",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Bind all schemas
+  python scripts/bind_schemas_workflow.py
+
+  # Bind only specific schema(s)
+  python scripts/bind_schemas_workflow.py --schema-filter scRNA_seqLevel3_4
+
+  # Bind only for specific folder types
+  python scripts/bind_schemas_workflow.py --folder-type-filter v8_release v8_ingest
+
+  # Bind specific schema for specific folder types
+  python scripts/bind_schemas_workflow.py --schema-filter scRNA_seqLevel3_4 --folder-type-filter v8_release v8_ingest
+        """
+    )
+    parser.add_argument(
+        '--schema-filter',
+        nargs='+',
+        help='Only bind these schema(s) (e.g., scRNA_seqLevel3_4 Biospecimen)'
+    )
+    parser.add_argument(
+        '--folder-type-filter',
+        nargs='+',
+        help='Only bind to these folder types (e.g., v8_release v8_ingest)'
+    )
+    parser.add_argument(
+        '--schema-version',
+        default=None,
+        help='Schema version (e.g., v1.0.0). Defaults to SCHEMA_VERSION env var or v1.0.0'
+    )
+    parser.add_argument(
+        '--config-file',
+        default='schema_binding_config.yml',
+        help='Path to schema_binding_config.yml (default: schema_binding_config.yml)'
+    )
+    
+    args = parser.parse_args()
     
     # Load configuration
-    with open('schema_binding_config.yml', 'r') as f:
+    with open(args.config_file, 'r') as f:
         config = yaml.safe_load(f)
 
     file_based_schemas = config['schema_bindings'].get('file_based', {})
     record_based_schemas = config['schema_bindings'].get('record_based', {})
     organization_name = os.environ.get('ORGANIZATION_NAME', 'HTAN2Organization')
     
-    # Get schema version from environment or default to v1.0.0
-    schema_version = os.environ.get('SCHEMA_VERSION', 'v1.0.0')
+    # Get schema version
+    schema_version = args.schema_version or os.environ.get('SCHEMA_VERSION', 'v1.0.0')
+    
+    # Apply schema filter if specified
+    if args.schema_filter:
+        file_based_schemas = {k: v for k, v in file_based_schemas.items() if k in args.schema_filter}
+        record_based_schemas = {k: v for k, v in record_based_schemas.items() if k in args.schema_filter}
+        print(f"📋 Filtering to schemas: {', '.join(args.schema_filter)}")
+    
+    # Apply folder type filter to projects
+    if args.folder_type_filter:
+        print(f"📁 Filtering to folder types: {', '.join(args.folder_type_filter)}")
+        for schema_name in file_based_schemas:
+            file_based_schemas[schema_name]['projects'] = filter_projects_by_folder_type(
+                file_based_schemas[schema_name].get('projects', []),
+                args.folder_type_filter
+            )
+        for schema_name in record_based_schemas:
+            record_based_schemas[schema_name]['projects'] = filter_projects_by_folder_type(
+                record_based_schemas[schema_name].get('projects', []),
+                args.folder_type_filter
+            )
 
     # Track results
     results = {
