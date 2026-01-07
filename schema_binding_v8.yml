@@ -2,9 +2,6 @@ schema_bindings:
   file_based:
     BulkWESLevel1:
       projects:
-      - name: htan2-testing1
-        subfolder: WES_Level_1
-        synapse_id: syn70775693
       - name: HTAN2
         subfolder: v8_staging/WES/Level_1
         synapse_id: syn72101911
@@ -809,8 +806,3 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_staging/Biospecimen
         synapse_id: syn72102525
-organization:
-  name: HTAN2Organization
-schema_patterns:
-  file_based: HTAN.{schema_name}-{version}-schema.json
-  record_based: HTAN.{schema_name}-{version}-schema.json

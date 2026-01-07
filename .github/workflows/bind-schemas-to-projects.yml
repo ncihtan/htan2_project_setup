@@ -1,6 +1,7 @@
 name: Bind Schemas to HTAN2 Projects
 
 on:
+  # Manual trigger only - gives full control over when and which schemas to bind
   workflow_dispatch:
     inputs:
       schema_version:
@@ -8,9 +9,9 @@ on:
         required: true
         default: 'v1.0.0'
       data_model_repo:
-        description: 'HTAN2 data model repository (e.g., sage-bionetworks/htan2-data-model)'
+        description: 'HTAN2 data model repository (e.g., ncihtan/htan2-data-model)'
         required: true
-        default: 'sage-bionetworks/htan2-data-model'
+        default: 'ncihtan/htan2-data-model'
 
 env:
   PYTHON_VERSION: '3.11'
@@ -35,13 +36,8 @@ jobs:
     - name: Determine schema version
       id: version
       run: |
-        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          echo "version=${{ github.event.inputs.schema_version }}" >> $GITHUB_OUTPUT
-        else
-          # Extract version from repository dispatch event
-          VERSION=${{ github.event.client_payload.version }}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-        fi
+        # Manual trigger only - use input
+        echo "version=${{ github.event.inputs.schema_version }}" >> $GITHUB_OUTPUT
         echo "Schema version: ${{ steps.version.outputs.version }}"
     
     - name: Download schemas from htan2-data-model release
