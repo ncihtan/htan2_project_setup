@@ -9,7 +9,6 @@ import argparse
 
 # Import shared utilities
 from htan2_synapse import (
-    load_projects,
     find_contributor_team,
     HTAN_DCC_ADMINS_TEAM_ID,
     HTAN_DCC_TEAM_ID,
