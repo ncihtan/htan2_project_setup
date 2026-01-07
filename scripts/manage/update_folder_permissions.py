@@ -10,8 +10,6 @@ import argparse
 
 # Import shared utilities
 from htan2_synapse import (
-    load_projects,
-    find_contributor_team,
     set_folder_permissions,
 )
 
