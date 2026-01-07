@@ -1,0 +1,76 @@
+{
+  "successful": [],
+  "failed": [],
+  "skipped": [
+    {
+      "schema": "BulkWESLevel1",
+      "reason": "Schemas directory not found",
+      "projects": []
+    },
+    {
+      "schema": "BulkWESLevel2",
+      "reason": "Schemas directory not found",
+      "projects": []
+    },
+    {
+      "schema": "BulkWESLevel3",
+      "reason": "Schemas directory not found",
+      "projects": []
+    },
+    {
+      "schema": "scRNA_seqLevel1",
+      "reason": "Schemas directory not found",
+      "projects": []
+    },
+    {
+      "schema": "scRNA_seqLevel2",
+      "reason": "Schemas directory not found",
+      "projects": []
+    },
+    {
+      "schema": "scRNA_seqLevel3_4",
+      "reason": "Schemas directory not found",
+      "projects": []
+    },
+    {
+      "schema": "SpatialTranscriptomicsLevel1",
+      "reason": "Schemas directory not found",
+      "projects": []
+    },
+    {
+      "schema": "SpatialTranscriptomicsLevel3",
+      "reason": "Schemas directory not found",
+      "projects": []
+    },
+    {
+      "schema": "SpatialTranscriptomicsLevel4",
+      "reason": "Schemas directory not found",
+      "projects": []
+    },
+    {
+      "schema": "SpatialPanel",
+      "reason": "Schemas directory not found",
+      "projects": []
+    },
+    {
+      "schema": "DigitalPathology",
+      "reason": "Schemas directory not found",
+      "projects": []
+    },
+    {
+      "schema": "MultiplexMicroscopyLevel2",
+      "reason": "Schemas directory not found",
+      "projects": []
+    },
+    {
+      "schema": "MultiplexMicroscopyLevel3",
+      "reason": "Schemas directory not found",
+      "projects": []
+    },
+    {
+      "schema": "MultiplexMicroscopyLevel4",
+      "reason": "Schemas directory not found",
+      "projects": []
+    }
+  ]
+}

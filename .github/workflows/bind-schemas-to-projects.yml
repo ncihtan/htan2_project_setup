@@ -99,48 +99,87 @@ jobs:
         # TODO: Expand to bind all file-based schemas to all projects with existing subfolders
         # This can be done by iterating through the schema_binding_config.yml configuration
     
-    - name: Create project documentation
+    - name: Create binding summary
+      if: always()
       run: |
-        echo "Creating project documentation..."
+        echo "Creating binding summary..."
         
-        # Create a summary of bound schemas
+        # Check if binding results exist
+        if [ -f binding_results.json ]; then
+          SUCCESSFUL=$(jq '.successful | length' binding_results.json)
+          FAILED=$(jq '.failed | length' binding_results.json)
+          SKIPPED=$(jq '.skipped | length' binding_results.json)
+        else
+          SUCCESSFUL=0
+          FAILED=0
+          SKIPPED=0
+        fi
+        
         cat > schema_binding_summary.md << EOF
         # Schema Binding Summary
         
         **Date**: $(date)
         **Schema Version**: ${{ steps.version.outputs.version }}
-        **Repository**: ${{ github.event.inputs.data_model_repo || 'sage-bionetworks/htan2-data-model' }}
+        **Repository**: ${{ github.event.inputs.data_model_repo || 'ncihtan/htan2-data-model' }}
         
-        ## Bound Schemas
+        ## Binding Results
         
-        ### File-based Schemas
-        - WES Level 1: Bound to HTAN2_Ovarian project (syn69630475)
-        
-        ### Record-based Schemas
-        - Demographics: Registered in Synapse
-        - Diagnosis: Registered in Synapse
-        - Therapy: Registered in Synapse
-        - FollowUp: Registered in Synapse
-        - MolecularTest: Registered in Synapse
-        - Exposure: Registered in Synapse
-        - FamilyHistory: Registered in Synapse
-        - VitalStatus: Registered in Synapse
-        
-        ## Next Steps
-        
-        1. Verify schemas are properly bound to project folders
-        2. Test file uploads with schema validation
-        3. Check fileview functionality
-        4. Review wiki pages for data views
+        - ✅ **Successful**: $SUCCESSFUL binding(s)
+        - ❌ **Failed**: $FAILED binding(s)
+        - ⏭️  **Skipped**: $SKIPPED schema(s)
         
         EOF
         
-        echo "Documentation created:"
+        # Add failed bindings if any
+        if [ -f binding_results.json ] && [ "$FAILED" -gt 0 ]; then
+          echo "" >> schema_binding_summary.md
+          echo "## ❌ Failed Bindings" >> schema_binding_summary.md
+          echo "" >> schema_binding_summary.md
+          jq -r '.failed[] | "- **\(.schema)** → \(.project) (\(.synapse_id))**\n  - Subfolder: \(.subfolder)\n  - Error: \(.error)"' binding_results.json >> schema_binding_summary.md
+        fi
+        
+        # Add skipped schemas if any
+        if [ -f binding_results.json ] && [ "$SKIPPED" -gt 0 ]; then
+          echo "" >> schema_binding_summary.md
+          echo "## ⏭️  Skipped Schemas" >> schema_binding_summary.md
+          echo "" >> schema_binding_summary.md
+          jq -r '.skipped[] | "- **\(.schema)**: \(.reason)\n  - Projects: \(.projects | join(", "))"' binding_results.json >> schema_binding_summary.md
+        fi
+        
+        # Add successful bindings summary
+        if [ -f binding_results.json ] && [ "$SUCCESSFUL" -gt 0 ]; then
+          echo "" >> schema_binding_summary.md
+          echo "## ✅ Successful Bindings" >> schema_binding_summary.md
+          echo "" >> schema_binding_summary.md
+          echo "Total: $SUCCESSFUL binding(s) completed successfully" >> schema_binding_summary.md
+          echo "" >> schema_binding_summary.md
+          echo "### By Schema:" >> schema_binding_summary.md
+          jq -r '.successful | group_by(.schema) | .[] | "- **\(.[0].schema)**: \(length) binding(s)"' binding_results.json >> schema_binding_summary.md
+          echo "" >> schema_binding_summary.md
+          echo "### By Project:" >> schema_binding_summary.md
+          jq -r '.successful | group_by(.project) | .[] | "- **\(.[0].project)**: \(length) binding(s)"' binding_results.json >> schema_binding_summary.md
+        fi
+        
+        echo "" >> schema_binding_summary.md
+        echo "## Next Steps" >> schema_binding_summary.md
+        echo "" >> schema_binding_summary.md
+        if [ "$FAILED" -gt 0 ]; then
+          echo "- ⚠️  Review failed bindings above and fix any issues" >> schema_binding_summary.md
+        fi
+        echo "- Verify schemas are properly bound in Synapse" >> schema_binding_summary.md
+        echo "- Test file uploads with schema validation" >> schema_binding_summary.md
+        echo "- Check fileview functionality" >> schema_binding_summary.md
+        
+        echo ""
+        echo "Summary created:"
         cat schema_binding_summary.md
     
     - name: Upload binding summary as artifact
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: schema-binding-summary-${{ steps.version.outputs.version }}
-        path: schema_binding_summary.md
+        path: |
+          schema_binding_summary.md
+          binding_results.json
         retention-days: 30

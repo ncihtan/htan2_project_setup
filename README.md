@@ -21,7 +21,26 @@ The workflow has two main phases:
 
 ## Phase 1: Folder Setup (One-Time Per Version)
 
-### Quick Start
+### Option 1: Complete Setup via GitHub Action (Recommended)
+
+The easiest way to set up folders and bind schemas in one go:
+
+1. Go to GitHub → Actions → "Setup Folders and Bind Schemas"
+2. Click "Run workflow"
+3. Enter:
+   - **Version**: `9` (creates v9_ingest, v9_staging, v9_release)
+   - **Schema version**: `v2.0.0` (or the schema version you want)
+   - **Data model repo**: `ncihtan/htan2-data-model`
+4. Click "Run workflow"
+
+This single action will:
+1. ✅ Create all folders (v9_ingest, v9_staging, v9_release) with all modules
+2. ✅ Set access permissions for all folders
+3. ✅ Update schema binding config with real Synapse IDs
+4. ✅ Download schemas from the specified version
+5. ✅ Bind schemas to all v9_staging folders
+
+### Option 2: Local Setup
 
 ```bash
 # Complete setup for version 8

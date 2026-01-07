@@ -1,0 +1,212 @@
+name: Setup Folders and Bind Schemas
+
+on:
+  # Manual trigger - complete workflow for setting up folders and binding schemas
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Folder version number (e.g., 9 for v9_ingest, v9_staging, v9_release)'
+        required: true
+        default: '9'
+      schema_version:
+        description: 'Schema version to bind (e.g., v2.0.0)'
+        required: true
+        default: 'v2.0.0'
+      data_model_repo:
+        description: 'HTAN2 data model repository (e.g., ncihtan/htan2-data-model)'
+        required: true
+        default: 'ncihtan/htan2-data-model'
+
+env:
+  PYTHON_VERSION: '3.11'
+  ORGANIZATION_NAME: 'HTAN2Organization'
+
+jobs:
+  setup-and-bind:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: pip install --upgrade pip && pip install -r requirements.txt
+    
+    - name: Setup Folders
+      env:
+        SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
+        SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
+      run: |
+        echo "=========================================="
+        echo "Phase 1: Setting up folders for v${{ github.event.inputs.version }}"
+        echo "=========================================="
+        
+        # Run the complete folder setup
+        python scripts/manage/setup_folders.py --version ${{ github.event.inputs.version }}
+        
+        echo ""
+        echo "✓ Folder setup complete"
+        echo "Generated files:"
+        echo "  - folder_structure_v${{ github.event.inputs.version }}.yml"
+        echo "  - schema_binding_v${{ github.event.inputs.version }}.yml"
+        echo "  - schema_binding_config.yml (updated)"
+    
+    - name: Download schemas from htan2-data-model
+      run: |
+        echo "=========================================="
+        echo "Phase 2: Downloading schemas"
+        echo "=========================================="
+        
+        # Create schemas directory
+        mkdir -p schemas
+        
+        # Download schemas from the htan2-data-model repository
+        SCHEMA_VERSION=${{ github.event.inputs.schema_version }}
+        REPO="${{ github.event.inputs.data_model_repo }}"
+        
+        echo "Downloading schemas from $REPO version $SCHEMA_VERSION"
+        
+        # Get the list of available schema files from the JSON_Schemas directory
+        echo "Fetching available schema files from JSON_Schemas/$SCHEMA_VERSION..."
+        SCHEMA_FILES=$(curl -s "https://api.github.com/repos/$REPO/contents/JSON_Schemas/$SCHEMA_VERSION" | \
+          jq -r '.[].name | select(endswith(".json"))' | \
+          sort)
+        
+        if [ -z "$SCHEMA_FILES" ]; then
+          echo "❌ Error: No schema files found for version $SCHEMA_VERSION"
+          echo "Available versions can be checked at: https://api.github.com/repos/$REPO/contents/JSON_Schemas"
+          exit 1
+        fi
+        
+        echo "Available schema files:"
+        echo "$SCHEMA_FILES"
+        
+        # Download each schema file
+        for schema_file in $SCHEMA_FILES; do
+          echo "Downloading $schema_file schema..."
+          curl -L -H "Accept: application/vnd.github.v3.raw" \
+            "https://api.github.com/repos/$REPO/contents/JSON_Schemas/$SCHEMA_VERSION/$schema_file" \
+            -o "schemas/$schema_file"
+        done
+        
+        # List downloaded schemas
+        echo ""
+        echo "Downloaded schemas:"
+        ls -la schemas/
+        
+        # Create a list of available schema names for later use
+        echo "$SCHEMA_FILES" > available_schemas.txt
+        echo "Available schemas saved to available_schemas.txt"
+    
+    - name: Bind schemas to project folders
+      env:
+        SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
+        SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
+      run: |
+        echo "=========================================="
+        echo "Phase 3: Binding schemas to folders"
+        echo "=========================================="
+        
+        echo "Binding schemas from ${{ github.event.inputs.schema_version }} to v${{ github.event.inputs.version }} folders"
+        echo ""
+        echo "The action will bind schemas to all folders listed in schema_binding_config.yml"
+        echo "This includes all v${{ github.event.inputs.version }}_staging folders that were just set up."
+        echo ""
+        
+        # Process file-based schemas using the dedicated script
+        python scripts/bind_schemas_workflow.py
+        
+        echo ""
+        echo "✓ Schema binding complete"
+    
+    - name: Create summary
+      if: always()
+      run: |
+        echo "=========================================="
+        echo "Summary"
+        echo "=========================================="
+        
+        # Check if binding results exist
+        if [ -f binding_results.json ]; then
+          SUCCESSFUL=$(jq '.successful | length' binding_results.json)
+          FAILED=$(jq '.failed | length' binding_results.json)
+          SKIPPED=$(jq '.skipped | length' binding_results.json)
+        else
+          SUCCESSFUL=0
+          FAILED=0
+          SKIPPED=0
+        fi
+        
+        cat > workflow_summary.md << EOF
+        # Folder Setup and Schema Binding Summary
+        
+        **Date**: $(date)
+        **Folder Version**: v${{ github.event.inputs.version }}
+        **Schema Version**: ${{ github.event.inputs.schema_version }}
+        **Data Model Repo**: ${{ github.event.inputs.data_model_repo }}
+        
+        ## Completed Steps
+        
+        1. ✅ Created folders (v${{ github.event.inputs.version }}_ingest, v${{ github.event.inputs.version }}_staging, v${{ github.event.inputs.version }}_release)
+        2. ✅ Set access permissions for all folders
+        3. ✅ Updated schema binding config with real Synapse IDs
+        4. ✅ Merged v${{ github.event.inputs.version }}_staging bindings into schema_binding_config.yml
+        5. ✅ Downloaded schemas from ${{ github.event.inputs.data_model_repo }}/JSON_Schemas/${{ github.event.inputs.schema_version }}/
+        6. Schema binding results:
+           - ✅ Successful: $SUCCESSFUL binding(s)
+           - ❌ Failed: $FAILED binding(s)
+           - ⏭️  Skipped: $SKIPPED schema(s)
+        
+        EOF
+        
+        # Add failed bindings if any
+        if [ -f binding_results.json ] && [ "$FAILED" -gt 0 ]; then
+          echo "" >> workflow_summary.md
+          echo "## ❌ Failed Bindings" >> workflow_summary.md
+          echo "" >> workflow_summary.md
+          jq -r '.failed[] | "- **\(.schema)** → \(.project) (\(.synapse_id))**\n  - Subfolder: \(.subfolder)\n  - Error: \(.error)"' binding_results.json >> workflow_summary.md
+        fi
+        
+        # Add skipped schemas if any
+        if [ -f binding_results.json ] && [ "$SKIPPED" -gt 0 ]; then
+          echo "" >> workflow_summary.md
+          echo "## ⏭️  Skipped Schemas" >> workflow_summary.md
+          echo "" >> workflow_summary.md
+          jq -r '.skipped[] | "- ⏭️  **\(.schema)**: \(.reason)\n  - Projects: \(.projects | join(", "))"' binding_results.json >> workflow_summary.md
+        fi
+        
+        echo "" >> workflow_summary.md
+        echo "## Generated Files" >> workflow_summary.md
+        echo "" >> workflow_summary.md
+        echo "- \`folder_structure_v${{ github.event.inputs.version }}.yml\` - Complete folder structure" >> workflow_summary.md
+        echo "- \`schema_binding_v${{ github.event.inputs.version }}.yml\` - Schema bindings for this version" >> workflow_summary.md
+        echo "- \`schema_binding_config.yml\` - Updated master config" >> workflow_summary.md
+        
+        echo "" >> workflow_summary.md
+        echo "## Next Steps" >> workflow_summary.md
+        echo "" >> workflow_summary.md
+        if [ "$FAILED" -gt 0 ]; then
+          echo "- ⚠️  Review failed bindings above and fix any issues" >> workflow_summary.md
+        fi
+        echo "- Verify schemas are properly bound in Synapse" >> workflow_summary.md
+        echo "- Test file uploads with schema validation" >> workflow_summary.md
+        echo "- Check fileview functionality" >> workflow_summary.md
+        
+        echo "Summary created:"
+        cat workflow_summary.md
+    
+    - name: Upload summary as artifact
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: setup-summary-v${{ github.event.inputs.version }}-${{ github.event.inputs.schema_version }}
+        path: |
+          workflow_summary.md
+          binding_results.json
+        retention-days: 30
+
