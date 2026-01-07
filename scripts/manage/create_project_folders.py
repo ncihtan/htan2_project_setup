@@ -8,7 +8,6 @@ import synapseclient
 import yaml
 import argparse
 from typing import Dict, List, Optional
-from synapseclient.core.exceptions import SynapseHTTPError
 
 # Import shared utilities
 import sys
