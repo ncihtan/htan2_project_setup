@@ -225,7 +225,6 @@ def generate_schema_binding_structure(all_projects_structure, projects, version,
     
     # Process each project
     for project_name, project_structure in all_projects_structure.items():
-        project_id = projects[project_name]
         
         # Process each folder type (only staging folders get schema bindings)
         for folder_type in folder_types:
