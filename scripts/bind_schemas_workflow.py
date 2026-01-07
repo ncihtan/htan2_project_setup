@@ -33,6 +33,8 @@ def map_schema_name_to_file(schema_name: str, schema_version: str = "v1.0.0") ->
     # Handle special cases first
     if schema_name == "DigitalPathology":
         return f"HTAN.DigitalPathologyData{version_suffix}-schema.json"
+    elif schema_name == "Biospecimen":
+        return f"HTAN.BiospecimenData{version_suffix}-schema.json"
     elif schema_name == "scRNA_seqLevel1":
         return f"HTAN.scRNALevel1{version_suffix}-schema.json"
     elif schema_name == "scRNA_seqLevel2":
@@ -186,13 +188,17 @@ def main():
                 '--create_fileview'
             ]
             
+            # Use longer timeout for scRNA_seqLevel3_4 which tends to be large
+            timeout = 900 if schema_name == "scRNA_seqLevel3_4" else 300  # 15 min for scRNA_seqLevel3_4, 5 min for others
+            print(f'    Timeout: {timeout // 60} minutes')
+            
             try:
                 result = subprocess.run(
                     cmd, 
                     capture_output=True, 
                     text=True, 
                     check=True,
-                    timeout=300  # 5 minute timeout per binding
+                    timeout=900 if schema_name == "scRNA_seqLevel3_4" else 300  # 15 min for scRNA_seqLevel3_4, 5 min for others
                 )
                 print(f'    ✅ Successfully bound')
                 results['successful'].append({
@@ -208,8 +214,12 @@ def main():
                     if line.strip():
                         print(f'      {line}')
             except subprocess.TimeoutExpired:
-                error_msg = 'Binding timed out after 5 minutes'
+                timeout_minutes = timeout // 60
+                error_msg = f'Binding timed out after {timeout_minutes} minutes'
                 print(f'    ❌ Failed: {error_msg}')
+                print(f'    This may indicate the schema is very large or there is a Synapse API issue')
+                print(f'    Schema file: {schema_file}')
+                print(f'    Consider checking the schema size or Synapse status')
                 results['failed'].append({
                     'schema': schema_name,
                     'project': project_name,
@@ -304,13 +314,17 @@ def main():
                 '--create_fileview'
             ]
             
+            # Use longer timeout for scRNA_seqLevel3_4 which tends to be large
+            timeout = 900 if schema_name == "scRNA_seqLevel3_4" else 300  # 15 min for scRNA_seqLevel3_4, 5 min for others
+            print(f'    Timeout: {timeout // 60} minutes')
+            
             try:
                 result = subprocess.run(
                     cmd, 
                     capture_output=True, 
                     text=True, 
                     check=True,
-                    timeout=300  # 5 minute timeout per binding
+                    timeout=900 if schema_name == "scRNA_seqLevel3_4" else 300  # 15 min for scRNA_seqLevel3_4, 5 min for others
                 )
                 print(f'    ✅ Successfully bound')
                 results['successful'].append({
@@ -326,8 +340,12 @@ def main():
                     if line.strip():
                         print(f'      {line}')
             except subprocess.TimeoutExpired:
-                error_msg = 'Binding timed out after 5 minutes'
+                timeout_minutes = timeout // 60
+                error_msg = f'Binding timed out after {timeout_minutes} minutes'
                 print(f'    ❌ Failed: {error_msg}')
+                print(f'    This may indicate the schema is very large or there is a Synapse API issue')
+                print(f'    Schema file: {schema_file}')
+                print(f'    Consider checking the schema size or Synapse status')
                 results['failed'].append({
                     'schema': schema_name,
                     'project': project_name,

@@ -116,30 +116,32 @@ Example:
             
             run_command(perm_cmd, f"Setting permissions for {version}_{folder_type}")
     
-    # Step 3: Update schema bindings with real IDs
+    # Step 3: Update schema bindings with real IDs for all folder types
     print("\n🔗 Step 3: Updating schema bindings with real IDs...")
-    update_cmd = [
-        "python", "scripts/manage/update_schema_bindings.py",
-        "--version", version,
-        "--folder-type", "staging"  # Only staging folders get schemas
-    ]
-    if args.dry_run:
-        update_cmd.append("--dry-run")
+    for folder_type in ["ingest", "staging", "release"]:
+        update_cmd = [
+            "python", "scripts/manage/update_schema_bindings.py",
+            "--version", version,
+            "--folder-type", folder_type
+        ]
+        if args.dry_run:
+            update_cmd.append("--dry-run")
+        
+        run_command(update_cmd, f"Schema Binding Update for {version}_{folder_type}")
     
-    run_command(update_cmd, "Schema Binding Update")
-    
-    # Step 4: Merge into main config
+    # Step 4: Merge into main config (all folder types)
     if not args.skip_merge:
         print("\n📋 Step 4: Merging into schema_binding_config.yml...")
+        # Merge all folder types (ingest, staging, release)
         merge_cmd = [
             "python", "merge_schema_bindings.py",
-            "--schema-binding-file", f"schema_binding_{version}.yml",
-            "--folder-type-filter", f"{version}_staging"
+            "--schema-binding-file", f"schema_binding_{version}.yml"
+            # No folder-type-filter - merge all folder types
         ]
         if args.dry_run:
             merge_cmd.append("--dry-run")
         
-        run_command(merge_cmd, "Config Merge")
+        run_command(merge_cmd, "Config Merge (all folder types)")
     
     print("\n" + "="*80)
     print("✅ COMPLETE - Folder Setup Finished")
