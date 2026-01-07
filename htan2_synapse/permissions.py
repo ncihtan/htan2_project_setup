@@ -3,7 +3,6 @@ Utilities for setting folder permissions in Synapse.
 """
 
 import json
-from typing import Optional
 from .config import HTAN_DCC_ADMINS_TEAM_ID, HTAN_DCC_TEAM_ID, ACT_TEAM_ID
 from .teams import find_contributor_team
 
