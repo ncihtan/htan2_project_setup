@@ -6,7 +6,6 @@ Script to verify folder permissions are set correctly.
 import synapseclient
 import yaml
 import argparse
-from typing import Dict
 
 # Import shared utilities
 from htan2_synapse import (

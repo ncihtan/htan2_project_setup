@@ -12,7 +12,7 @@ import os
 import sys
 import json
 import re
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 
 def map_schema_name_to_file(schema_name: str, schema_version: str = "v1.0.0") -> str:

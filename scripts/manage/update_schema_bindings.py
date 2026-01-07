@@ -311,6 +311,7 @@ Examples:
             int(version)
             version = f"v{version}"
         except ValueError:
+            # If the version is not an integer, leave it as provided (e.g., custom tags like 'v8-beta').
             pass
     
     # Determine folder types

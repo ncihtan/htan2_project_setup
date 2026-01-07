@@ -82,6 +82,7 @@ Example:
             int(version)
             version = f"v{version}"
         except ValueError:
+            # If version is not purely numeric, assume it's already in the desired format
             pass
     
     print("="*80)
