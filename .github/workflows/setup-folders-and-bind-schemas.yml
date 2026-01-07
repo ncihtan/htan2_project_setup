@@ -107,6 +107,7 @@ jobs:
       env:
         SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
         SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
+        SCHEMA_VERSION: ${{ github.event.inputs.schema_version }}
       run: |
         echo "=========================================="
         echo "Phase 3: Binding schemas to folders"

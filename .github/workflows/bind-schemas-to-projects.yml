@@ -80,8 +80,10 @@ jobs:
       env:
         SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
         SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
+        SCHEMA_VERSION: ${{ steps.version.outputs.version }}
       run: |
         echo "Binding schemas to project subfolders..."
+        echo "Schema version: $SCHEMA_VERSION"
         
         # Load project configuration
         echo "Loading project configuration from projects.yml and schema_binding_config.yml..."
