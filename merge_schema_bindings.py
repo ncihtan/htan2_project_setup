@@ -8,7 +8,6 @@ the existing schema_binding_config.yml file.
 import yaml
 import argparse
 import sys
-from pathlib import Path
 
 
 def load_yaml(file_path: str) -> dict:
