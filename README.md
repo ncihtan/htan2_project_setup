@@ -2,264 +2,223 @@
 
 > [!NOTE]
 > These scripts are intended for internal use by the HTAN DCC.  
-> Resulting projects will not be publically accessible
+> Resulting projects will not be publicly accessible
 
-## create_project.py
+## Overview
 
+This repository manages HTAN2 Synapse project setup, including:
+- **Project and Team Creation** - Initial project setup
+- **Folder Structure Creation** - Standardized folder hierarchies for data ingestion
+- **Access Control** - Permission management for different folder types
+- **Schema Binding** - Binding JSON schemas to project folders
 
-This script automates the creation of projects in Synapse and sets permissions for specific teams. If a project already exists, it resets the permissions for that project. After execution, the script saves the created or updated project names and their corresponding Synapse IDs in a `projects.yml` file.
+## Workflow
 
-### Features
-- Automatically creates Synapse projects if they do not exist.
-- Resets permissions for existing Synapse projects.
-- Adds specified teams to the projects with customizable permissions.
-- Saves the project names and Synapse IDs to `projects.yml`.
+The workflow has two main phases:
 
-### Prerequisites
+1. **Folder Setup** (One-time per version) - Creates folders, sets permissions, generates config
+2. **Schema Binding** (Manual trigger) - Binds schemas to folders when you're ready
+
+## Phase 1: Folder Setup (One-Time Per Version)
+
+### Option 1: Complete Setup via GitHub Action (Recommended)
+
+The easiest way to set up folders and bind schemas in one go:
+
+1. Go to GitHub → Actions → "Setup Folders and Bind Schemas"
+2. Click "Run workflow"
+3. Enter:
+   - **Version**: `9` (creates v9_ingest, v9_staging, v9_release)
+   - **Schema version**: `v2.0.0` (or the schema version you want)
+   - **Data model repo**: `ncihtan/htan2-data-model`
+4. Click "Run workflow"
+
+This single action will:
+1. ✅ Create all folders (v9_ingest, v9_staging, v9_release) with all modules
+2. ✅ Set access permissions for all folders
+3. ✅ Update schema binding config with real Synapse IDs
+4. ✅ Download schemas from the specified version
+5. ✅ Bind schemas to all v9 folders (ingest, staging, release)
+
+### Option 2: Local Setup
+
+```bash
+# Complete setup for version 8
+python scripts/manage/setup_folders.py --version 8
+```
+
+This single command does everything:
+1. ✅ Creates all folders (v8_ingest, v8_staging, v8_release) with all modules
+2. ✅ Sets access permissions for all folders
+3. ✅ Updates schema binding file with real Synapse IDs
+4. ✅ Merges all folder bindings (ingest, staging, release) into `schema_binding_config.yml`
+
+### What Gets Generated
+
+After running the setup script, you'll have:
+
+- **`folder_structure_v8.yml`** - Complete folder structure with all Synapse IDs
+- **`schema_binding_v8.yml`** - Schema binding mappings with real IDs (ingest, staging, release)
+- **`schema_binding_config.yml`** - Updated with v8 bindings for all folder types (used by GitHub Action)
+
+### Manual Steps (Alternative)
+
+If you prefer to run steps individually:
+
+```bash
+# 1. Create folders
+python scripts/manage/create_project_folders.py --version 8
+
+# 2. Set permissions
+python scripts/manage/update_folder_permissions.py --version 8 --folder-type ingest
+python scripts/manage/update_folder_permissions.py --version 8 --folder-type staging
+python scripts/manage/update_folder_permissions.py --version 8 --folder-type release
+
+# 3. Update schema bindings with real IDs (for all folder types)
+python scripts/manage/update_schema_bindings.py --version 8 --folder-type ingest
+python scripts/manage/update_schema_bindings.py --version 8 --folder-type staging
+python scripts/manage/update_schema_bindings.py --version 8 --folder-type release
+
+# 4. Merge into config (all folder types)
+python merge_schema_bindings.py \
+  --schema-binding-file schema_binding_v8.yml
+```
+
+## Phase 2: Schema Binding (Manual)
+
+Once folders are set up and `schema_binding_config.yml` is configured, schema binding is done manually when you're ready.
+
+### How It Works
+
+1. **Decide When to Bind** - You choose when to bind schemas (e.g., after schema release, after testing, etc.)
+2. **Manual Trigger** - Go to GitHub → Actions → "Bind Schemas to HTAN2 Projects" → "Run workflow"
+3. **Enter Schema Version** - Specify which schema version to bind (e.g., `v1.0.0`)
+4. **Download Schemas** - Action downloads schemas from `ncihtan/htan2-data-model/JSON_Schemas/v1.0.0/`
+5. **Bind Schemas** - Action reads `schema_binding_config.yml` and binds schemas to all listed folders (ingest, staging, release)
+6. **Create Fileviews** - Action creates fileviews and wiki pages for each bound schema
+
+### Manual Trigger Steps
+
+1. Go to GitHub → Actions → "Bind Schemas to HTAN2 Projects"
+2. Click "Run workflow"
+3. Enter:
+   - Schema version: `v1.0.0` (or the version you want)
+   - Data model repo: `ncihtan/htan2-data-model`
+4. Click "Run workflow" button
+
+## Project Structure
+
+```
+htan2_project_setup/
+├── htan2_synapse/          # Shared utilities package
+│   ├── config.py           # Team IDs, module definitions
+│   ├── projects.py         # Project loading utilities
+│   ├── teams.py            # Team utilities
+│   ├── permissions.py     # Permission setting logic
+│   └── folders.py          # Folder creation utilities
+│
+├── scripts/
+│   ├── setup/              # One-time setup scripts
+│   │   ├── create_projects.py
+│   │   ├── create_teams.py
+│   │   └── create_team_table.py
+│   │
+│   ├── manage/             # Operational scripts
+│   │   ├── setup_folders.py          # Master setup script
+│   │   ├── create_project_folders.py
+│   │   ├── update_folder_permissions.py
+│   │   ├── update_schema_bindings.py
+│   │   └── verify_permissions.py
+│   │
+│   ├── bind_schemas_workflow.py      # Schema binding workflow
+│   └── synapse_json_schema_bind.py   # Schema binding utility
+│
+├── .github/workflows/
+│   ├── setup-folders-and-bind-schemas.yml  # Complete setup workflow
+│   └── bind-schemas-to-projects.yml        # Schema binding only workflow
+│
+├── projects.yml                      # Project names and IDs
+├── schema_binding_config.yml         # Master schema binding config
+├── folder_structure_v8.yml           # v8 folder structure (generated)
+└── schema_binding_v8.yml             # v8 schema bindings (generated)
+```
+
+## Key Files
+
+- **`projects.yml`** - Project names and Synapse IDs
+- **`schema_binding_config.yml`** - Master config for schema binding (used by GitHub Action)
+  - Contains all version bindings (v8_ingest, v8_staging, v8_release, v9_ingest, etc.)
+  - Updated automatically when new versions are set up
+- **`folder_structure_{version}.yml`** - Complete folder hierarchy with Synapse IDs (per version)
+- **`schema_binding_{version}.yml`** - Schema binding mappings (ingest, staging, release, per version)
+
+## Access Permissions
+
+### v{version}_ingest/
+- **HTAN DCC Admins**: Admin
+- **HTAN DCC**: Edit/Delete
+- **ACT**: Edit/Delete
+- **Contributors**: Edit/Delete
+- **Others**: View Only
+
+### v{version}_staging/
+- **HTAN DCC Admins**: Admin
+- **HTAN DCC**: Edit/Delete
+- **ACT**: Edit/Delete
+- **Contributors**: Modify (no Create/Delete)
+- **Others**: View Only
+
+### v{version}_release/
+- **HTAN DCC Admins**: Admin
+- **HTAN DCC**: View Only
+- **ACT**: View Only
+- **Contributors**: View Only
+- **Others**: View Only
+
+## Key Points
+
+1. **Folder Setup is One-Time** - Run `setup_folders.py` once per version
+2. **Schema Binding is Manual** - You control when to bind schemas via GitHub Actions UI
+3. **All Folder Types Get Schemas** - Schemas are bound to `{version}_ingest/`, `{version}_staging/`, and `{version}_release/` folders
+4. **Config is Cumulative** - `schema_binding_config.yml` contains all versions and folder types
+5. **Action Uses Config** - GitHub Action reads `schema_binding_config.yml` to know where to bind
+6. **Full Control** - You decide which schema version to bind and when
+
+## Prerequisites
+
 - Python 3.x
 - Synapse Python Client (`synapseclient`)
-- PyYAML (`yaml` for reading/writing YAML files)
+- PyYAML
 
-### Install dependencies
-You can install the necessary Python libraries with the following command:
+Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+## Troubleshooting
+
+### Folders Created But No Schemas Bound
+
+1. Check that `schema_binding_config.yml` has the folder mappings
+2. Verify the schema version exists in htan2-data-model
+3. Check GitHub Action logs for errors
+
+### Schema Binding Fails
+
+1. Verify schemas are registered in Synapse (handled by htan2-data-model)
+2. Check that folder IDs in config are correct
+3. Verify Synapse credentials in GitHub secrets
+
+### Need to Update Permissions
 
 ```bash
-pip install synapseclient pyyaml
+python scripts/manage/update_folder_permissions.py --version 8 --folder-type staging
 ```
 
-### Usage
-1. Clone the repository or copy the script to your local machine.
-2. Open the script and make sure the following fields are correct:
-   - **`project_names`**: A list of project names that you want to create or manage in Synapse.
-   - **`htan_dcc_admins_team_id`**: The ID of the HTAN DCC Admins team.
-   - **`htan_dcc_team_id`**: The ID of the HTAN DCC team.
-   - **`act_team_id`**: The ID of the ACT team.
-   
-3. Run the script using Python:
+### Need to Rebind Schemas
 
-```bash
-python synapse_project_creator.py
-```
+Just trigger the GitHub Action again - it will rebind all schemas from the config.
 
-4. The script will:
-   - Log into Synapse.
-   - Loop through the project names.
-   - Create the project if it doesn't exist or reset its permissions if it already exists.
-   - Set team permissions for the projects.
-   - Save the project name and Synapse ID to `projects.yml`.
+## Related Repositories
 
-#### Output of `projects.yml`
-After running the script, the `projects.yml` file will contain project names and their corresponding Synapse IDs. This is presented as a table below
-
-| Project          | Synapse ID                                                   |
-|------------------|--------------------------------------------------------------|
-| HTAN2            | [syn63296487](https://www.synapse.org/#!Synapse:syn63296487) |
-| HTAN2_Ovarian    | [syn63298044](https://www.synapse.org/#!Synapse:syn63298044) |
-| HTAN2_Glioma     | [syn63298048](https://www.synapse.org/#!Synapse:syn63298048) |
-| HTAN2_Gastric    | [syn63298051](https://www.synapse.org/#!Synapse:syn63298051) |
-| HTAN2_Skin       | [syn63298054](https://www.synapse.org/#!Synapse:syn63298054) |
-| HTAN2_Pediatric  | [syn63298059](https://www.synapse.org/#!Synapse:syn63298059) |
-| HTAN2_Myeloma    | [syn63298063](https://www.synapse.org/#!Synapse:syn63298063) |
-| HTAN2_Pancreatic | [syn63298065](https://www.synapse.org/#!Synapse:syn63298065) |
-| HTAN2_Prostate   | [syn63298068](https://www.synapse.org/#!Synapse:syn63298068) |
-| HTAN2_CRC        | [syn63298073](https://www.synapse.org/#!Synapse:syn63298073) |
-| HTAN2_Lymphoma   | [syn63298076](https://www.synapse.org/#!Synapse:syn63298076) |
-
-
-### Customization
-- **Project Names**: You can modify the `project_names` list to include any project names you need.
-- **Permissions**: The permissions for each team can be adjusted within the `set_project_permissions` function.
-  - The current setup adds admin permissions to the **HTAN DCC Admins** and **ACT** teams, while the **HTAN DCC** team gets edit and delete permissions.
-
-#### Troubleshooting
-- If you encounter a `SynapseHTTPError`, ensure that your Synapse credentials are correct and you have the necessary permissions to create and manage the projects.
-- Verify that the team IDs are accurate by checking the Synapse web interface.
-
----
-
-## Schema Binding (NEW)
-
-This repository now also handles the binding of JSON schemas to HTAN2 project folders in Synapse. It consumes schemas generated by the [htan2-data-model](https://github.com/sage-bionetworks/htan2-data-model) repository and binds them to appropriate project subfolders.
-
-### Schema Binding Responsibilities
-
-#### What This Repository Does
-- **Schema Binding**: Binds JSON schemas to specific Synapse project folders
-- **Fileview Creation**: Creates fileviews with columns extracted from schemas
-- **Wiki Management**: Creates wiki pages for data views
-- **Project Configuration**: Manages project-specific mappings and configurations
-
-#### What This Repository Does NOT Do
-- **Schema Generation**: Does not generate schemas (handled by htan2-data-model)
-- **Schema Registration**: Does not register schemas in Synapse (handled by htan2-data-model)
-- **Schema Definition**: Does not define LinkML schemas (handled by htan2-data-model)
-
-### Schema Binding Architecture
-
-```
-htan2-data-model (schema generation)
-    ↓ (publishes schemas as GitHub releases)
-htan2-project-setup (schema binding)
-    ↓ (binds schemas to project folders)
-Synapse Projects (with bound schemas and fileviews)
-```
-
-### Complete Schema Binding Workflow
-
-The schema binding process involves multiple steps across two repositories. Here's the complete workflow:
-
-#### Step 1: Create and Push Tagged Release
-```bash
-# In htan2-data-model repository
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-#### Step 2: Schema Generation and Registration
-- **Action runs on GitHub** in `htan2-data-model` repository
-- **Creates and registers JSON Schemas** in Synapse
-- **Attaches schemas as release assets** to the GitHub release
-- **Opens PR** to store JSON Schemas in `htan2-data-model` repository under JSON_Schemas/
-
-#### Step 3: Merge PR and Configure Binding
-- **Merge the PR** in htan2-project-setup to get the latest schemas (htan2_project_setup pulls from this folder, so merging must be done before proceeding to the next step)
-- **Specify folder binding targets** for the schemas in `schema_binding_config.yml`:
-```yaml
-schema_bindings:
-  file_based:
-    BulkWESLevel1:
-      projects:
-        - name: "htan2-testing1"
-          subfolder: "WES_Level_1"
-          synapse_id: "syn70775693"
-```
-
-#### Step 4: Bind Schemas to Folders
-- **Manually trigger** "Bind Schemas to HTAN2 Projects" action in `htan2_project_setup`
-- **Specify version number** (e.g., v1.0.0)
-- **Schemas are then bound** to the specified folders in Synapse
-- **Fileviews and wiki pages** are automatically created
-
-### High Level Workflow Steps
-
-1. **Schema Release**: htan2-data-model publishes schemas as GitHub release artifacts
-2. **Schema Registration**: Schemas are registered in Synapse during the release process
-3. **PR Creation for new JSON Schemas**: Schemas are committed to a folder like JSON_Schemas/v*.*.*
-4. **Trigger**: This repository is triggered via manual workflow dispatch, specifying release version v*.*.*
-5. **Download**: Schemas are downloaded from the htan2-data-model JSON_Schemas/v*.*.*
-6. **Bind**: Schemas are bound to appropriate project subfolders as specified in the config file in `htan2_project_setup`
-
-### Schema Binding Configuration
-
-#### Project Mappings
-The repository uses two configuration files:
-
-1. **`projects.yml`** - Existing project mappings (created by `create_projects.py`):
-```yaml
-HTAN2_Ovarian: syn63298044
-HTAN2_Glioma: syn63298048
-# etc.
-```
-
-2. **`schema_binding_config.yml`** - Schema binding configuration:
-```yaml
-schema_bindings:
-  file_based:
-    BulkWESLevel1:
-      projects:
-        - name: "HTAN2_Ovarian"
-          subfolder: "WES_Level_1"
-          synapse_id: "syn69630475"
-```
-
-#### Schema Types
-Schemas are classified as either file-based or record-based:
-
-- **File-based**: WES, scRNA-seq (bound to project subfolders)
-- **Record-based**: Biospecimen, Clinical (registered but not bound)
-
-### Schema Binding Usage
-
-#### Manual Binding
-```bash
-# Bind a specific schema to a project folder
-python scripts/synapse_json_schema_bind.py \
-  -p "schemas/HTAN.BulkWESLevel1-v1.0.0-schema.json" \
-  -t "syn69630475" \
-  -n "HTAN2Organization" \
-  --create_fileview
-```
-
-#### Automated Binding
-The GitHub Actions workflow automatically:
-1. Downloads schemas from htan2-data-model releases
-2. Binds file-based schemas to project subfolders
-3. Creates fileviews and wiki pages
-4. Generates binding summary documentation
-
-### Schema Binding Files
-
-- `scripts/synapse_json_schema_bind.py` - Core binding logic
-- `projects.yml` - Existing project mappings (created by `create_projects.py`)
-- `schema_binding_config.yml` - Schema binding configuration
-- `.github/workflows/bind-schemas-to-projects.yml` - GitHub Actions workflow
-- `requirements.txt` - Python dependencies
-
-### Schema Binding Dependencies
-
-- `synapseclient` - Synapse Python client
-- `requests` - HTTP requests for downloading schemas
-- `pyyaml` - YAML configuration parsing
-- `pandas` - Data manipulation (if needed)
-
-### Schema Binding Environment Variables
-
-Required secrets in GitHub repository:
-- `SYNAPSE_USERNAME` - Synapse username
-- `SYNAPSE_AUTH_TOKEN` - Synapse authentication token
-
-### Related Repositories
-
-- [htan2-data-model](https://github.com/sage-bionetworks/htan2-data-model) - Schema definition and generation
-- [htan2-project-setup](https://github.com/sage-bionetworks/htan2-project-setup) - This repository
-
-### Schema Binding Troubleshooting
-
-#### Common Issues
-
-**1. Authentication Errors (403 Client Error)**
-- **Problem**: "Anonymous users have only READ access permission"
-- **Solution**: Add Synapse credentials as GitHub secrets:
-  - `SYNAPSE_USERNAME`: Your Synapse username
-  - `SYNAPSE_AUTH_TOKEN`: Your Synapse Personal Access Token
-
-**2. Schema Not Found (404 Client Error)**
-- **Problem**: "JSON Schema not found for organizationName: 'HTAN2Organization'"
-- **Solution**: Ensure schemas are registered in Synapse first:
-  - Check that htan2-data-model workflow registered schemas (not using `--no_bind`)
-  - Verify the schema version exists in Synapse
-
-**3. Schema Files Not Downloaded**
-- **Problem**: "Schema file for BulkWESLevel1 not found"
-- **Solution**: Check that:
-  - The version tag exists in htan2-data-model repository
-  - JSON_Schemas/{version} directory contains the schema files
-  - The repository path is correct (ncihtan/htan2-data-model)
-
-**4. Folder Not Found**
-- **Problem**: Target folder doesn't exist in Synapse
-- **Solution**: Create the target folder in Synapse before running the workflow
-
-#### Required GitHub Secrets
-
-Add these secrets to your repository settings:
-- `SYNAPSE_USERNAME`: Your Synapse username
-- `SYNAPSE_AUTH_TOKEN`: Your Synapse Personal Access Token
-
-### Schema Binding Contributing
-
-1. Update project mappings in `projects.yml` (use `create_projects.py`)
-2. Update schema bindings in `schema_binding_config.yml`
-3. Modify binding logic in `scripts/synapse_json_schema_bind.py`
-4. Update workflow in `.github/workflows/bind-schemas-to-projects.yml`
-5. Test with manual workflow dispatch
+- [htan2-data-model](https://github.com/ncihtan/htan2-data-model) - Schema definition and generation
