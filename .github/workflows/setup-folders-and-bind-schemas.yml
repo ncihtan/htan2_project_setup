@@ -116,7 +116,7 @@ jobs:
         echo "Binding schemas from ${{ github.event.inputs.schema_version }} to v${{ github.event.inputs.version }} folders"
         echo ""
         echo "The action will bind schemas to all folders listed in schema_binding_config.yml"
-        echo "This includes all v${{ github.event.inputs.version }}_staging folders that were just set up."
+        echo "This includes all v${{ github.event.inputs.version }}_ingest, v${{ github.event.inputs.version }}_staging, and v${{ github.event.inputs.version }}_release folders that were just set up."
         echo ""
         
         # Process file-based schemas using the dedicated script
@@ -156,7 +156,7 @@ jobs:
         1. ✅ Created folders (v${{ github.event.inputs.version }}_ingest, v${{ github.event.inputs.version }}_staging, v${{ github.event.inputs.version }}_release)
         2. ✅ Set access permissions for all folders
         3. ✅ Updated schema binding config with real Synapse IDs
-        4. ✅ Merged v${{ github.event.inputs.version }}_staging bindings into schema_binding_config.yml
+        4. ✅ Merged v${{ github.event.inputs.version }} bindings (ingest, staging, release) into schema_binding_config.yml
         5. ✅ Downloaded schemas from ${{ github.event.inputs.data_model_repo }}/JSON_Schemas/${{ github.event.inputs.schema_version }}/
         6. Schema binding results:
            - ✅ Successful: $SUCCESSFUL binding(s)

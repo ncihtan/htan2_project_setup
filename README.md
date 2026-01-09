@@ -38,7 +38,7 @@ This single action will:
 2. ✅ Set access permissions for all folders
 3. ✅ Update schema binding config with real Synapse IDs
 4. ✅ Download schemas from the specified version
-5. ✅ Bind schemas to all v9_staging folders
+5. ✅ Bind schemas to all v9 folders (ingest, staging, release)
 
 ### Option 2: Local Setup
 
@@ -51,15 +51,15 @@ This single command does everything:
 1. ✅ Creates all folders (v8_ingest, v8_staging, v8_release) with all modules
 2. ✅ Sets access permissions for all folders
 3. ✅ Updates schema binding file with real Synapse IDs
-4. ✅ Merges staging folder bindings into `schema_binding_config.yml`
+4. ✅ Merges all folder bindings (ingest, staging, release) into `schema_binding_config.yml`
 
 ### What Gets Generated
 
 After running the setup script, you'll have:
 
 - **`folder_structure_v8.yml`** - Complete folder structure with all Synapse IDs
-- **`schema_binding_v8.yml`** - Schema binding mappings with real IDs (staging only)
-- **`schema_binding_config.yml`** - Updated with v8_staging bindings (used by GitHub Action)
+- **`schema_binding_v8.yml`** - Schema binding mappings with real IDs (ingest, staging, release)
+- **`schema_binding_config.yml`** - Updated with v8 bindings for all folder types (used by GitHub Action)
 
 ### Manual Steps (Alternative)
 
@@ -74,13 +74,14 @@ python scripts/manage/update_folder_permissions.py --version 8 --folder-type ing
 python scripts/manage/update_folder_permissions.py --version 8 --folder-type staging
 python scripts/manage/update_folder_permissions.py --version 8 --folder-type release
 
-# 3. Update schema bindings with real IDs
+# 3. Update schema bindings with real IDs (for all folder types)
+python scripts/manage/update_schema_bindings.py --version 8 --folder-type ingest
 python scripts/manage/update_schema_bindings.py --version 8 --folder-type staging
+python scripts/manage/update_schema_bindings.py --version 8 --folder-type release
 
-# 4. Merge into config
+# 4. Merge into config (all folder types)
 python merge_schema_bindings.py \
-  --schema-binding-file schema_binding_v8.yml \
-  --folder-type-filter v8_staging
+  --schema-binding-file schema_binding_v8.yml
 ```
 
 ## Phase 2: Schema Binding (Manual)
@@ -93,7 +94,7 @@ Once folders are set up and `schema_binding_config.yml` is configured, schema bi
 2. **Manual Trigger** - Go to GitHub → Actions → "Bind Schemas to HTAN2 Projects" → "Run workflow"
 3. **Enter Schema Version** - Specify which schema version to bind (e.g., `v1.0.0`)
 4. **Download Schemas** - Action downloads schemas from `ncihtan/htan2-data-model/JSON_Schemas/v1.0.0/`
-5. **Bind Schemas** - Action reads `schema_binding_config.yml` and binds schemas to all listed folders
+5. **Bind Schemas** - Action reads `schema_binding_config.yml` and binds schemas to all listed folders (ingest, staging, release)
 6. **Create Fileviews** - Action creates fileviews and wiki pages for each bound schema
 
 ### Manual Trigger Steps
@@ -129,12 +130,12 @@ htan2_project_setup/
 │   │   ├── update_schema_bindings.py
 │   │   └── verify_permissions.py
 │   │
-│   └── schema/             # Schema binding
-│       ├── bind_schemas_workflow.py
-│       └── synapse_json_schema_bind.py
+│   ├── bind_schemas_workflow.py      # Schema binding workflow
+│   └── synapse_json_schema_bind.py   # Schema binding utility
 │
 ├── .github/workflows/
-│   └── bind-schemas-to-projects.yml  # GitHub Action for schema binding
+│   ├── setup-folders-and-bind-schemas.yml  # Complete setup workflow
+│   └── bind-schemas-to-projects.yml        # Schema binding only workflow
 │
 ├── projects.yml                      # Project names and IDs
 ├── schema_binding_config.yml         # Master schema binding config
@@ -146,10 +147,10 @@ htan2_project_setup/
 
 - **`projects.yml`** - Project names and Synapse IDs
 - **`schema_binding_config.yml`** - Master config for schema binding (used by GitHub Action)
-  - Contains all version bindings (v8_staging, v9_staging, etc.)
+  - Contains all version bindings (v8_ingest, v8_staging, v8_release, v9_ingest, etc.)
   - Updated automatically when new versions are set up
 - **`folder_structure_{version}.yml`** - Complete folder hierarchy with Synapse IDs (per version)
-- **`schema_binding_{version}.yml`** - Schema binding mappings (staging only, per version)
+- **`schema_binding_{version}.yml`** - Schema binding mappings (ingest, staging, release, per version)
 
 ## Access Permissions
 
@@ -178,8 +179,8 @@ htan2_project_setup/
 
 1. **Folder Setup is One-Time** - Run `setup_folders.py` once per version
 2. **Schema Binding is Manual** - You control when to bind schemas via GitHub Actions UI
-3. **Only Staging Gets Schemas** - Schemas are only bound to `{version}_staging/` folders
-4. **Config is Cumulative** - `schema_binding_config.yml` contains all versions
+3. **All Folder Types Get Schemas** - Schemas are bound to `{version}_ingest/`, `{version}_staging/`, and `{version}_release/` folders
+4. **Config is Cumulative** - `schema_binding_config.yml` contains all versions and folder types
 5. **Action Uses Config** - GitHub Action reads `schema_binding_config.yml` to know where to bind
 6. **Full Control** - You decide which schema version to bind and when
 
