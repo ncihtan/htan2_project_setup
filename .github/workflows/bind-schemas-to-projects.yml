@@ -12,6 +12,10 @@ on:
         description: 'HTAN2 data model repository (e.g., ncihtan/htan2-data-model)'
         required: true
         default: 'ncihtan/htan2-data-model'
+      folder_types:
+        description: 'Folder types to bind (e.g., v8_ingest v8_staging v8_release). Leave empty to bind all. Separate multiple with spaces.'
+        required: false
+        default: ''
 
 env:
   PYTHON_VERSION: '3.11'
@@ -95,8 +99,17 @@ jobs:
         # Process file-based schemas from config
         echo "Processing file-based schemas from configuration..."
         
+        # Build command with optional folder-type filter
+        BIND_CMD="python scripts/bind_schemas_workflow.py"
+        if [ -n "${{ github.event.inputs.folder_types }}" ]; then
+          echo "Filtering to folder types: ${{ github.event.inputs.folder_types }}"
+          BIND_CMD="$BIND_CMD --folder-type-filter ${{ github.event.inputs.folder_types }}"
+        else
+          echo "Binding to all folder types in config"
+        fi
+        
         # Process file-based schemas using the dedicated script
-        python scripts/bind_schemas_workflow.py
+        $BIND_CMD
         
         # TODO: Expand to bind all file-based schemas to all projects with existing subfolders
         # This can be done by iterating through the schema_binding_config.yml configuration
