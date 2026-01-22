@@ -13,3 +13,4 @@ env/
 binding_results.json
 schema_binding_summary.md
 workflow_summary.md
+schemas/
