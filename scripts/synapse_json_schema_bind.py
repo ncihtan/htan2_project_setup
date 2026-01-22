@@ -279,46 +279,13 @@ def create_wiki_with_fileview_id(syn, entity_id: str, fileview_id: str, schema_n
     
     # Create wiki content with hyperlink
     fileview_url = f"https://www.synapse.org/#!Synapse:{fileview_id}"
-    wiki_content = f"""# {schema_name} Data View
+    wiki_content = f"""The data is displayed in a fileview with columns extracted from the JSON schema:
 
-This page displays the {schema_name} data files with schema-validated metadata.
+Fileview ID: {fileview_id}
 
-## Fileview
+[View Fileview →]({fileview_url})
 
-The data is displayed in a fileview with columns extracted from the JSON schema:
-
-**Fileview ID**: `{fileview_id}`
-
-**[View Fileview →]({fileview_url})**
-
-## Schema Validation
-
-All files in this folder are validated against the {schema_name} JSON schema. Files with invalid or missing required annotations will show validation errors.
-
-## Columns
-
-The fileview includes the following key columns:
-- COMPONENT
-- FILENAME  
-- FILE_FORMAT
-- HTAN_DATA_FILE_ID
-- HTAN_PARENT_BIOSPECIMEN_ID
-- SEQUENCING_PLATFORM
-- LIBRARY_LAYOUT
-- READ_LENGTH
-- LIBRARY_SELECTION_METHOD
-- SEQUENCING_BATCH_ID
-- TARGET_CAPTURE_KIT
-- LIBRARY_PREPARATION_KIT_NAME
-
-## Usage
-
-Files uploaded to this folder will automatically appear in the fileview with their metadata validated against the schema.
-
-## Quick Links
-
-- [Open Fileview]({fileview_url})
-- [Schema Documentation](https://repo-prod.prod.sagebase.org/repo/v1/schema/type/registered/HTAN2Organization-{schema_name}-1.0.0)
+Schema Documentation: https://htan2-data-model.readthedocs.io/en/latest/index.html
 """
     
     try:
