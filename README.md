@@ -57,9 +57,10 @@ This single command does everything:
 
 After running the setup script, you'll have:
 
-- **`folder_structure_v8.yml`** - Complete folder structure with all Synapse IDs
 - **`schema_binding_v8.yml`** - Schema binding mappings with real IDs (ingest, staging, release)
 - **`schema_binding_config.yml`** - Updated with v8 bindings for all folder types (used by GitHub Action)
+
+**Note**: `folder_structure_v8.yml` is generated but not tracked in git (it's regenerated when needed).
 
 ### Manual Steps (Alternative)
 
@@ -84,27 +85,34 @@ python merge_schema_bindings.py \
   --schema-binding-file schema_binding_v8.yml
 ```
 
-## Phase 2: Schema Binding (Manual)
+## Phase 2: Schema Binding
 
-Once folders are set up and `schema_binding_config.yml` is configured, schema binding is done manually when you're ready.
+### For New Releases
 
-### How It Works
+1. **Run the "Bind Schemas to HTAN2 Projects" GitHub Action**
+   - Go to GitHub → Actions → "Bind Schemas to HTAN2 Projects" → "Run workflow"
+   - Enter the requested inputs (schema version, data model repo, etc.)
+   - Click "Run workflow"
 
-1. **Decide When to Bind** - You choose when to bind schemas (e.g., after schema release, after testing, etc.)
-2. **Manual Trigger** - Go to GitHub → Actions → "Bind Schemas to HTAN2 Projects" → "Run workflow"
-3. **Enter Schema Version** - Specify which schema version to bind (e.g., `v1.0.0`)
-4. **Download Schemas** - Action downloads schemas from `ncihtan/htan2-data-model/JSON_Schemas/v1.0.0/`
-5. **Bind Schemas** - Action reads `schema_binding_config.yml` and binds schemas to all listed folders (ingest, staging, release)
-6. **Create Fileviews** - Action creates fileviews and wiki pages for each bound schema
+2. **Extract Fileview IDs**
+   ```bash
+   python scripts/manage/update_fileview_ids.py
+   ```
+   This adds fileview IDs to the config for BigQuery (b1q).
 
-### Manual Trigger Steps
+### For Updating Existing Folders to Newer Data Model Version
 
-1. Go to GitHub → Actions → "Bind Schemas to HTAN2 Projects"
-2. Click "Run workflow"
-3. Enter:
-   - Schema version: `v1.0.0` (or the version you want)
-   - Data model repo: `ncihtan/htan2-data-model`
-4. Click "Run workflow" button
+**Important**: Each folder type (e.g., v8_ingest) takes approximately 3 hours to run, so trigger them separately.
+
+1. **Run the "Bind Schemas to HTAN2 Projects" GitHub Action** for each folder type:
+   - First: Filter to `v8_ingest` only
+   - Then: Filter to `v8_staging` only  
+   - Finally: Filter to `v8_release` only
+
+2. **After all bindings complete, extract Fileview IDs**
+   ```bash
+   python scripts/manage/update_fileview_ids.py
+   ```
 
 ## Project Structure
 
@@ -128,6 +136,7 @@ htan2_project_setup/
 │   │   ├── create_project_folders.py
 │   │   ├── update_folder_permissions.py
 │   │   ├── update_schema_bindings.py
+│   │   ├── update_fileview_ids.py    # Extract fileview IDs from wikis
 │   │   └── verify_permissions.py
 │   │
 │   ├── bind_schemas_workflow.py      # Schema binding workflow
@@ -138,8 +147,7 @@ htan2_project_setup/
 │   └── bind-schemas-to-projects.yml        # Schema binding only workflow
 │
 ├── projects.yml                      # Project names and IDs
-├── schema_binding_config.yml         # Master schema binding config
-├── folder_structure_v8.yml           # v8 folder structure (generated)
+├── schema_binding_config.yml         # Master schema binding config (includes fileview_ids)
 └── schema_binding_v8.yml             # v8 schema bindings (generated)
 ```
 
@@ -148,8 +156,8 @@ htan2_project_setup/
 - **`projects.yml`** - Project names and Synapse IDs
 - **`schema_binding_config.yml`** - Master config for schema binding (used by GitHub Action)
   - Contains all version bindings (v8_ingest, v8_staging, v8_release, v9_ingest, etc.)
+  - Includes `fileview_id` fields for each bound schema (extracted via `update_fileview_ids.py`)
   - Updated automatically when new versions are set up
-- **`folder_structure_{version}.yml`** - Complete folder hierarchy with Synapse IDs (per version)
 - **`schema_binding_{version}.yml`** - Schema binding mappings (ingest, staging, release, per version)
 
 ## Access Permissions
@@ -178,11 +186,10 @@ htan2_project_setup/
 ## Key Points
 
 1. **Folder Setup is One-Time** - Run `setup_folders.py` once per version
-2. **Schema Binding is Manual** - You control when to bind schemas via GitHub Actions UI
-3. **All Folder Types Get Schemas** - Schemas are bound to `{version}_ingest/`, `{version}_staging/`, and `{version}_release/` folders
-4. **Config is Cumulative** - `schema_binding_config.yml` contains all versions and folder types
-5. **Action Uses Config** - GitHub Action reads `schema_binding_config.yml` to know where to bind
-6. **Full Control** - You decide which schema version to bind and when
+2. **New Releases** - Run bind schemas action, then update fileview IDs script
+3. **Updating Existing Folders** - Run bind schemas action separately for each folder type (ingest, staging, release) due to ~3 hour runtime per folder type
+4. **Fileview IDs for BigQuery** - After bindings complete, run `update_fileview_ids.py` to extract fileview IDs and add them to the config for b1q
+5. **Config Contains Fileview IDs** - `schema_binding_config.yml` includes `fileview_id` fields for each bound schema
 
 ## Prerequisites
 
@@ -218,6 +225,16 @@ python scripts/manage/update_folder_permissions.py --version 8 --folder-type sta
 ### Need to Rebind Schemas
 
 Just trigger the GitHub Action again - it will rebind all schemas from the config.
+
+### Need to Update Fileview IDs
+
+After schema bindings are complete and verified, extract fileview IDs:
+
+```bash
+python scripts/manage/update_fileview_ids.py
+```
+
+This updates `schema_binding_config.yml` with `fileview_id` fields extracted from wikis.
 
 ## Related Repositories
 
