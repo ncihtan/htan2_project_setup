@@ -41,9 +41,9 @@ def map_schema_name_to_file(schema_name: str, schema_version: str = "v1.0.0") ->
         return f"HTAN.scRNALevel2{version_suffix}-schema.json"
     elif schema_name == "scRNA_seqLevel3_4":
         return f"HTAN.scRNALevel3_4{version_suffix}-schema.json"
-    elif schema_name.startswith("SpatialTranscriptomics"):
-        # Convert SpatialTranscriptomicsLevel1 -> SpatialLevel1
-        level_part = schema_name.replace("SpatialTranscriptomics", "Spatial")
+    elif schema_name.startswith("SpatialOmics"):
+        # Convert SpatialOmicsLevel1 -> SpatialLevel1
+        level_part = schema_name.replace("SpatialOmics", "Spatial")
         return f"HTAN.{level_part}{version_suffix}-schema.json"
     else:
         # Default: add HTAN prefix
@@ -253,17 +253,18 @@ Examples:
             print(f'    Folder: {subfolder}')
             print(f'    Synapse ID: {synapse_id}')
             
-            # Run the binding script
+            # Run the binding script (without fileview creation to speed up binding)
             cmd = [
                 'python', 'scripts/synapse_json_schema_bind.py',
                 '-p', schema_file,
                 '-t', synapse_id,
-                '-n', organization_name,
-                '--create_fileview'
+                '-n', organization_name
+                # Note: Removed --create_fileview flag to speed up binding process
+                # Fileviews can be created separately if needed
             ]
             
             # Use longer timeout for scRNA_seqLevel3_4 which tends to be large
-            timeout = 900 if schema_name == "scRNA_seqLevel3_4" else 300  # 15 min for scRNA_seqLevel3_4, 5 min for others
+            timeout = 1800 if schema_name == "scRNA_seqLevel3_4" else 300  # 30 min for scRNA_seqLevel3_4, 5 min for others
             print(f'    Timeout: {timeout // 60} minutes')
             
             try:
@@ -379,17 +380,18 @@ Examples:
             print(f'    Folder: {subfolder}')
             print(f'    Synapse ID: {synapse_id}')
             
-            # Run the binding script
+            # Run the binding script (without fileview creation to speed up binding)
             cmd = [
                 'python', 'scripts/synapse_json_schema_bind.py',
                 '-p', schema_file,
                 '-t', synapse_id,
-                '-n', organization_name,
-                '--create_fileview'
+                '-n', organization_name
+                # Note: Removed --create_fileview flag to speed up binding process
+                # Fileviews can be created separately if needed
             ]
             
             # Use longer timeout for scRNA_seqLevel3_4 which tends to be large
-            timeout = 900 if schema_name == "scRNA_seqLevel3_4" else 300  # 15 min for scRNA_seqLevel3_4, 5 min for others
+            timeout = 1800 if schema_name == "scRNA_seqLevel3_4" else 300  # 30 min for scRNA_seqLevel3_4, 5 min for others
             print(f'    Timeout: {timeout // 60} minutes')
             
             try:

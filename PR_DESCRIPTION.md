@@ -21,7 +21,7 @@ This PR introduces a complete workflow for setting up new release versions (v8+)
 - **Biospecimen Mapping**: Fixed mapping from `Biospecimen` → `HTAN.BiospecimenData-v1.0.0-schema.json`
 - **Special Schema Names**: Added proper mappings for:
   - `scRNA_seqLevel1/2/3_4` → `HTAN.scRNALevel1/2/3_4-v1.0.0-schema.json`
-  - `SpatialTranscriptomicsLevel*` → `HTAN.SpatialLevel*-v1.0.0-schema.json`
+  - `SpatialOmicsLevel*` → `HTAN.SpatialLevel*-v1.0.0-schema.json`
   - `DigitalPathology` → `HTAN.DigitalPathologyData-v1.0.0-schema.json`
 
 #### Enhanced Error Handling
@@ -140,4 +140,5 @@ After merging:
 - Fixes schema binding issues where wrong schemas were being matched
 - Fixes missing record-based schema bindings
 - Adds support for ingest and release folder schema bindings
+
 

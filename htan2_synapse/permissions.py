@@ -208,3 +208,4 @@ def set_folder_permissions(syn, folder_id: str, folder_type: str, version: str, 
     except Exception as e:
         print(f"    ⚠ Warning: Error setting permissions: {e}")
 
+

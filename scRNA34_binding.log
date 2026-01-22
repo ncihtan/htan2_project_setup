@@ -1,0 +1,480 @@
+Found 10 failed bindings in /Users/agopalan/Downloads/schema-binding-summary-v1.0.0 (5)/binding_results.json
+Found 10 failed bindings in /Users/agopalan/Downloads/schema-binding-summary-v1.0.0 (6)/binding_results.json
+Found 10 failed bindings in /Users/agopalan/Downloads/schema-binding-summary-v1.0.0 (7)/binding_results.json
+
+Found 30 unique scRNA_seqLevel3_4 failed bindings to retry
+
+Logging in to Synapse...
+Welcome, Aditi Gopalan!
+
+[WARNING] /Users/agopalan/anaconda3/lib/python3.11/site-packages/pandas/core/arrays/masked.py:61: UserWarning: Pandas requires version '1.3.6' or newer of 'bottleneck' (version '1.3.5' currently installed).
+  from pandas.core import (
+
+✅ Successfully logged in
+
+✅ Verified schema exists: HTAN2Organization-scRNALevel34-1.0.0
+
+================================================================================
+PROCESSING FAILED BINDINGS
+================================================================================
+
+[1/30] HTAN2_CRC - v8_ingest/scRNA_seq/Level_3_4
+  Entity ID: syn72101037
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380448)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380448
+✅ Wiki page created on entity syn72101037
+✅ Fileview ID syn72380448 stored in wiki
+  ✅ Fileview and wiki created
+
+[2/30] HTAN2_Gastric - v8_ingest/scRNA_seq/Level_3_4
+  Entity ID: syn72101065
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380449)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380449
+✅ Wiki page created on entity syn72101065
+✅ Fileview ID syn72380449 stored in wiki
+  ✅ Fileview and wiki created
+
+[3/30] HTAN2_Glioma - v8_ingest/scRNA_seq/Level_3_4
+  Entity ID: syn72101093
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380450)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380450
+✅ Wiki page created on entity syn72101093
+✅ Fileview ID syn72380450 stored in wiki
+  ✅ Fileview and wiki created
+
+[4/30] HTAN2_Lymphoma - v8_ingest/scRNA_seq/Level_3_4
+  Entity ID: syn72101123
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380451)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380451
+✅ Wiki page created on entity syn72101123
+✅ Fileview ID syn72380451 stored in wiki
+  ✅ Fileview and wiki created
+
+[5/30] HTAN2_Myeloma - v8_ingest/scRNA_seq/Level_3_4
+  Entity ID: syn72101151
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380452)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380452
+✅ Wiki page created on entity syn72101151
+✅ Fileview ID syn72380452 stored in wiki
+  ✅ Fileview and wiki created
+
+[6/30] HTAN2_Ovarian - v8_ingest/scRNA_seq/Level_3_4
+  Entity ID: syn72101179
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380437)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380437
+Downloading files:   0%|          | 0.00/1.00 [00:00<?, ?B/s, 638842]Downloading files:   0%|          | 0.00/219 [00:00<?, ?B/s, 638842] Downloading files: 100%|██████████| 219/219 [00:00<00:00, 822B/s, 638842][638842]: Downloaded to /Users/agopalan/.synapseCache/786/167291786/167291786.md
+Downloading files: 100%|██████████| 219/219 [00:00<00:00, 809B/s, 638842]
+✅ Wiki page created on entity syn72101179
+✅ Fileview ID syn72380437 stored in wiki
+  ✅ Fileview and wiki created
+
+[7/30] HTAN2_Pancreatic - v8_ingest/scRNA_seq/Level_3_4
+  Entity ID: syn72101208
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380454)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380454
+✅ Wiki page created on entity syn72101208
+✅ Fileview ID syn72380454 stored in wiki
+  ✅ Fileview and wiki created
+
+[8/30] HTAN2_Pediatric - v8_ingest/scRNA_seq/Level_3_4
+  Entity ID: syn72101238
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async: 0.00it [00:00, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380455)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380455
+✅ Wiki page created on entity syn72101238
+✅ Fileview ID syn72380455 stored in wiki
+  ✅ Fileview and wiki created
+
+[9/30] HTAN2_Prostate - v8_ingest/scRNA_seq/Level_3_4
+  Entity ID: syn72101266
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380456)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380456
+✅ Wiki page created on entity syn72101266
+✅ Fileview ID syn72380456 stored in wiki
+  ✅ Fileview and wiki created
+
+[10/30] HTAN2_Skin - v8_ingest/scRNA_seq/Level_3_4
+  Entity ID: syn72101294
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380457)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380457
+✅ Wiki page created on entity syn72101294
+✅ Fileview ID syn72380457 stored in wiki
+  ✅ Fileview and wiki created
+
+[11/30] HTAN2_CRC - v8_staging/scRNA_seq/Level_3_4
+  Entity ID: syn72101981
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380458)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380458
+✅ Wiki page created on entity syn72101981
+✅ Fileview ID syn72380458 stored in wiki
+  ✅ Fileview and wiki created
+
+[12/30] HTAN2_Gastric - v8_staging/scRNA_seq/Level_3_4
+  Entity ID: syn72102041
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380459)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380459
+✅ Wiki page created on entity syn72102041
+✅ Fileview ID syn72380459 stored in wiki
+  ✅ Fileview and wiki created
+
+[13/30] HTAN2_Glioma - v8_staging/scRNA_seq/Level_3_4
+  Entity ID: syn72102101
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380460)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380460
+✅ Wiki page created on entity syn72102101
+✅ Fileview ID syn72380460 stored in wiki
+  ✅ Fileview and wiki created
+
+[14/30] HTAN2_Lymphoma - v8_staging/scRNA_seq/Level_3_4
+  Entity ID: syn72102162
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380461)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380461
+✅ Wiki page created on entity syn72102162
+✅ Fileview ID syn72380461 stored in wiki
+  ✅ Fileview and wiki created
+
+[15/30] HTAN2_Myeloma - v8_staging/scRNA_seq/Level_3_4
+  Entity ID: syn72102223
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380462)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380462
+✅ Wiki page created on entity syn72102223
+✅ Fileview ID syn72380462 stored in wiki
+  ✅ Fileview and wiki created
+
+[16/30] HTAN2_Ovarian - v8_staging/scRNA_seq/Level_3_4
+  Entity ID: syn72102285
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380463)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380463
+✅ Wiki page created on entity syn72102285
+✅ Fileview ID syn72380463 stored in wiki
+  ✅ Fileview and wiki created
+
+[17/30] HTAN2_Pancreatic - v8_staging/scRNA_seq/Level_3_4
+  Entity ID: syn72102347
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380464)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380464
+✅ Wiki page created on entity syn72102347
+✅ Fileview ID syn72380464 stored in wiki
+  ✅ Fileview and wiki created
+
+[18/30] HTAN2_Pediatric - v8_staging/scRNA_seq/Level_3_4
+  Entity ID: syn72102407
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380465)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380465
+✅ Wiki page created on entity syn72102407
+✅ Fileview ID syn72380465 stored in wiki
+  ✅ Fileview and wiki created
+
+[19/30] HTAN2_Prostate - v8_staging/scRNA_seq/Level_3_4
+  Entity ID: syn72102469
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380466)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380466
+✅ Wiki page created on entity syn72102469
+✅ Fileview ID syn72380466 stored in wiki
+  ✅ Fileview and wiki created
+
+[20/30] HTAN2_Skin - v8_staging/scRNA_seq/Level_3_4
+  Entity ID: syn72102533
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380467)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380467
+✅ Wiki page created on entity syn72102533
+✅ Fileview ID syn72380467 stored in wiki
+  ✅ Fileview and wiki created
+
+[21/30] HTAN2_CRC - v8_release/scRNA_seq/Level_3_4
+  Entity ID: syn72102011
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380468)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380468
+✅ Wiki page created on entity syn72102011
+✅ Fileview ID syn72380468 stored in wiki
+  ✅ Fileview and wiki created
+
+[22/30] HTAN2_Gastric - v8_release/scRNA_seq/Level_3_4
+  Entity ID: syn72102071
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380469)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380469
+✅ Wiki page created on entity syn72102071
+✅ Fileview ID syn72380469 stored in wiki
+  ✅ Fileview and wiki created
+
+[23/30] HTAN2_Glioma - v8_release/scRNA_seq/Level_3_4
+  Entity ID: syn72102131
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380470)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380470
+✅ Wiki page created on entity syn72102131
+✅ Fileview ID syn72380470 stored in wiki
+  ✅ Fileview and wiki created
+
+[24/30] HTAN2_Lymphoma - v8_release/scRNA_seq/Level_3_4
+  Entity ID: syn72102193
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:01<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:01<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380471)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380471
+✅ Wiki page created on entity syn72102193
+✅ Fileview ID syn72380471 stored in wiki
+  ✅ Fileview and wiki created
+
+[25/30] HTAN2_Myeloma - v8_release/scRNA_seq/Level_3_4
+  Entity ID: syn72102253
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380472)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380472
+✅ Wiki page created on entity syn72102253
+✅ Fileview ID syn72380472 stored in wiki
+  ✅ Fileview and wiki created
+
+[26/30] HTAN2_Ovarian - v8_release/scRNA_seq/Level_3_4
+  Entity ID: syn72102315
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380473)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380473
+✅ Wiki page created on entity syn72102315
+✅ Fileview ID syn72380473 stored in wiki
+  ✅ Fileview and wiki created
+
+[27/30] HTAN2_Pancreatic - v8_release/scRNA_seq/Level_3_4
+  Entity ID: syn72102377
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380474)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380474
+✅ Wiki page created on entity syn72102377
+✅ Fileview ID syn72380474 stored in wiki
+  ✅ Fileview and wiki created
+
+[28/30] HTAN2_Pediatric - v8_release/scRNA_seq/Level_3_4
+  Entity ID: syn72102438
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380475)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380475
+✅ Wiki page created on entity syn72102438
+✅ Fileview ID syn72380475 stored in wiki
+  ✅ Fileview and wiki created
+
+[29/30] HTAN2_Prostate - v8_release/scRNA_seq/Level_3_4
+  Entity ID: syn72102499
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380476)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380476
+✅ Wiki page created on entity syn72102499
+✅ Fileview ID syn72380476 stored in wiki
+  ✅ Fileview and wiki created
+
+[30/30] HTAN2_Skin - v8_release/scRNA_seq/Level_3_4
+  Entity ID: syn72102563
+  Binding schema...
+  ✅ Schema bound successfully
+  Creating fileview and wiki...
+Creating fileview for schema: scRNALevel34
+Created 6 columns from schema properties
+/column/view/scope/async: 0.00it [00:00, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]/column/view/scope/async:   0%|          | 0.00/1.00 [00:00<?, ?it/s]
+✅ Created fileview: scRNALevel34 Fileview (ID: syn72380477)
+✅ Added 6 columns to fileview
+Creating wiki page for fileview: syn72380477
+✅ Wiki page created on entity syn72102563
+✅ Fileview ID syn72380477 stored in wiki
+  ✅ Fileview and wiki created
+
+================================================================================
+SUMMARY
+================================================================================
+✅ Successfully bound: 30
+❌ Failed: 0
+================================================================================
+
+Results saved to: scRNA34_binding_results.json

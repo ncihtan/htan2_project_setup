@@ -116,7 +116,7 @@ def get_folder_structure_from_synapse(syn, projects: Dict[str, str], version: st
                         
                         folder_structure["modules"][module_name] = module_structure
                 else:
-                    # Regular file-based modules (WES, scRNA_seq, SpatialTranscriptomics)
+                    # Regular file-based modules (WES, scRNA_seq, SpatialOmics)
                     module_id = find_folder_id(syn, folder_id, module_name)
                     if module_id:
                         print(f"    ✓ Found {module_name}/: {module_id}")
@@ -197,7 +197,7 @@ def generate_schema_binding_from_structure(structure: Dict, version: str, folder
                     })
             
             # File-based schemas
-            for module_name in ["WES", "scRNA_seq", "SpatialTranscriptomics"]:
+            for module_name in ["WES", "scRNA_seq", "SpatialOmics"]:
                 if module_name in modules:
                     module_data = modules[module_name]
                     for subfolder_name, subfolder_id in module_data.get("subfolders", {}).items():
@@ -377,4 +377,5 @@ Examples:
 
 if __name__ == "__main__":
     main()
+
 

@@ -1,3 +1,20 @@
+0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Helper script to merge schema binding structure into schema_binding_config.yml.

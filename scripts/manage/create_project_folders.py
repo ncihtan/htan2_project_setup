@@ -324,7 +324,7 @@ def generate_schema_binding_structure(all_projects_structure, projects, version,
                                 schema_name = "scRNALevel3_4"
                             else:
                                 schema_name = f"scRNA{subfolder_name.replace('_', '')}"
-                        elif module_name == "SpatialTranscriptomics":
+                        elif module_name == "SpatialOmics":
                             if subfolder_name == "Panel":
                                 schema_name = "SpatialPanel"
                             else:

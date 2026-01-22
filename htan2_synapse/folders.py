@@ -37,3 +37,4 @@ def create_folder(syn, parent_id: str, folder_name: str) -> Optional[str]:
         print(f"  ✗ Failed to create folder '{folder_name}': {e}")
         return None
 
+

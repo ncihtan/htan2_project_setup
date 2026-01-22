@@ -42,7 +42,7 @@ FILE_BASED_MODULES = {
         "DigitalPathology",  # DigitalPathologyData - no levels, just the main folder
         "MultiplexMicroscopy"  # Has Level_2, Level_3, Level_4 subfolders
     ],
-    "SpatialTranscriptomics": [
+    "SpatialOmics": [
         "Level_1",
         "Level_3",
         "Level_4",
@@ -59,4 +59,5 @@ IMAGING_SUBFOLDERS = {
         "Level_4"
     ]
 }
+
 

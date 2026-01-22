@@ -555,373 +555,373 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_ingest/scRNA_seq/Level_3_4
         synapse_id: syn72101294
-    SpatialTranscriptomicsLevel1:
+    SpatialOmicsLevel1:
       projects:
       - name: HTAN2_CRC
-        subfolder: v8_staging/SpatialTranscriptomics/Level_1
+        subfolder: v8_staging/SpatialOmics/Level_1
         synapse_id: syn72101989
       - name: HTAN2_Gastric
-        subfolder: v8_staging/SpatialTranscriptomics/Level_1
+        subfolder: v8_staging/SpatialOmics/Level_1
         synapse_id: syn72102049
       - name: HTAN2_Glioma
-        subfolder: v8_staging/SpatialTranscriptomics/Level_1
+        subfolder: v8_staging/SpatialOmics/Level_1
         synapse_id: syn72102109
       - name: HTAN2_Lymphoma
-        subfolder: v8_staging/SpatialTranscriptomics/Level_1
+        subfolder: v8_staging/SpatialOmics/Level_1
         synapse_id: syn72102171
       - name: HTAN2_Myeloma
-        subfolder: v8_staging/SpatialTranscriptomics/Level_1
+        subfolder: v8_staging/SpatialOmics/Level_1
         synapse_id: syn72102231
       - name: HTAN2_Ovarian
-        subfolder: v8_staging/SpatialTranscriptomics/Level_1
+        subfolder: v8_staging/SpatialOmics/Level_1
         synapse_id: syn72102293
       - name: HTAN2_Pancreatic
-        subfolder: v8_staging/SpatialTranscriptomics/Level_1
+        subfolder: v8_staging/SpatialOmics/Level_1
         synapse_id: syn72102355
       - name: HTAN2_Pediatric
-        subfolder: v8_staging/SpatialTranscriptomics/Level_1
+        subfolder: v8_staging/SpatialOmics/Level_1
         synapse_id: syn72102415
       - name: HTAN2_Prostate
-        subfolder: v8_staging/SpatialTranscriptomics/Level_1
+        subfolder: v8_staging/SpatialOmics/Level_1
         synapse_id: syn72102477
       - name: HTAN2_Skin
-        subfolder: v8_staging/SpatialTranscriptomics/Level_1
+        subfolder: v8_staging/SpatialOmics/Level_1
         synapse_id: syn72102541
       - name: HTAN2_CRC
-        subfolder: v8_release/SpatialTranscriptomics/Level_1
+        subfolder: v8_release/SpatialOmics/Level_1
         synapse_id: syn72102019
       - name: HTAN2_CRC
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_1
+        subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101044
       - name: HTAN2_Gastric
-        subfolder: v8_release/SpatialTranscriptomics/Level_1
+        subfolder: v8_release/SpatialOmics/Level_1
         synapse_id: syn72102079
       - name: HTAN2_Gastric
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_1
+        subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101072
       - name: HTAN2_Glioma
-        subfolder: v8_release/SpatialTranscriptomics/Level_1
+        subfolder: v8_release/SpatialOmics/Level_1
         synapse_id: syn72102139
       - name: HTAN2_Glioma
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_1
+        subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101100
       - name: HTAN2_Lymphoma
-        subfolder: v8_release/SpatialTranscriptomics/Level_1
+        subfolder: v8_release/SpatialOmics/Level_1
         synapse_id: syn72102201
       - name: HTAN2_Lymphoma
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_1
+        subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101130
       - name: HTAN2_Myeloma
-        subfolder: v8_release/SpatialTranscriptomics/Level_1
+        subfolder: v8_release/SpatialOmics/Level_1
         synapse_id: syn72102261
       - name: HTAN2_Myeloma
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_1
+        subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101158
       - name: HTAN2_Ovarian
-        subfolder: v8_release/SpatialTranscriptomics/Level_1
+        subfolder: v8_release/SpatialOmics/Level_1
         synapse_id: syn72102323
       - name: HTAN2_Ovarian
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_1
+        subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101186
       - name: HTAN2_Pancreatic
-        subfolder: v8_release/SpatialTranscriptomics/Level_1
+        subfolder: v8_release/SpatialOmics/Level_1
         synapse_id: syn72102385
       - name: HTAN2_Pancreatic
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_1
+        subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101215
       - name: HTAN2_Pediatric
-        subfolder: v8_release/SpatialTranscriptomics/Level_1
+        subfolder: v8_release/SpatialOmics/Level_1
         synapse_id: syn72102447
       - name: HTAN2_Pediatric
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_1
+        subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101245
       - name: HTAN2_Prostate
-        subfolder: v8_release/SpatialTranscriptomics/Level_1
+        subfolder: v8_release/SpatialOmics/Level_1
         synapse_id: syn72102511
       - name: HTAN2_Prostate
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_1
+        subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101273
       - name: HTAN2_Skin
-        subfolder: v8_release/SpatialTranscriptomics/Level_1
+        subfolder: v8_release/SpatialOmics/Level_1
         synapse_id: syn72102571
       - name: HTAN2_Skin
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_1
+        subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101301
-    SpatialTranscriptomicsLevel3:
+    SpatialOmicsLevel3:
       projects:
       - name: HTAN2_CRC
-        subfolder: v8_staging/SpatialTranscriptomics/Level_3
+        subfolder: v8_staging/SpatialOmics/Level_3
         synapse_id: syn72101990
       - name: HTAN2_Gastric
-        subfolder: v8_staging/SpatialTranscriptomics/Level_3
+        subfolder: v8_staging/SpatialOmics/Level_3
         synapse_id: syn72102050
       - name: HTAN2_Glioma
-        subfolder: v8_staging/SpatialTranscriptomics/Level_3
+        subfolder: v8_staging/SpatialOmics/Level_3
         synapse_id: syn72102110
       - name: HTAN2_Lymphoma
-        subfolder: v8_staging/SpatialTranscriptomics/Level_3
+        subfolder: v8_staging/SpatialOmics/Level_3
         synapse_id: syn72102172
       - name: HTAN2_Myeloma
-        subfolder: v8_staging/SpatialTranscriptomics/Level_3
+        subfolder: v8_staging/SpatialOmics/Level_3
         synapse_id: syn72102232
       - name: HTAN2_Ovarian
-        subfolder: v8_staging/SpatialTranscriptomics/Level_3
+        subfolder: v8_staging/SpatialOmics/Level_3
         synapse_id: syn72102294
       - name: HTAN2_Pancreatic
-        subfolder: v8_staging/SpatialTranscriptomics/Level_3
+        subfolder: v8_staging/SpatialOmics/Level_3
         synapse_id: syn72102356
       - name: HTAN2_Pediatric
-        subfolder: v8_staging/SpatialTranscriptomics/Level_3
+        subfolder: v8_staging/SpatialOmics/Level_3
         synapse_id: syn72102416
       - name: HTAN2_Prostate
-        subfolder: v8_staging/SpatialTranscriptomics/Level_3
+        subfolder: v8_staging/SpatialOmics/Level_3
         synapse_id: syn72102478
       - name: HTAN2_Skin
-        subfolder: v8_staging/SpatialTranscriptomics/Level_3
+        subfolder: v8_staging/SpatialOmics/Level_3
         synapse_id: syn72102542
       - name: HTAN2_CRC
-        subfolder: v8_release/SpatialTranscriptomics/Level_3
+        subfolder: v8_release/SpatialOmics/Level_3
         synapse_id: syn72102020
       - name: HTAN2_CRC
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_3
+        subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101045
       - name: HTAN2_Gastric
-        subfolder: v8_release/SpatialTranscriptomics/Level_3
+        subfolder: v8_release/SpatialOmics/Level_3
         synapse_id: syn72102080
       - name: HTAN2_Gastric
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_3
+        subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101073
       - name: HTAN2_Glioma
-        subfolder: v8_release/SpatialTranscriptomics/Level_3
+        subfolder: v8_release/SpatialOmics/Level_3
         synapse_id: syn72102140
       - name: HTAN2_Glioma
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_3
+        subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101101
       - name: HTAN2_Lymphoma
-        subfolder: v8_release/SpatialTranscriptomics/Level_3
+        subfolder: v8_release/SpatialOmics/Level_3
         synapse_id: syn72102202
       - name: HTAN2_Lymphoma
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_3
+        subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101131
       - name: HTAN2_Myeloma
-        subfolder: v8_release/SpatialTranscriptomics/Level_3
+        subfolder: v8_release/SpatialOmics/Level_3
         synapse_id: syn72102262
       - name: HTAN2_Myeloma
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_3
+        subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101159
       - name: HTAN2_Ovarian
-        subfolder: v8_release/SpatialTranscriptomics/Level_3
+        subfolder: v8_release/SpatialOmics/Level_3
         synapse_id: syn72102324
       - name: HTAN2_Ovarian
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_3
+        subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101187
       - name: HTAN2_Pancreatic
-        subfolder: v8_release/SpatialTranscriptomics/Level_3
+        subfolder: v8_release/SpatialOmics/Level_3
         synapse_id: syn72102386
       - name: HTAN2_Pancreatic
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_3
+        subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101216
       - name: HTAN2_Pediatric
-        subfolder: v8_release/SpatialTranscriptomics/Level_3
+        subfolder: v8_release/SpatialOmics/Level_3
         synapse_id: syn72102448
       - name: HTAN2_Pediatric
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_3
+        subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101246
       - name: HTAN2_Prostate
-        subfolder: v8_release/SpatialTranscriptomics/Level_3
+        subfolder: v8_release/SpatialOmics/Level_3
         synapse_id: syn72102512
       - name: HTAN2_Prostate
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_3
+        subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101274
       - name: HTAN2_Skin
-        subfolder: v8_release/SpatialTranscriptomics/Level_3
+        subfolder: v8_release/SpatialOmics/Level_3
         synapse_id: syn72102572
       - name: HTAN2_Skin
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_3
+        subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101302
-    SpatialTranscriptomicsLevel4:
+    SpatialOmicsLevel4:
       projects:
       - name: HTAN2_CRC
-        subfolder: v8_staging/SpatialTranscriptomics/Level_4
+        subfolder: v8_staging/SpatialOmics/Level_4
         synapse_id: syn72101991
       - name: HTAN2_Gastric
-        subfolder: v8_staging/SpatialTranscriptomics/Level_4
+        subfolder: v8_staging/SpatialOmics/Level_4
         synapse_id: syn72102051
       - name: HTAN2_Glioma
-        subfolder: v8_staging/SpatialTranscriptomics/Level_4
+        subfolder: v8_staging/SpatialOmics/Level_4
         synapse_id: syn72102111
       - name: HTAN2_Lymphoma
-        subfolder: v8_staging/SpatialTranscriptomics/Level_4
+        subfolder: v8_staging/SpatialOmics/Level_4
         synapse_id: syn72102173
       - name: HTAN2_Myeloma
-        subfolder: v8_staging/SpatialTranscriptomics/Level_4
+        subfolder: v8_staging/SpatialOmics/Level_4
         synapse_id: syn72102233
       - name: HTAN2_Ovarian
-        subfolder: v8_staging/SpatialTranscriptomics/Level_4
+        subfolder: v8_staging/SpatialOmics/Level_4
         synapse_id: syn72102295
       - name: HTAN2_Pancreatic
-        subfolder: v8_staging/SpatialTranscriptomics/Level_4
+        subfolder: v8_staging/SpatialOmics/Level_4
         synapse_id: syn72102357
       - name: HTAN2_Pediatric
-        subfolder: v8_staging/SpatialTranscriptomics/Level_4
+        subfolder: v8_staging/SpatialOmics/Level_4
         synapse_id: syn72102417
       - name: HTAN2_Prostate
-        subfolder: v8_staging/SpatialTranscriptomics/Level_4
+        subfolder: v8_staging/SpatialOmics/Level_4
         synapse_id: syn72102479
       - name: HTAN2_Skin
-        subfolder: v8_staging/SpatialTranscriptomics/Level_4
+        subfolder: v8_staging/SpatialOmics/Level_4
         synapse_id: syn72102543
       - name: HTAN2_CRC
-        subfolder: v8_release/SpatialTranscriptomics/Level_4
+        subfolder: v8_release/SpatialOmics/Level_4
         synapse_id: syn72102021
       - name: HTAN2_CRC
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_4
+        subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101046
       - name: HTAN2_Gastric
-        subfolder: v8_release/SpatialTranscriptomics/Level_4
+        subfolder: v8_release/SpatialOmics/Level_4
         synapse_id: syn72102081
       - name: HTAN2_Gastric
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_4
+        subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101074
       - name: HTAN2_Glioma
-        subfolder: v8_release/SpatialTranscriptomics/Level_4
+        subfolder: v8_release/SpatialOmics/Level_4
         synapse_id: syn72102141
       - name: HTAN2_Glioma
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_4
+        subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101102
       - name: HTAN2_Lymphoma
-        subfolder: v8_release/SpatialTranscriptomics/Level_4
+        subfolder: v8_release/SpatialOmics/Level_4
         synapse_id: syn72102203
       - name: HTAN2_Lymphoma
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_4
+        subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101132
       - name: HTAN2_Myeloma
-        subfolder: v8_release/SpatialTranscriptomics/Level_4
+        subfolder: v8_release/SpatialOmics/Level_4
         synapse_id: syn72102263
       - name: HTAN2_Myeloma
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_4
+        subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101160
       - name: HTAN2_Ovarian
-        subfolder: v8_release/SpatialTranscriptomics/Level_4
+        subfolder: v8_release/SpatialOmics/Level_4
         synapse_id: syn72102325
       - name: HTAN2_Ovarian
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_4
+        subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101188
       - name: HTAN2_Pancreatic
-        subfolder: v8_release/SpatialTranscriptomics/Level_4
+        subfolder: v8_release/SpatialOmics/Level_4
         synapse_id: syn72102387
       - name: HTAN2_Pancreatic
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_4
+        subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101217
       - name: HTAN2_Pediatric
-        subfolder: v8_release/SpatialTranscriptomics/Level_4
+        subfolder: v8_release/SpatialOmics/Level_4
         synapse_id: syn72102449
       - name: HTAN2_Pediatric
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_4
+        subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101247
       - name: HTAN2_Prostate
-        subfolder: v8_release/SpatialTranscriptomics/Level_4
+        subfolder: v8_release/SpatialOmics/Level_4
         synapse_id: syn72102513
       - name: HTAN2_Prostate
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_4
+        subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101275
       - name: HTAN2_Skin
-        subfolder: v8_release/SpatialTranscriptomics/Level_4
+        subfolder: v8_release/SpatialOmics/Level_4
         synapse_id: syn72102573
       - name: HTAN2_Skin
-        subfolder: v8_ingest/SpatialTranscriptomics/Level_4
+        subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101303
     SpatialPanel:
       projects:
       - name: HTAN2_CRC
-        subfolder: v8_staging/SpatialTranscriptomics/Panel
+        subfolder: v8_staging/SpatialOmics/Panel
         synapse_id: syn72101992
       - name: HTAN2_Gastric
-        subfolder: v8_staging/SpatialTranscriptomics/Panel
+        subfolder: v8_staging/SpatialOmics/Panel
         synapse_id: syn72102052
       - name: HTAN2_Glioma
-        subfolder: v8_staging/SpatialTranscriptomics/Panel
+        subfolder: v8_staging/SpatialOmics/Panel
         synapse_id: syn72102112
       - name: HTAN2_Lymphoma
-        subfolder: v8_staging/SpatialTranscriptomics/Panel
+        subfolder: v8_staging/SpatialOmics/Panel
         synapse_id: syn72102174
       - name: HTAN2_Myeloma
-        subfolder: v8_staging/SpatialTranscriptomics/Panel
+        subfolder: v8_staging/SpatialOmics/Panel
         synapse_id: syn72102234
       - name: HTAN2_Ovarian
-        subfolder: v8_staging/SpatialTranscriptomics/Panel
+        subfolder: v8_staging/SpatialOmics/Panel
         synapse_id: syn72102296
       - name: HTAN2_Pancreatic
-        subfolder: v8_staging/SpatialTranscriptomics/Panel
+        subfolder: v8_staging/SpatialOmics/Panel
         synapse_id: syn72102358
       - name: HTAN2_Pediatric
-        subfolder: v8_staging/SpatialTranscriptomics/Panel
+        subfolder: v8_staging/SpatialOmics/Panel
         synapse_id: syn72102418
       - name: HTAN2_Prostate
-        subfolder: v8_staging/SpatialTranscriptomics/Panel
+        subfolder: v8_staging/SpatialOmics/Panel
         synapse_id: syn72102480
       - name: HTAN2_Skin
-        subfolder: v8_staging/SpatialTranscriptomics/Panel
+        subfolder: v8_staging/SpatialOmics/Panel
         synapse_id: syn72102544
       - name: HTAN2_CRC
-        subfolder: v8_release/SpatialTranscriptomics/Panel
+        subfolder: v8_release/SpatialOmics/Panel
         synapse_id: syn72102022
       - name: HTAN2_CRC
-        subfolder: v8_ingest/SpatialTranscriptomics/Panel
+        subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101047
       - name: HTAN2_Gastric
-        subfolder: v8_release/SpatialTranscriptomics/Panel
+        subfolder: v8_release/SpatialOmics/Panel
         synapse_id: syn72102082
       - name: HTAN2_Gastric
-        subfolder: v8_ingest/SpatialTranscriptomics/Panel
+        subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101075
       - name: HTAN2_Glioma
-        subfolder: v8_release/SpatialTranscriptomics/Panel
+        subfolder: v8_release/SpatialOmics/Panel
         synapse_id: syn72102142
       - name: HTAN2_Glioma
-        subfolder: v8_ingest/SpatialTranscriptomics/Panel
+        subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101103
       - name: HTAN2_Lymphoma
-        subfolder: v8_release/SpatialTranscriptomics/Panel
+        subfolder: v8_release/SpatialOmics/Panel
         synapse_id: syn72102204
       - name: HTAN2_Lymphoma
-        subfolder: v8_ingest/SpatialTranscriptomics/Panel
+        subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101133
       - name: HTAN2_Myeloma
-        subfolder: v8_release/SpatialTranscriptomics/Panel
+        subfolder: v8_release/SpatialOmics/Panel
         synapse_id: syn72102264
       - name: HTAN2_Myeloma
-        subfolder: v8_ingest/SpatialTranscriptomics/Panel
+        subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101161
       - name: HTAN2_Ovarian
-        subfolder: v8_release/SpatialTranscriptomics/Panel
+        subfolder: v8_release/SpatialOmics/Panel
         synapse_id: syn72102326
       - name: HTAN2_Ovarian
-        subfolder: v8_ingest/SpatialTranscriptomics/Panel
+        subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101189
       - name: HTAN2_Pancreatic
-        subfolder: v8_release/SpatialTranscriptomics/Panel
+        subfolder: v8_release/SpatialOmics/Panel
         synapse_id: syn72102388
       - name: HTAN2_Pancreatic
-        subfolder: v8_ingest/SpatialTranscriptomics/Panel
+        subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101218
       - name: HTAN2_Pediatric
-        subfolder: v8_release/SpatialTranscriptomics/Panel
+        subfolder: v8_release/SpatialOmics/Panel
         synapse_id: syn72102450
       - name: HTAN2_Pediatric
-        subfolder: v8_ingest/SpatialTranscriptomics/Panel
+        subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101248
       - name: HTAN2_Prostate
-        subfolder: v8_release/SpatialTranscriptomics/Panel
+        subfolder: v8_release/SpatialOmics/Panel
         synapse_id: syn72102514
       - name: HTAN2_Prostate
-        subfolder: v8_ingest/SpatialTranscriptomics/Panel
+        subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101276
       - name: HTAN2_Skin
-        subfolder: v8_release/SpatialTranscriptomics/Panel
+        subfolder: v8_release/SpatialOmics/Panel
         synapse_id: syn72102574
       - name: HTAN2_Skin
-        subfolder: v8_ingest/SpatialTranscriptomics/Panel
+        subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101304
     DigitalPathology:
       projects:
