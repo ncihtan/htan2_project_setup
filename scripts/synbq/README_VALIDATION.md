@@ -5,7 +5,7 @@
 Validate a single fileview.
 
 ```bash
-python scripts/manage/validate_single_fileview.py --folder-id syn72644024 --fileview-id syn72644059
+python scripts/synbq/validate_single_fileview.py --folder-id syn72644024 --fileview-id syn72644059
 ```
 
 **Output:** `validation_status_{FOLDER_ID}.csv` with columns:
@@ -17,13 +17,13 @@ Validate all fileviews from `schema_binding_config.yml`.
 
 ```bash
 # Validate all fileviews (outputs to current directory)
-python scripts/manage/validate_fileviews.py
+python scripts/synbq/validate_fileviews.py
 
 # Custom output directory
-python scripts/manage/validate_fileviews.py --output-dir validation_results
+python scripts/synbq/validate_fileviews.py --output-dir validation_results
 
 # Custom config file
-python scripts/manage/validate_fileviews.py --config-file schema_binding_v8.yml
+python scripts/synbq/validate_fileviews.py --config-file schema_binding_v8.yml
 ```
 
 **Output:** One CSV per fileview: `validation_status_{FILEVIEW_ID}.csv`
