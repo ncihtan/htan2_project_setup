@@ -137,6 +137,7 @@ htan2_project_setup/
 │   │   ├── update_folder_permissions.py
 │   │   ├── update_schema_bindings.py
 │   │   ├── update_fileview_ids.py    # Extract fileview IDs from wikis
+│   │   ├── create_curation_tasks_from_config.py  # Create curation tasks from config
 │   │   └── verify_permissions.py
 │   │
 │   ├── bind_schemas_workflow.py      # Schema binding workflow
@@ -235,6 +236,29 @@ python scripts/manage/update_fileview_ids.py
 ```
 
 This updates `schema_binding_config.yml` with `fileview_id` fields extracted from wikis.
+
+### Creating Curation Tasks
+
+After schemas are bound and fileview IDs are extracted, create curation tasks for metadata curation:
+
+```bash
+# Dry run to preview tasks
+python scripts/manage/create_curation_tasks_from_config.py --dry-run --subfolder-filter v8_ingest
+
+# Create tasks for all v8_ingest folders
+python scripts/manage/create_curation_tasks_from_config.py --subfolder-filter v8_ingest
+
+# Create tasks for a specific project
+python scripts/manage/create_curation_tasks_from_config.py --subfolder-filter v8_ingest --project-name HTAN2_Ovarian
+
+# List existing tasks for a project
+python scripts/manage/create_curation_tasks_from_config.py --list-tasks syn63298044
+```
+
+**Note**: 
+- File-based schemas (WES, scRNA_seq, SpatialOmics, Imaging) use file-based curation tasks
+- Record-based schemas (Clinical, Biospecimen) use record-based curation tasks with RecordSets
+- Each project should have 23 tasks for v8_ingest (14 file-based + 9 record-based)
 
 ## Related Repositories
 
