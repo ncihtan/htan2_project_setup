@@ -40,7 +40,7 @@ def map_schema_name_to_file(schema_name: str, schema_version: str = "v1.0.0") ->
     elif schema_name == "scRNA_seqLevel2":
         return f"HTAN.scRNALevel2{version_suffix}-schema.json"
     elif schema_name == "scRNA_seqLevel3_4":
-        return f"HTAN.scRNALevel3_4{version_suffix}-schema.json"
+        return f"HTAN.scRNALevel3and4{version_suffix}-schema.json"
     elif schema_name.startswith("SpatialOmics"):
         # Convert SpatialOmicsLevel1 -> SpatialLevel1
         level_part = schema_name.replace("SpatialOmics", "Spatial")
