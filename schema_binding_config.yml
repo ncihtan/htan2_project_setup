@@ -126,6 +126,10 @@ schema_bindings:
         subfolder: v8_ingest/WES/Level_1
         synapse_id: syn72099031
         fileview_id: syn72243364
+      - name: htan2-testing1
+        subfolder: WES/Level_1
+        synapse_id: syn73742689
+        fileview_id: syn73742809
     BulkWESLevel2:
       projects:
       - name: HTAN2_CRC
@@ -248,6 +252,10 @@ schema_bindings:
         subfolder: v8_ingest/WES/Level_2
         synapse_id: syn72099032
         fileview_id: syn72243707
+      - name: htan2-testing1
+        subfolder: WES/Level_2
+        synapse_id: syn73742690
+        fileview_id: syn73742810
     BulkWESLevel3:
       projects:
       - name: HTAN2_CRC
@@ -370,6 +378,10 @@ schema_bindings:
         subfolder: v8_ingest/WES/Level_3
         synapse_id: syn72099033
         fileview_id: syn72244030
+      - name: htan2-testing1
+        subfolder: WES/Level_3
+        synapse_id: syn73742691
+        fileview_id: syn73742812
     scRNA_seqLevel1:
       projects:
       - name: HTAN2_CRC
@@ -492,6 +504,10 @@ schema_bindings:
         subfolder: v8_ingest/scRNA_seq/Level_1
         synapse_id: syn72101292
         fileview_id: syn72244348
+      - name: htan2-testing1
+        subfolder: scRNA_seq/Level_1
+        synapse_id: syn73742693
+        fileview_id: syn73742813
     scRNA_seqLevel2:
       projects:
       - name: HTAN2_CRC
@@ -614,6 +630,10 @@ schema_bindings:
         subfolder: v8_ingest/scRNA_seq/Level_2
         synapse_id: syn72101293
         fileview_id: syn72244442
+      - name: htan2-testing1
+        subfolder: scRNA_seq/Level_2
+        synapse_id: syn73742694
+        fileview_id: syn73742814
     scRNA_seqLevel3_4:
       projects:
       - name: HTAN2_CRC
@@ -736,6 +756,10 @@ schema_bindings:
         subfolder: v8_ingest/scRNA_seq/Level_3_4
         synapse_id: syn72101294
         fileview_id: syn72380457
+      - name: htan2-testing1
+        subfolder: scRNA_seq/Level_3_4
+        synapse_id: syn73742695
+        fileview_id: syn73742815
     SpatialOmicsLevel1:
       projects:
       - name: HTAN2_CRC
@@ -1224,6 +1248,10 @@ schema_bindings:
         subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101304
         fileview_id: syn72309474
+      - name: htan2-testing1
+        subfolder: SpatialOmics/Panel
+        synapse_id: syn73742703
+        fileview_id: syn73742808
     DigitalPathology:
       projects:
       - name: HTAN2_CRC
@@ -1346,6 +1374,10 @@ schema_bindings:
         subfolder: v8_ingest/Imaging/DigitalPathology
         synapse_id: syn72101801
         fileview_id: syn72309517
+      - name: htan2-testing1
+        subfolder: Imaging/DigitalPathology
+        synapse_id: syn73742697
+        fileview_id: syn73742801
     MultiplexMicroscopyLevel2:
       projects:
       - name: HTAN2_CRC
@@ -1468,6 +1500,10 @@ schema_bindings:
         subfolder: v8_ingest/Imaging/MultiplexMicroscopy/Level_2
         synapse_id: syn72101803
         fileview_id: syn72309559
+      - name: htan2-testing1
+        subfolder: Imaging/MultiplexMicroscopy/Level_2
+        synapse_id: syn73742784
+        fileview_id: syn73742802
     MultiplexMicroscopyLevel3:
       projects:
       - name: HTAN2_CRC
@@ -1590,6 +1626,10 @@ schema_bindings:
         subfolder: v8_ingest/Imaging/MultiplexMicroscopy/Level_3
         synapse_id: syn72101804
         fileview_id: syn72309592
+      - name: htan2-testing1
+        subfolder: Imaging/MultiplexMicroscopy/Level_3
+        synapse_id: syn73742785
+        fileview_id: syn73742803
     MultiplexMicroscopyLevel4:
       projects:
       - name: HTAN2_CRC
@@ -1712,6 +1752,10 @@ schema_bindings:
         subfolder: v8_ingest/Imaging/MultiplexMicroscopy/Level_4
         synapse_id: syn72101805
         fileview_id: syn72309636
+      - name: htan2-testing1
+        subfolder: Imaging/MultiplexMicroscopy/Level_4
+        synapse_id: syn73742786
+        fileview_id: syn73742804
   record_based:
     Demographics:
       projects:
