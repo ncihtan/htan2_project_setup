@@ -267,6 +267,29 @@ Or re-run the "Create Curation Tasks" GitHub Action with **force** enabled.
 python check_curation_task_schemas.py <project_id>
 ```
 
+### Schema was rebound but curation task still uses the old schema version
+
+Curation tasks cache the schema URI at creation time. Rebinding the schema to the
+folder does **not** update the task — you must delete the old task and create a new one.
+
+Use the "Create Curation Tasks" GitHub Action with **delete_first** enabled (optionally
+scoped with **project_name**). This will:
+1. Delete existing tasks and their fileviews
+2. Create new tasks against the current bound schema
+3. Commit updated fileview IDs to config
+
+Or locally:
+```bash
+python scripts/manage/delete_all_curation_tasks_and_fileviews.py \
+  --all-from-config --project-name HTAN2_CRC
+
+python scripts/manage/create_curation_tasks_from_config.py \
+  --project-name HTAN2_CRC --subfolder-filter v8_ingest
+
+python scripts/manage/update_fileview_ids.py \
+  --project-name HTAN2_CRC --subfolder-filter v8_ingest
+```
+
 ### Need to rebind schemas
 
 Trigger the "Bind Schemas to HTAN2 Projects" GitHub Action again.

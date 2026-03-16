@@ -26,6 +26,11 @@ on:
         required: false
         type: boolean
         default: false
+      delete_first:
+        description: 'Delete all existing tasks and fileviews before creating new ones. Respects project_name filter. Implied by dry_run (will show what would be deleted).'
+        required: false
+        type: boolean
+        default: false
 
 env:
   PYTHON_VERSION: '3.11'
@@ -45,6 +50,25 @@ jobs:
 
     - name: Install dependencies
       run: pip install --upgrade pip && pip install -r requirements.txt
+
+    - name: Delete existing tasks and fileviews
+      if: ${{ github.event.inputs.delete_first == 'true' }}
+      env:
+        SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
+        SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
+      run: |
+        CMD="python scripts/manage/delete_all_curation_tasks_and_fileviews.py --all-from-config"
+
+        if [ -n "${{ github.event.inputs.project_name }}" ]; then
+          CMD="$CMD --project-name ${{ github.event.inputs.project_name }}"
+        fi
+
+        if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+          CMD="$CMD --dry-run"
+        fi
+
+        echo "Running: $CMD"
+        $CMD
 
     - name: Create curation tasks
       env:
