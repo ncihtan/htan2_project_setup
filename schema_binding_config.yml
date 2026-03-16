@@ -2002,6 +2002,8 @@ schema_bindings:
       - name: htan2-testing1
         subfolder: v8_ingest/Clinical/Demographics
         synapse_id: syn73742679
+        record_set_id: syn73742792
+        fileview_id: syn73742792
       - name: htan2-testing1
         subfolder: v8_release/Clinical/Demographics
         synapse_id: syn73742733
@@ -2133,6 +2135,8 @@ schema_bindings:
       - name: htan2-testing1
         subfolder: v8_ingest/Clinical/Diagnosis
         synapse_id: syn73742680
+        record_set_id: syn73742793
+        fileview_id: syn73742793
       - name: htan2-testing1
         subfolder: v8_release/Clinical/Diagnosis
         synapse_id: syn73742734
@@ -2264,6 +2268,8 @@ schema_bindings:
       - name: htan2-testing1
         subfolder: v8_ingest/Clinical/Therapy
         synapse_id: syn73742681
+        record_set_id: syn73742799
+        fileview_id: syn73742799
       - name: htan2-testing1
         subfolder: v8_release/Clinical/Therapy
         synapse_id: syn73742735
@@ -2395,6 +2401,8 @@ schema_bindings:
       - name: htan2-testing1
         subfolder: v8_ingest/Clinical/FollowUp
         synapse_id: syn73742682
+        record_set_id: syn73742796
+        fileview_id: syn73742796
       - name: htan2-testing1
         subfolder: v8_release/Clinical/FollowUp
         synapse_id: syn73742736
@@ -2526,6 +2534,8 @@ schema_bindings:
       - name: htan2-testing1
         subfolder: v8_ingest/Clinical/MolecularTest
         synapse_id: syn73742683
+        record_set_id: syn73742797
+        fileview_id: syn73742797
       - name: htan2-testing1
         subfolder: v8_release/Clinical/MolecularTest
         synapse_id: syn73742737
@@ -2657,6 +2667,8 @@ schema_bindings:
       - name: htan2-testing1
         subfolder: v8_ingest/Clinical/Exposure
         synapse_id: syn73742684
+        record_set_id: syn73742794
+        fileview_id: syn73742794
       - name: htan2-testing1
         subfolder: v8_release/Clinical/Exposure
         synapse_id: syn73742738
@@ -2788,6 +2800,8 @@ schema_bindings:
       - name: htan2-testing1
         subfolder: v8_ingest/Clinical/FamilyHistory
         synapse_id: syn73742685
+        record_set_id: syn73742795
+        fileview_id: syn73742795
       - name: htan2-testing1
         subfolder: v8_release/Clinical/FamilyHistory
         synapse_id: syn73742739
@@ -2919,6 +2933,8 @@ schema_bindings:
       - name: htan2-testing1
         subfolder: v8_ingest/Clinical/VitalStatus
         synapse_id: syn73742686
+        record_set_id: syn73742800
+        fileview_id: syn73742800
       - name: htan2-testing1
         subfolder: v8_release/Clinical/VitalStatus
         synapse_id: syn73742740
@@ -3050,6 +3066,8 @@ schema_bindings:
       - name: htan2-testing1
         subfolder: v8_ingest/Biospecimen
         synapse_id: syn73742687
+        record_set_id: syn73986748
+        fileview_id: syn73986748
       - name: htan2-testing1
         subfolder: v8_release/Biospecimen
         synapse_id: syn73742741
