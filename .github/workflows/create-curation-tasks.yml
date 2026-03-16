@@ -1,0 +1,109 @@
+name: Create Curation Tasks
+
+on:
+  workflow_dispatch:
+    inputs:
+      subfolder_filter:
+        description: 'Only process subfolders containing this string (e.g. v8_ingest, v8_staging, v8_release). Leave empty to process all.'
+        required: false
+        default: ''
+      project_name:
+        description: 'Only process this project (e.g. HTAN2_CRC). Leave empty for all projects.'
+        required: false
+        default: ''
+      record_based_only:
+        description: 'Only create record-based tasks (Clinical + Biospecimen)'
+        required: false
+        type: boolean
+        default: false
+      dry_run:
+        description: 'Dry run — preview what would be created without making changes'
+        required: false
+        type: boolean
+        default: false
+      force:
+        description: 'Force task creation even if a task already exists (use to replace old-style REST tasks)'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  create-curation-tasks:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install dependencies
+      run: pip install --upgrade pip && pip install -r requirements.txt
+
+    - name: Create curation tasks
+      env:
+        SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
+        SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
+      run: |
+        CMD="python scripts/manage/create_curation_tasks_from_config.py"
+
+        if [ -n "${{ github.event.inputs.subfolder_filter }}" ]; then
+          CMD="$CMD --subfolder-filter ${{ github.event.inputs.subfolder_filter }}"
+        fi
+
+        if [ -n "${{ github.event.inputs.project_name }}" ]; then
+          CMD="$CMD --project-name ${{ github.event.inputs.project_name }}"
+        fi
+
+        if [ "${{ github.event.inputs.record_based_only }}" = "true" ]; then
+          CMD="$CMD --record-based-only"
+        fi
+
+        if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+          CMD="$CMD --dry-run"
+        fi
+
+        if [ "${{ github.event.inputs.force }}" = "true" ]; then
+          CMD="$CMD --force"
+        fi
+
+        echo "Running: $CMD"
+        $CMD
+
+    - name: Update fileview IDs in config
+      if: ${{ github.event.inputs.dry_run != 'true' }}
+      env:
+        SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
+        SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
+      run: |
+        CMD="python scripts/manage/update_fileview_ids.py"
+
+        if [ -n "${{ github.event.inputs.subfolder_filter }}" ]; then
+          CMD="$CMD --subfolder-filter ${{ github.event.inputs.subfolder_filter }}"
+        fi
+
+        if [ -n "${{ github.event.inputs.project_name }}" ]; then
+          CMD="$CMD --project-name ${{ github.event.inputs.project_name }}"
+        fi
+
+        echo "Running: $CMD"
+        $CMD
+
+    - name: Commit updated config
+      if: ${{ github.event.inputs.dry_run != 'true' }}
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add schema_binding_config.yml
+        if git diff --cached --quiet; then
+          echo "No config changes to commit."
+        else
+          git commit -m "Update fileview IDs after creating curation tasks [skip ci]"
+          git push
+        fi
