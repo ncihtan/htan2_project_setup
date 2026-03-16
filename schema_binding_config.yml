@@ -1895,6 +1895,7 @@ schema_bindings:
         subfolder: Clinical/Demographics
         synapse_id: syn73742679
         record_set_id: syn73742792
+        fileview_id: syn73742792
     Diagnosis:
       projects:
       - name: HTAN2_CRC
@@ -2021,6 +2022,7 @@ schema_bindings:
         subfolder: Clinical/Diagnosis
         synapse_id: syn73742680
         record_set_id: syn73742793
+        fileview_id: syn73742793
     Therapy:
       projects:
       - name: HTAN2_CRC
@@ -2147,6 +2149,7 @@ schema_bindings:
         subfolder: Clinical/Therapy
         synapse_id: syn73742681
         record_set_id: syn73742799
+        fileview_id: syn73742799
     FollowUp:
       projects:
       - name: HTAN2_CRC
@@ -2273,6 +2276,7 @@ schema_bindings:
         subfolder: Clinical/FollowUp
         synapse_id: syn73742682
         record_set_id: syn73742796
+        fileview_id: syn73742796
     MolecularTest:
       projects:
       - name: HTAN2_CRC
@@ -2399,6 +2403,7 @@ schema_bindings:
         subfolder: Clinical/MolecularTest
         synapse_id: syn73742683
         record_set_id: syn73742797
+        fileview_id: syn73742797
     Exposure:
       projects:
       - name: HTAN2_CRC
@@ -2525,6 +2530,7 @@ schema_bindings:
         subfolder: Clinical/Exposure
         synapse_id: syn73742684
         record_set_id: syn73742794
+        fileview_id: syn73742794
     FamilyHistory:
       projects:
       - name: HTAN2_CRC
@@ -2651,6 +2657,7 @@ schema_bindings:
         subfolder: Clinical/FamilyHistory
         synapse_id: syn73742685
         record_set_id: syn73742795
+        fileview_id: syn73742795
     VitalStatus:
       projects:
       - name: HTAN2_CRC
@@ -2777,6 +2784,7 @@ schema_bindings:
         subfolder: Clinical/VitalStatus
         synapse_id: syn73742686
         record_set_id: syn73742800
+        fileview_id: syn73742800
     Biospecimen:
       projects:
       - name: HTAN2_CRC
@@ -2903,6 +2911,7 @@ schema_bindings:
         subfolder: Biospecimen
         synapse_id: syn73742687
         record_set_id: syn73742791
+        fileview_id: syn73742791
 organization:
   name: HTAN2Organization
 schema_patterns:
