@@ -2,15 +2,6 @@ schema_bindings:
   file_based:
     BulkWESLevel1:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/WES/Level_1
-        synapse_id: syn72098890
-      - name: HTAN2
-        subfolder: v8_staging/WES/Level_1
-        synapse_id: syn72101911
-      - name: HTAN2
-        subfolder: v8_release/WES/Level_1
-        synapse_id: syn72101943
       - name: HTAN2_CRC
         subfolder: v8_ingest/WES/Level_1
         synapse_id: syn72098904
@@ -101,17 +92,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/WES/Level_1
         synapse_id: syn72102557
+      - name: htan2-testing1
+        subfolder: v8_ingest/WES/Level_1
+        synapse_id: syn73742689
+      - name: htan2-testing1
+        subfolder: v8_staging/WES/Level_1
+        synapse_id: syn73742716
+      - name: htan2-testing1
+        subfolder: v8_release/WES/Level_1
+        synapse_id: syn73742743
     BulkWESLevel2:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/WES/Level_2
-        synapse_id: syn72098891
-      - name: HTAN2
-        subfolder: v8_staging/WES/Level_2
-        synapse_id: syn72101912
-      - name: HTAN2
-        subfolder: v8_release/WES/Level_2
-        synapse_id: syn72101944
       - name: HTAN2_CRC
         subfolder: v8_ingest/WES/Level_2
         synapse_id: syn72098905
@@ -202,17 +193,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/WES/Level_2
         synapse_id: syn72102558
+      - name: htan2-testing1
+        subfolder: v8_ingest/WES/Level_2
+        synapse_id: syn73742690
+      - name: htan2-testing1
+        subfolder: v8_staging/WES/Level_2
+        synapse_id: syn73742717
+      - name: htan2-testing1
+        subfolder: v8_release/WES/Level_2
+        synapse_id: syn73742744
     BulkWESLevel3:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/WES/Level_3
-        synapse_id: syn72098892
-      - name: HTAN2
-        subfolder: v8_staging/WES/Level_3
-        synapse_id: syn72101913
-      - name: HTAN2
-        subfolder: v8_release/WES/Level_3
-        synapse_id: syn72101945
       - name: HTAN2_CRC
         subfolder: v8_ingest/WES/Level_3
         synapse_id: syn72098906
@@ -303,17 +294,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/WES/Level_3
         synapse_id: syn72102559
+      - name: htan2-testing1
+        subfolder: v8_ingest/WES/Level_3
+        synapse_id: syn73742691
+      - name: htan2-testing1
+        subfolder: v8_staging/WES/Level_3
+        synapse_id: syn73742718
+      - name: htan2-testing1
+        subfolder: v8_release/WES/Level_3
+        synapse_id: syn73742745
     scRNA_seqLevel1:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/scRNA_seq/Level_1
-        synapse_id: syn72101007
-      - name: HTAN2
-        subfolder: v8_staging/scRNA_seq/Level_1
-        synapse_id: syn72101915
-      - name: HTAN2
-        subfolder: v8_release/scRNA_seq/Level_1
-        synapse_id: syn72101947
       - name: HTAN2_CRC
         subfolder: v8_ingest/scRNA_seq/Level_1
         synapse_id: syn72101035
@@ -404,17 +395,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/scRNA_seq/Level_1
         synapse_id: syn72102561
+      - name: htan2-testing1
+        subfolder: v8_ingest/scRNA_seq/Level_1
+        synapse_id: syn73742693
+      - name: htan2-testing1
+        subfolder: v8_staging/scRNA_seq/Level_1
+        synapse_id: syn73742720
+      - name: htan2-testing1
+        subfolder: v8_release/scRNA_seq/Level_1
+        synapse_id: syn73742747
     scRNA_seqLevel2:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/scRNA_seq/Level_2
-        synapse_id: syn72101008
-      - name: HTAN2
-        subfolder: v8_staging/scRNA_seq/Level_2
-        synapse_id: syn72101916
-      - name: HTAN2
-        subfolder: v8_release/scRNA_seq/Level_2
-        synapse_id: syn72101948
       - name: HTAN2_CRC
         subfolder: v8_ingest/scRNA_seq/Level_2
         synapse_id: syn72101036
@@ -505,17 +496,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/scRNA_seq/Level_2
         synapse_id: syn72102562
+      - name: htan2-testing1
+        subfolder: v8_ingest/scRNA_seq/Level_2
+        synapse_id: syn73742694
+      - name: htan2-testing1
+        subfolder: v8_staging/scRNA_seq/Level_2
+        synapse_id: syn73742721
+      - name: htan2-testing1
+        subfolder: v8_release/scRNA_seq/Level_2
+        synapse_id: syn73742748
     scRNA_seqLevel3_4:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/scRNA_seq/Level_3_4
-        synapse_id: syn72101009
-      - name: HTAN2
-        subfolder: v8_staging/scRNA_seq/Level_3_4
-        synapse_id: syn72101917
-      - name: HTAN2
-        subfolder: v8_release/scRNA_seq/Level_3_4
-        synapse_id: syn72101949
       - name: HTAN2_CRC
         subfolder: v8_ingest/scRNA_seq/Level_3_4
         synapse_id: syn72101037
@@ -606,17 +597,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/scRNA_seq/Level_3_4
         synapse_id: syn72102563
+      - name: htan2-testing1
+        subfolder: v8_ingest/scRNA_seq/Level_3_4
+        synapse_id: syn73742695
+      - name: htan2-testing1
+        subfolder: v8_staging/scRNA_seq/Level_3_4
+        synapse_id: syn73742722
+      - name: htan2-testing1
+        subfolder: v8_release/scRNA_seq/Level_3_4
+        synapse_id: syn73742749
     SpatialOmicsLevel1:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/SpatialOmics/Level_1
-        synapse_id: syn72101016
-      - name: HTAN2
-        subfolder: v8_staging/SpatialOmics/Level_1
-        synapse_id: syn72101927
-      - name: HTAN2
-        subfolder: v8_release/SpatialOmics/Level_1
-        synapse_id: syn72101957
       - name: HTAN2_CRC
         subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101044
@@ -707,17 +698,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/SpatialOmics/Level_1
         synapse_id: syn72102571
+      - name: htan2-testing1
+        subfolder: v8_ingest/SpatialOmics/Level_1
+        synapse_id: syn73742700
+      - name: htan2-testing1
+        subfolder: v8_staging/SpatialOmics/Level_1
+        synapse_id: syn73742727
+      - name: htan2-testing1
+        subfolder: v8_release/SpatialOmics/Level_1
+        synapse_id: syn73742754
     SpatialOmicsLevel3:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/SpatialOmics/Level_3
-        synapse_id: syn72101017
-      - name: HTAN2
-        subfolder: v8_staging/SpatialOmics/Level_3
-        synapse_id: syn72101928
-      - name: HTAN2
-        subfolder: v8_release/SpatialOmics/Level_3
-        synapse_id: syn72101958
       - name: HTAN2_CRC
         subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101045
@@ -808,17 +799,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/SpatialOmics/Level_3
         synapse_id: syn72102572
+      - name: htan2-testing1
+        subfolder: v8_ingest/SpatialOmics/Level_3
+        synapse_id: syn73742701
+      - name: htan2-testing1
+        subfolder: v8_staging/SpatialOmics/Level_3
+        synapse_id: syn73742728
+      - name: htan2-testing1
+        subfolder: v8_release/SpatialOmics/Level_3
+        synapse_id: syn73742755
     SpatialOmicsLevel4:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/SpatialOmics/Level_4
-        synapse_id: syn72101018
-      - name: HTAN2
-        subfolder: v8_staging/SpatialOmics/Level_4
-        synapse_id: syn72101929
-      - name: HTAN2
-        subfolder: v8_release/SpatialOmics/Level_4
-        synapse_id: syn72101959
       - name: HTAN2_CRC
         subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101046
@@ -909,17 +900,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/SpatialOmics/Level_4
         synapse_id: syn72102573
+      - name: htan2-testing1
+        subfolder: v8_ingest/SpatialOmics/Level_4
+        synapse_id: syn73742702
+      - name: htan2-testing1
+        subfolder: v8_staging/SpatialOmics/Level_4
+        synapse_id: syn73742729
+      - name: htan2-testing1
+        subfolder: v8_release/SpatialOmics/Level_4
+        synapse_id: syn73742756
     SpatialPanel:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/SpatialOmics/Panel
-        synapse_id: syn72101019
-      - name: HTAN2
-        subfolder: v8_staging/SpatialOmics/Panel
-        synapse_id: syn72101930
-      - name: HTAN2
-        subfolder: v8_release/SpatialOmics/Panel
-        synapse_id: syn72101960
       - name: HTAN2_CRC
         subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101047
@@ -1010,17 +1001,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/SpatialOmics/Panel
         synapse_id: syn72102574
+      - name: htan2-testing1
+        subfolder: v8_ingest/SpatialOmics/Panel
+        synapse_id: syn73742703
+      - name: htan2-testing1
+        subfolder: v8_staging/SpatialOmics/Panel
+        synapse_id: syn73742730
+      - name: htan2-testing1
+        subfolder: v8_release/SpatialOmics/Panel
+        synapse_id: syn73742757
     DigitalPathology:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/Imaging/DigitalPathology
-        synapse_id: syn72101628
-      - name: HTAN2
-        subfolder: v8_staging/Imaging/DigitalPathology
-        synapse_id: syn72101920
-      - name: HTAN2
-        subfolder: v8_release/Imaging/DigitalPathology
-        synapse_id: syn72101951
       - name: HTAN2_CRC
         subfolder: v8_ingest/Imaging/DigitalPathology
         synapse_id: syn72101646
@@ -1111,17 +1102,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/Imaging/DigitalPathology
         synapse_id: syn72102565
+      - name: htan2-testing1
+        subfolder: v8_ingest/Imaging/DigitalPathology
+        synapse_id: syn73742697
+      - name: htan2-testing1
+        subfolder: v8_staging/Imaging/DigitalPathology
+        synapse_id: syn73742724
+      - name: htan2-testing1
+        subfolder: v8_release/Imaging/DigitalPathology
+        synapse_id: syn73742751
     MultiplexMicroscopyLevel2:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/Level_2
-        synapse_id: syn72101630
-      - name: HTAN2
-        subfolder: v8_staging/Imaging/MultiplexMicroscopy/Level_2
-        synapse_id: syn72101923
-      - name: HTAN2
-        subfolder: v8_release/Imaging/MultiplexMicroscopy/Level_2
-        synapse_id: syn72101953
       - name: HTAN2_CRC
         subfolder: v8_ingest/Imaging/MultiplexMicroscopy/Level_2
         synapse_id: syn72101648
@@ -1212,17 +1203,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/Imaging/MultiplexMicroscopy/Level_2
         synapse_id: syn72102567
+      - name: htan2-testing1
+        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/Level_2
+        synapse_id: syn73742784
+      - name: htan2-testing1
+        subfolder: v8_staging/Imaging/MultiplexMicroscopy/Level_2
+        synapse_id: syn73742852
+      - name: htan2-testing1
+        subfolder: v8_release/Imaging/MultiplexMicroscopy/Level_2
+        synapse_id: syn73742855
     MultiplexMicroscopyLevel3:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/Level_3
-        synapse_id: syn72101631
-      - name: HTAN2
-        subfolder: v8_staging/Imaging/MultiplexMicroscopy/Level_3
-        synapse_id: syn72101924
-      - name: HTAN2
-        subfolder: v8_release/Imaging/MultiplexMicroscopy/Level_3
-        synapse_id: syn72101954
       - name: HTAN2_CRC
         subfolder: v8_ingest/Imaging/MultiplexMicroscopy/Level_3
         synapse_id: syn72101649
@@ -1313,17 +1304,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/Imaging/MultiplexMicroscopy/Level_3
         synapse_id: syn72102568
+      - name: htan2-testing1
+        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/Level_3
+        synapse_id: syn73742785
+      - name: htan2-testing1
+        subfolder: v8_staging/Imaging/MultiplexMicroscopy/Level_3
+        synapse_id: syn73742853
+      - name: htan2-testing1
+        subfolder: v8_release/Imaging/MultiplexMicroscopy/Level_3
+        synapse_id: syn73742856
     MultiplexMicroscopyLevel4:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/Level_4
-        synapse_id: syn72101632
-      - name: HTAN2
-        subfolder: v8_staging/Imaging/MultiplexMicroscopy/Level_4
-        synapse_id: syn72101925
-      - name: HTAN2
-        subfolder: v8_release/Imaging/MultiplexMicroscopy/Level_4
-        synapse_id: syn72101955
       - name: HTAN2_CRC
         subfolder: v8_ingest/Imaging/MultiplexMicroscopy/Level_4
         synapse_id: syn72101650
@@ -1414,18 +1405,18 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/Imaging/MultiplexMicroscopy/Level_4
         synapse_id: syn72102569
+      - name: htan2-testing1
+        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/Level_4
+        synapse_id: syn73742786
+      - name: htan2-testing1
+        subfolder: v8_staging/Imaging/MultiplexMicroscopy/Level_4
+        synapse_id: syn73742854
+      - name: htan2-testing1
+        subfolder: v8_release/Imaging/MultiplexMicroscopy/Level_4
+        synapse_id: syn73742857
   record_based:
     Demographics:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/Clinical/Demographics
-        synapse_id: syn72098881
-      - name: HTAN2
-        subfolder: v8_staging/Clinical/Demographics
-        synapse_id: syn72101901
-      - name: HTAN2
-        subfolder: v8_release/Clinical/Demographics
-        synapse_id: syn72101933
       - name: HTAN2_CRC
         subfolder: v8_ingest/Clinical/Demographics
         synapse_id: syn72098895
@@ -1516,17 +1507,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/Clinical/Demographics
         synapse_id: syn72102547
+      - name: htan2-testing1
+        subfolder: v8_ingest/Clinical/Demographics
+        synapse_id: syn73742679
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/Demographics
+        synapse_id: syn73742706
+      - name: htan2-testing1
+        subfolder: v8_release/Clinical/Demographics
+        synapse_id: syn73742733
     Diagnosis:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/Clinical/Diagnosis
-        synapse_id: syn72098882
-      - name: HTAN2
-        subfolder: v8_staging/Clinical/Diagnosis
-        synapse_id: syn72101902
-      - name: HTAN2
-        subfolder: v8_release/Clinical/Diagnosis
-        synapse_id: syn72101934
       - name: HTAN2_CRC
         subfolder: v8_ingest/Clinical/Diagnosis
         synapse_id: syn72098896
@@ -1617,17 +1608,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/Clinical/Diagnosis
         synapse_id: syn72102548
+      - name: htan2-testing1
+        subfolder: v8_ingest/Clinical/Diagnosis
+        synapse_id: syn73742680
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/Diagnosis
+        synapse_id: syn73742707
+      - name: htan2-testing1
+        subfolder: v8_release/Clinical/Diagnosis
+        synapse_id: syn73742734
     Therapy:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/Clinical/Therapy
-        synapse_id: syn72098883
-      - name: HTAN2
-        subfolder: v8_staging/Clinical/Therapy
-        synapse_id: syn72101903
-      - name: HTAN2
-        subfolder: v8_release/Clinical/Therapy
-        synapse_id: syn72101935
       - name: HTAN2_CRC
         subfolder: v8_ingest/Clinical/Therapy
         synapse_id: syn72098897
@@ -1718,17 +1709,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/Clinical/Therapy
         synapse_id: syn72102549
+      - name: htan2-testing1
+        subfolder: v8_ingest/Clinical/Therapy
+        synapse_id: syn73742681
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/Therapy
+        synapse_id: syn73742708
+      - name: htan2-testing1
+        subfolder: v8_release/Clinical/Therapy
+        synapse_id: syn73742735
     FollowUp:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/Clinical/FollowUp
-        synapse_id: syn72098884
-      - name: HTAN2
-        subfolder: v8_staging/Clinical/FollowUp
-        synapse_id: syn72101904
-      - name: HTAN2
-        subfolder: v8_release/Clinical/FollowUp
-        synapse_id: syn72101936
       - name: HTAN2_CRC
         subfolder: v8_ingest/Clinical/FollowUp
         synapse_id: syn72098898
@@ -1819,17 +1810,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/Clinical/FollowUp
         synapse_id: syn72102550
+      - name: htan2-testing1
+        subfolder: v8_ingest/Clinical/FollowUp
+        synapse_id: syn73742682
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/FollowUp
+        synapse_id: syn73742709
+      - name: htan2-testing1
+        subfolder: v8_release/Clinical/FollowUp
+        synapse_id: syn73742736
     MolecularTest:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/Clinical/MolecularTest
-        synapse_id: syn72098885
-      - name: HTAN2
-        subfolder: v8_staging/Clinical/MolecularTest
-        synapse_id: syn72101905
-      - name: HTAN2
-        subfolder: v8_release/Clinical/MolecularTest
-        synapse_id: syn72101937
       - name: HTAN2_CRC
         subfolder: v8_ingest/Clinical/MolecularTest
         synapse_id: syn72098899
@@ -1920,17 +1911,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/Clinical/MolecularTest
         synapse_id: syn72102551
+      - name: htan2-testing1
+        subfolder: v8_ingest/Clinical/MolecularTest
+        synapse_id: syn73742683
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/MolecularTest
+        synapse_id: syn73742710
+      - name: htan2-testing1
+        subfolder: v8_release/Clinical/MolecularTest
+        synapse_id: syn73742737
     Exposure:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/Clinical/Exposure
-        synapse_id: syn72098886
-      - name: HTAN2
-        subfolder: v8_staging/Clinical/Exposure
-        synapse_id: syn72101906
-      - name: HTAN2
-        subfolder: v8_release/Clinical/Exposure
-        synapse_id: syn72101938
       - name: HTAN2_CRC
         subfolder: v8_ingest/Clinical/Exposure
         synapse_id: syn72098900
@@ -2021,17 +2012,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/Clinical/Exposure
         synapse_id: syn72102552
+      - name: htan2-testing1
+        subfolder: v8_ingest/Clinical/Exposure
+        synapse_id: syn73742684
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/Exposure
+        synapse_id: syn73742711
+      - name: htan2-testing1
+        subfolder: v8_release/Clinical/Exposure
+        synapse_id: syn73742738
     FamilyHistory:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/Clinical/FamilyHistory
-        synapse_id: syn72098887
-      - name: HTAN2
-        subfolder: v8_staging/Clinical/FamilyHistory
-        synapse_id: syn72101907
-      - name: HTAN2
-        subfolder: v8_release/Clinical/FamilyHistory
-        synapse_id: syn72101939
       - name: HTAN2_CRC
         subfolder: v8_ingest/Clinical/FamilyHistory
         synapse_id: syn72098901
@@ -2122,17 +2113,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/Clinical/FamilyHistory
         synapse_id: syn72102553
+      - name: htan2-testing1
+        subfolder: v8_ingest/Clinical/FamilyHistory
+        synapse_id: syn73742685
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/FamilyHistory
+        synapse_id: syn73742712
+      - name: htan2-testing1
+        subfolder: v8_release/Clinical/FamilyHistory
+        synapse_id: syn73742739
     VitalStatus:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/Clinical/VitalStatus
-        synapse_id: syn72098888
-      - name: HTAN2
-        subfolder: v8_staging/Clinical/VitalStatus
-        synapse_id: syn72101908
-      - name: HTAN2
-        subfolder: v8_release/Clinical/VitalStatus
-        synapse_id: syn72101940
       - name: HTAN2_CRC
         subfolder: v8_ingest/Clinical/VitalStatus
         synapse_id: syn72098902
@@ -2223,17 +2214,17 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/Clinical/VitalStatus
         synapse_id: syn72102554
+      - name: htan2-testing1
+        subfolder: v8_ingest/Clinical/VitalStatus
+        synapse_id: syn73742686
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/VitalStatus
+        synapse_id: syn73742713
+      - name: htan2-testing1
+        subfolder: v8_release/Clinical/VitalStatus
+        synapse_id: syn73742740
     Biospecimen:
       projects:
-      - name: HTAN2
-        subfolder: v8_ingest/Biospecimen
-        synapse_id: syn72099076
-      - name: HTAN2
-        subfolder: v8_staging/Biospecimen
-        synapse_id: syn72101909
-      - name: HTAN2
-        subfolder: v8_release/Biospecimen
-        synapse_id: syn72101941
       - name: HTAN2_CRC
         subfolder: v8_ingest/Biospecimen
         synapse_id: syn72099260
@@ -2324,3 +2315,12 @@ schema_bindings:
       - name: HTAN2_Skin
         subfolder: v8_release/Biospecimen
         synapse_id: syn72102555
+      - name: htan2-testing1
+        subfolder: v8_ingest/Biospecimen
+        synapse_id: syn73742687
+      - name: htan2-testing1
+        subfolder: v8_staging/Biospecimen
+        synapse_id: syn73742714
+      - name: htan2-testing1
+        subfolder: v8_release/Biospecimen
+        synapse_id: syn73742741
