@@ -60,4 +60,12 @@ IMAGING_SUBFOLDERS = {
     ]
 }
 
+# Record-based subfolders nested inside Imaging sub-modules
+# ChannelMetadata is record-based (per htan2-data-model multiplex_microscopy.yaml)
+IMAGING_RECORD_BASED_SUBFOLDERS = {
+    "MultiplexMicroscopy": [
+        "ChannelMetadata"
+    ]
+}
+
 
