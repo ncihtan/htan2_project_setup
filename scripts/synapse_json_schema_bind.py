@@ -143,7 +143,7 @@ def main():
     schema_uri = get_schema_uri(org_name, component_adjusted, version)
     print(f"Binding schema: {schema_uri} → {target}")
 
-    enable_derived = component_adjusted == "AccessRequirement" or includes_ar is not None
+    enable_derived = base_component == "AccessRequirement" or includes_ar is not None
     bind_schema_to_entity(syn, schema_uri, target, enable_derived_annotations=enable_derived)
     print(f"✅ Schema {component_adjusted} {version} successfully bound to entity {target}")
 
