@@ -125,7 +125,6 @@ def update_fileview_ids_in_config(
 
     total_updated = 0
     total_not_found = 0
-    total_errors = 0
 
     # Build folder_id -> fileview/recordset map from curation tasks.
     # If filtering to a single project name, resolve its Synapse project ID
@@ -229,7 +228,6 @@ def update_fileview_ids_in_config(
     print("=" * 80)
     print(f"✅ Fileview IDs found and updated: {total_updated}")
     print(f"⚠️  No fileview found: {total_not_found}")
-    print(f"❌ Errors: {total_errors}")
     print("=" * 80)
 
 
