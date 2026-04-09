@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script to extract fileview IDs from wikis or folder children and add them to schema binding config.
+Script to extract fileview IDs from folder children and add them to schema binding config.
 
 Run this after creating curation tasks (e.g. via create_curation_tasks_from_config.py using the
 curator extension). The curator's create_file_based_metadata_task creates the EntityView (fileview);
@@ -16,38 +16,11 @@ import synapseclient
 import yaml
 import argparse
 import sys
-import re
 from pathlib import Path
 from typing import Dict, Optional
 
 # Add parent directories to path to import htan2_synapse
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-
-
-def extract_fileview_id_from_wiki(syn, entity_id: str) -> Optional[str]:
-    """Extract fileview ID from existing wiki if it exists."""
-    try:
-        wiki = syn.getWiki(entity_id)
-        wiki_content = wiki.markdown
-
-        # Look for fileview ID patterns in the wiki
-        # Pattern 1: "Fileview ID: syn12345678"
-        match = re.search(r'Fileview ID:\s*(syn\d+)', wiki_content, re.IGNORECASE)
-        if match:
-            return match.group(1)
-
-        # Pattern 2: "syn12345678" in a link or text
-        match = re.search(r'(syn\d{8,})', wiki_content)
-        if match:
-            return match.group(1)
-
-    except synapseclient.core.exceptions.SynapseHTTPError as e:
-        if e.response.status_code == 404:
-            return None
-    except Exception as e:
-        print(f"  ⚠ Warning: Could not get wiki for {entity_id}: {e}")
-
-    return None
 
 
 def find_fileview_in_entity(syn, entity_id: str) -> Optional[str]:
