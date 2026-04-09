@@ -14,11 +14,12 @@ Record-based tasks are deleted but their RecordSets are NOT deleted (they hold d
 import argparse
 import json
 import synapseclient
+from typing import List, Optional, Set, Tuple
 
 
 def get_projects_from_config(
-    config_path: str, project_name_filter: str | None = None
-) -> list[tuple[str, str]]:
+    config_path: str, project_name_filter: Optional[str] = None
+) -> List[Tuple[str, str]]:
     """
     Get (project_name, folder_id) from schema_binding_config for all projects.
     Optionally filter by project name (e.g. HTAN2_Ovarian). Folder IDs are used to resolve to project IDs later.
@@ -28,8 +29,8 @@ def get_projects_from_config(
 
     with Path(config_path).open("r") as f:
         config = yaml.safe_load(f)
-    out: list[tuple[str, str]] = []
-    seen: set[tuple[str, str]] = set()
+    out: List[Tuple[str, str]] = []
+    seen: Set[Tuple[str, str]] = set()
     for section in ("file_based", "record_based"):
         for schema_config in config.get("schema_bindings", {}).get(section, {}).values():
             for proj in schema_config.get("projects", []):
@@ -46,7 +47,7 @@ def get_projects_from_config(
     return out
 
 
-def get_project_id(syn: synapseclient.Synapse, folder_id: str) -> str | None:
+def get_project_id(syn: synapseclient.Synapse, folder_id: str) -> Optional[str]:
     """Resolve folder to its top-level project ID."""
     try:
         entity = syn.get(folder_id, downloadFile=False)
@@ -61,7 +62,7 @@ def get_project_id(syn: synapseclient.Synapse, folder_id: str) -> str | None:
     return None
 
 
-def delete_tasks_and_fileviews(syn: synapseclient.Synapse, project_id: str, dry_run: bool = False) -> tuple[int, int]:
+def delete_tasks_and_fileviews(syn: synapseclient.Synapse, project_id: str, dry_run: bool = False) -> Tuple[int, int]:
     """Delete all curation tasks in project and fileviews linked to file-based tasks. Returns (tasks_deleted, fileviews_deleted)."""
     try:
         tasks = syn.restPOST("/curation/task/list", body=json.dumps({"projectId": project_id}))
