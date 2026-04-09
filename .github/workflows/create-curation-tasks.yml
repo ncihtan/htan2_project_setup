@@ -27,7 +27,7 @@ on:
         type: boolean
         default: false
       delete_first:
-        description: 'Delete all existing tasks and fileviews before creating new ones. Respects project_name filter. Implied by dry_run (will show what would be deleted).'
+        description: 'Delete all existing tasks and fileviews before creating new ones. Respects project_name filter.'
         required: false
         type: boolean
         default: false
