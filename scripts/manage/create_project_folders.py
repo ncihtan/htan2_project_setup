@@ -22,6 +22,7 @@ from htan2_synapse import (
     RECORD_BASED_MODULES,
     FILE_BASED_MODULES,
     IMAGING_SUBFOLDERS,
+    IMAGING_RECORD_BASED_SUBFOLDERS,
 )
 
 
@@ -149,9 +150,19 @@ def create_project_folders(syn, projects: Dict[str, str], version: str, folder_t
                                     level_id = f"synXXXXXXX"
                                 else:
                                     level_id = create_folder(syn, imaging_subfolder_id, level)
-                                
+
                                 if level_id:
                                     project_structure[folder_type]["modules"][module_name]["subfolders"][imaging_subfolder]["subfolders"][level] = level_id
+
+                            for rb_subfolder in IMAGING_RECORD_BASED_SUBFOLDERS.get("MultiplexMicroscopy", []):
+                                if dry_run:
+                                    print(f"        [DRY RUN] Would create: {rb_subfolder}/")
+                                    rb_id = f"synXXXXXXX"
+                                else:
+                                    rb_id = create_folder(syn, imaging_subfolder_id, rb_subfolder)
+
+                                if rb_id:
+                                    project_structure[folder_type]["modules"][module_name]["subfolders"][imaging_subfolder].setdefault("record_based_subfolders", {})[rb_subfolder] = rb_id
                 else:
                     # Create subfolders (if any) for other modules
                     if subfolders:
@@ -312,6 +323,15 @@ def generate_schema_binding_structure(all_projects_structure, projects, version,
                                                 "subfolder": f"{folder_type}/Imaging/{imaging_subfolder_name}/{level_name}",
                                                 "synapse_id": level_id
                                             })
+
+                                    for rb_name, rb_id in imaging_subfolder_data.get("record_based_subfolders", {}).items():
+                                        if rb_name not in schema_bindings["schema_bindings"]["record_based"]:
+                                            schema_bindings["schema_bindings"]["record_based"][rb_name] = {"projects": []}
+                                        schema_bindings["schema_bindings"]["record_based"][rb_name]["projects"].append({
+                                            "name": project_name,
+                                            "subfolder": f"{folder_type}/Imaging/{imaging_subfolder_name}/{rb_name}",
+                                            "synapse_id": rb_id
+                                        })
                 
                 # Handle modules with subfolders (non-Imaging)
                 elif "subfolders" in module_data and module_data["subfolders"]:

@@ -12,6 +12,7 @@ from .config import (
     RECORD_BASED_MODULES,
     FILE_BASED_MODULES,
     IMAGING_SUBFOLDERS,
+    IMAGING_RECORD_BASED_SUBFOLDERS,
 )
 from .projects import load_projects
 from .teams import find_contributor_team
@@ -25,6 +26,7 @@ __all__ = [
     "RECORD_BASED_MODULES",
     "FILE_BASED_MODULES",
     "IMAGING_SUBFOLDERS",
+    "IMAGING_RECORD_BASED_SUBFOLDERS",
     "load_projects",
     "find_contributor_team",
     "set_folder_permissions",
