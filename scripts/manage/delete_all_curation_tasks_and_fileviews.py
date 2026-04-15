@@ -13,6 +13,7 @@ Record-based tasks are deleted but their RecordSets are NOT deleted (they hold d
 
 import argparse
 import json
+import os
 import synapseclient
 from typing import List, Optional, Set, Tuple
 
@@ -136,7 +137,14 @@ def main():
         parser.error("Provide --project-id or --all-from-config")
 
     syn = synapseclient.Synapse()
-    syn.login()
+    auth_token = os.environ.get("SYNAPSE_PAT")
+    username = os.environ.get("SYNAPSE_USERNAME")
+    if auth_token:
+        syn.login(authToken=auth_token)
+    elif username:
+        syn.login(username)
+    else:
+        syn.login()
 
     if args.all_from_config:
         entries = get_projects_from_config(args.config, project_name_filter=args.project_name)

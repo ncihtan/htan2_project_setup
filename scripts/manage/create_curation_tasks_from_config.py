@@ -11,6 +11,7 @@ Requires: pip install 'synapseclient[curator]'
 
 import argparse
 import json
+import os
 import sys
 import yaml
 import synapseclient
@@ -198,7 +199,14 @@ def main():
     args = parser.parse_args()
 
     syn = synapseclient.Synapse()
-    syn.login()
+    auth_token = os.environ.get("SYNAPSE_PAT")
+    username = os.environ.get("SYNAPSE_USERNAME")
+    if auth_token:
+        syn.login(authToken=auth_token)
+    elif username:
+        syn.login(username)
+    else:
+        syn.login()
 
     if args.list_tasks:
         tasks = syn.restPOST("/curation/task/list", body=json.dumps({"projectId": args.list_tasks}))
