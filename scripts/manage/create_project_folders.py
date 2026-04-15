@@ -4,6 +4,7 @@ Script to create standardized folder structures for HTAN2 projects.
 Creates folders for all modules (file-based and record-based) with proper access controls.
 """
 
+import os
 import synapseclient
 import yaml
 import argparse
@@ -457,6 +458,13 @@ Examples:
     if not args.dry_run:
         print("Logging in to Synapse...")
         syn = synapseclient.Synapse()
+        auth_token = os.environ.get("SYNAPSE_PAT")
+    username = os.environ.get("SYNAPSE_USERNAME")
+    if auth_token:
+        syn.login(authToken=auth_token)
+    elif username:
+        syn.login(username)
+    else:
         syn.login()
         print("✓ Logged in successfully\n")
     else:

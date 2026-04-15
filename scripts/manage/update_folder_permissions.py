@@ -4,6 +4,7 @@ Script to update permissions for existing folders.
 This script can be used to update permissions for folders that were already created.
 """
 
+import os
 import synapseclient
 import yaml
 import argparse
@@ -109,7 +110,14 @@ def main():
     
     # Login to Synapse
     syn = synapseclient.Synapse()
-    syn.login()
+    auth_token = os.environ.get("SYNAPSE_PAT")
+    username = os.environ.get("SYNAPSE_USERNAME")
+    if auth_token:
+        syn.login(authToken=auth_token)
+    elif username:
+        syn.login(username)
+    else:
+        syn.login()
     
     print("="*80)
     print("HTAN2 Folder Permissions Update")

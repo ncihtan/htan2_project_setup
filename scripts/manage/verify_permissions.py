@@ -3,6 +3,7 @@
 Script to verify folder permissions are set correctly.
 """
 
+import os
 import synapseclient
 import yaml
 import argparse
@@ -105,7 +106,14 @@ def main():
     # Login
     print("Logging in to Synapse...")
     syn = synapseclient.Synapse()
-    syn.login()
+    auth_token = os.environ.get("SYNAPSE_PAT")
+    username = os.environ.get("SYNAPSE_USERNAME")
+    if auth_token:
+        syn.login(authToken=auth_token)
+    elif username:
+        syn.login(username)
+    else:
+        syn.login()
     print("✓ Logged in\n")
     
     # Check permissions

@@ -12,6 +12,7 @@ Usage:
 """
 
 import json
+import os
 import synapseclient
 import yaml
 import argparse
@@ -261,7 +262,14 @@ def main():
         sys.exit(1)
 
     syn = synapseclient.Synapse()
-    syn.login()
+    auth_token = os.environ.get("SYNAPSE_PAT")
+    username = os.environ.get("SYNAPSE_USERNAME")
+    if auth_token:
+        syn.login(authToken=auth_token)
+    elif username:
+        syn.login(username)
+    else:
+        syn.login()
     print("✅ Successfully logged in to Synapse\n")
     update_fileview_ids_in_config(
         syn,

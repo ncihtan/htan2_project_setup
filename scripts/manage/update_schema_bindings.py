@@ -4,6 +4,7 @@ Script to update schema binding file with real Synapse IDs from created folders.
 This script queries Synapse to get the actual folder IDs and updates schema_binding_{version}.yml.
 """
 
+import os
 import synapseclient
 import yaml
 import argparse
@@ -341,6 +342,13 @@ Examples:
         # Login to Synapse
         print("Logging in to Synapse...")
         syn = synapseclient.Synapse()
+        auth_token = os.environ.get("SYNAPSE_PAT")
+    username = os.environ.get("SYNAPSE_USERNAME")
+    if auth_token:
+        syn.login(authToken=auth_token)
+    elif username:
+        syn.login(username)
+    else:
         syn.login()
         print("✓ Logged in successfully\n")
         
