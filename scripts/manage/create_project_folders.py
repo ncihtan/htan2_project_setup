@@ -24,6 +24,7 @@ from htan2_synapse import (
     FILE_BASED_MODULES,
     IMAGING_SUBFOLDERS,
     IMAGING_RECORD_BASED_SUBFOLDERS,
+    SPATIAL_RECORD_BASED_SUBFOLDERS,
 )
 
 
@@ -173,9 +174,19 @@ def create_project_folders(syn, projects: Dict[str, str], version: str, folder_t
                                 subfolder_id = f"synXXXXXXX"
                             else:
                                 subfolder_id = create_folder(syn, module_id, subfolder)
-                            
+
                             if subfolder_id:
                                 project_structure[folder_type]["modules"][module_name]["subfolders"][subfolder] = subfolder_id
+
+                    # Create record-based subfolders (e.g. SpatialOmics/Panel)
+                    for rb_subfolder in SPATIAL_RECORD_BASED_SUBFOLDERS.get(module_name, []):
+                        if dry_run:
+                            print(f"      [DRY RUN] Would create: {rb_subfolder}/")
+                            rb_id = f"synXXXXXXX"
+                        else:
+                            rb_id = create_folder(syn, module_id, rb_subfolder)
+                        if rb_id:
+                            project_structure[folder_type]["modules"][module_name].setdefault("record_based_subfolders", {})[rb_subfolder] = rb_id
         
         all_projects_structure[project_name] = project_structure
     

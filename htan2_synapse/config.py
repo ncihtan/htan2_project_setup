@@ -46,6 +46,13 @@ FILE_BASED_MODULES = {
         "Level_1",
         "Level_3",
         "Level_4",
+    ]
+}
+
+# Record-based subfolders nested inside SpatialOmics
+# SpatialPanel is record-based (per htan2-data-model spatial_panel.yaml)
+SPATIAL_RECORD_BASED_SUBFOLDERS = {
+    "SpatialOmics": [
         "Panel"  # SpatialPanel
     ]
 }

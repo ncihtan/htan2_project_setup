@@ -209,15 +209,25 @@ def generate_schema_binding_from_structure(structure: Dict, version: str, folder
                             "Level_3": f"Bulk{module_name}Level3" if module_name == "WES" else f"{module_name}Level3",
                             "Level_3_4": f"{module_name}Level3_4",
                             "Level_4": f"{module_name}Level4",
-                            "Panel": f"SpatialPanel"
                         }
-                        
+
+                        # SpatialPanel is record-based; route it to record_based output
+                        if module_name == "SpatialOmics" and subfolder_name == "Panel":
+                            if "SpatialPanel" not in schema_bindings["schema_bindings"]["record_based"]:
+                                schema_bindings["schema_bindings"]["record_based"]["SpatialPanel"] = {"projects": []}
+                            schema_bindings["schema_bindings"]["record_based"]["SpatialPanel"]["projects"].append({
+                                "name": project_name,
+                                "subfolder": f"{folder_type}/{module_name}/{subfolder_name}",
+                                "synapse_id": subfolder_id
+                            })
+                            continue
+
                         schema_name = schema_name_map.get(subfolder_name, subfolder_name)
                         subfolder_path = f"{folder_type}/{module_name}/{subfolder_name}"
-                        
+
                         if schema_name not in schema_bindings["schema_bindings"]["file_based"]:
                             schema_bindings["schema_bindings"]["file_based"][schema_name] = {"projects": []}
-                        
+
                         schema_bindings["schema_bindings"]["file_based"][schema_name]["projects"].append({
                             "name": project_name,
                             "subfolder": subfolder_path,
