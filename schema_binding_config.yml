@@ -286,139 +286,139 @@ schema_bindings:
       - name: HTAN2_CRC
         subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101044
-        fileview_id: syn73925851
+        fileview_id: syn74778697
       - name: HTAN2_Gastric
         subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101072
-        fileview_id: syn73925852
+        fileview_id: syn74778698
       - name: HTAN2_Glioma
         subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101100
-        fileview_id: syn73925853
+        fileview_id: syn74778699
       - name: HTAN2_Lymphoma
         subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101130
-        fileview_id: syn73925854
+        fileview_id: syn74778702
       - name: HTAN2_Myeloma
         subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101158
-        fileview_id: syn73925855
+        fileview_id: syn74778703
       - name: HTAN2_Ovarian
         subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101186
-        fileview_id: syn73925856
+        fileview_id: syn74778704
       - name: HTAN2_Pancreatic
         subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101215
-        fileview_id: syn73925857
+        fileview_id: syn74778705
       - name: HTAN2_Pediatric
         subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101245
-        fileview_id: syn73925858
+        fileview_id: syn74778708
       - name: HTAN2_Prostate
         subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101273
-        fileview_id: syn73925859
+        fileview_id: syn74778709
       - name: HTAN2_Skin
         subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn72101301
-        fileview_id: syn73925862
+        fileview_id: syn74778710
       - name: htan2-testing1
         subfolder: v8_ingest/SpatialOmics/Level_1
         synapse_id: syn73742700
-        fileview_id: syn74143977
+        fileview_id: syn74778713
     SpatialOmicsLevel3:
       projects:
       - name: HTAN2_CRC
         subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101045
-        fileview_id: syn73925865
+        fileview_id: syn74778716
       - name: HTAN2_Gastric
         subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101073
-        fileview_id: syn73925868
+        fileview_id: syn74778717
       - name: HTAN2_Glioma
         subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101101
-        fileview_id: syn73925869
+        fileview_id: syn74778720
       - name: HTAN2_Lymphoma
         subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101131
-        fileview_id: syn73925870
+        fileview_id: syn74778721
       - name: HTAN2_Myeloma
         subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101159
-        fileview_id: syn73925871
+        fileview_id: syn74778722
       - name: HTAN2_Ovarian
         subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101187
-        fileview_id: syn73925874
+        fileview_id: syn74778723
       - name: HTAN2_Pancreatic
         subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101216
-        fileview_id: syn73925875
+        fileview_id: syn74778724
       - name: HTAN2_Pediatric
         subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101246
-        fileview_id: syn73925876
+        fileview_id: syn74778725
       - name: HTAN2_Prostate
         subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101274
-        fileview_id: syn74388060
+        fileview_id: syn74778726
       - name: HTAN2_Skin
         subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn72101302
-        fileview_id: syn73925878
+        fileview_id: syn74778727
       - name: htan2-testing1
         subfolder: v8_ingest/SpatialOmics/Level_3
         synapse_id: syn73742701
-        fileview_id: syn74389146
+        fileview_id: syn74778728
     SpatialOmicsLevel4:
       projects:
       - name: HTAN2_CRC
         subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101046
-        fileview_id: syn73925879
+        fileview_id: syn74778729
       - name: HTAN2_Gastric
         subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101074
-        fileview_id: syn73925880
+        fileview_id: syn74778732
       - name: HTAN2_Glioma
         subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101102
-        fileview_id: syn73925883
+        fileview_id: syn74778733
       - name: HTAN2_Lymphoma
         subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101132
-        fileview_id: syn73925884
+        fileview_id: syn74778734
       - name: HTAN2_Myeloma
         subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101160
-        fileview_id: syn73925885
+        fileview_id: syn74778737
       - name: HTAN2_Ovarian
         subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101188
-        fileview_id: syn73925887
+        fileview_id: syn74778738
       - name: HTAN2_Pancreatic
         subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101217
-        fileview_id: syn73925890
+        fileview_id: syn74778739
       - name: HTAN2_Pediatric
         subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101247
-        fileview_id: syn73925891
+        fileview_id: syn74778740
       - name: HTAN2_Prostate
         subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101275
-        fileview_id: syn73925894
+        fileview_id: syn74778744
       - name: HTAN2_Skin
         subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn72101303
-        fileview_id: syn73925895
+        fileview_id: syn74778746
       - name: htan2-testing1
         subfolder: v8_ingest/SpatialOmics/Level_4
         synapse_id: syn73742702
-        fileview_id: syn74143979
+        fileview_id: syn74778747
     DigitalPathology:
       projects:
       - name: HTAN2_CRC
@@ -1125,33 +1125,44 @@ schema_bindings:
       - name: HTAN2_CRC
         subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101047
+        fileview_id: syn74778963
       - name: HTAN2_Gastric
         subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101075
+        fileview_id: syn74778964
       - name: HTAN2_Glioma
         subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101103
+        fileview_id: syn74778969
       - name: HTAN2_Lymphoma
         subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101133
+        fileview_id: syn74778970
       - name: HTAN2_Myeloma
         subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101161
+        fileview_id: syn74778973
       - name: HTAN2_Ovarian
         subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101189
+        fileview_id: syn74778976
       - name: HTAN2_Pancreatic
         subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101218
+        fileview_id: syn74778978
       - name: HTAN2_Pediatric
         subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101248
+        fileview_id: syn74778979
       - name: HTAN2_Prostate
         subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101276
+        fileview_id: syn74778982
       - name: HTAN2_Skin
         subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn72101304
+        fileview_id: syn74778985
       - name: htan2-testing1
         subfolder: v8_ingest/SpatialOmics/Panel
         synapse_id: syn73742703
+        fileview_id: syn74778990
