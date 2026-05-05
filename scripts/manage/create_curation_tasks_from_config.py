@@ -21,12 +21,48 @@ try:
         create_record_based_metadata_task,
         create_file_based_metadata_task,
     )
+    import synapseclient.extensions.curator.file_based_metadata_task as _curator_file_mod
 except ImportError:
     print(
         "Error: synapseclient curator extension not installed.\n"
         "Run: pip install 'synapseclient[curator]'"
     )
     sys.exit(1)
+
+# Patch: STRING_LIST columns with no size constraints cause Synapse to exceed its ~64KB
+# row size limit. Set reasonable defaults before the columns are sent to Synapse.
+_orig_create_columns = _curator_file_mod._create_columns_from_json_schema
+
+def _bounded_create_columns(json_schema):
+    columns = _orig_create_columns(json_schema)
+    for col in columns:
+        if col.column_type == 'STRING_LIST':
+            # Synapse row size = max_size × max_list_length × 4 bytes per STRING_LIST column.
+            # Spatial schemas have 4 such columns; without bounds they exceed the ~64KB limit.
+            # 100 × 8 × 4 = 3,200 bytes per column — safe even for Level3 with 25 string cols.
+            try:
+                # synapseclient 4.11.x: attribute-based Column
+                col.maximum_size = 100
+                col.maximum_list_length = 8
+            except AttributeError:
+                # synapseclient 4.12.x: dict-based Column (camelCase keys)
+                col['maximumSize'] = 100
+                col['maximumListLength'] = 8
+    return columns
+
+_curator_file_mod._create_columns_from_json_schema = _bounded_create_columns
+
+# Patch: reorder_column inserts None into the columns dict when the named column is not
+# present (it pops → None, then stores {name: None}), causing the second store() call
+# inside create_json_schema_entity_view to crash. Skip silently if column is absent.
+from synapseclient.models import EntityView as _EntityView
+_orig_reorder_column = _EntityView.reorder_column
+
+def _safe_reorder_column(self, name, index):
+    if self.columns and name in self.columns:
+        _orig_reorder_column(self, name, index)
+
+_EntityView.reorder_column = _safe_reorder_column
 
 from synapseclient.models import Folder
 
