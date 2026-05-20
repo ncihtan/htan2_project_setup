@@ -15,7 +15,14 @@ from typing import Dict, Optional
 # Add parent directories to path to import htan2_synapse
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from htan2_synapse import load_projects, RECORD_BASED_MODULES, FILE_BASED_MODULES, IMAGING_SUBFOLDERS
+from htan2_synapse import (
+    load_projects,
+    RECORD_BASED_MODULES,
+    FILE_BASED_MODULES,
+    IMAGING_SUBFOLDERS,
+    IMAGING_RECORD_BASED_SUBFOLDERS,
+    SPATIAL_RECORD_BASED_SUBFOLDERS,
+)
 
 
 def find_folder_id(syn, parent_id: str, folder_name: str) -> Optional[str]:
@@ -112,7 +119,14 @@ def get_folder_structure_from_synapse(syn, projects: Dict[str, str], version: st
                                         if level_id:
                                             imaging_structure["subfolders"][level] = level_id
                                             print(f"        ✓ Found {level}/: {level_id}")
-                                
+
+                                # Record-based subfolders nested under Imaging modules (e.g., ChannelMetadata)
+                                for record_subfolder in IMAGING_RECORD_BASED_SUBFOLDERS.get(imaging_subfolder, []):
+                                    record_id = find_folder_id(syn, imaging_subfolder_id, record_subfolder)
+                                    if record_id:
+                                        imaging_structure["subfolders"][record_subfolder] = record_id
+                                        print(f"        ✓ Found {record_subfolder}/: {record_id}")
+
                                 module_structure["subfolders"][imaging_subfolder] = imaging_structure
                         
                         folder_structure["modules"][module_name] = module_structure
@@ -131,7 +145,14 @@ def get_folder_structure_from_synapse(syn, projects: Dict[str, str], version: st
                             if subfolder_id:
                                 module_structure["subfolders"][subfolder_name] = subfolder_id
                                 print(f"      ✓ Found {subfolder_name}/: {subfolder_id}")
-                        
+
+                        # Record-based subfolders nested under file-based modules (e.g., SpatialPanel)
+                        for record_subfolder in SPATIAL_RECORD_BASED_SUBFOLDERS.get(module_name, []):
+                            record_id = find_folder_id(syn, module_id, record_subfolder)
+                            if record_id:
+                                module_structure["subfolders"][record_subfolder] = record_id
+                                print(f"      ✓ Found {record_subfolder}/: {record_id}")
+
                         folder_structure["modules"][module_name] = module_structure
             
             project_structure["folders"][folder_type] = folder_structure
@@ -243,14 +264,25 @@ def generate_schema_binding_from_structure(structure: Dict, version: str, folder
                         subfolder_id = imaging_subfolder_data.get("synapse_id")
                         subfolder_path = f"{folder_type}/Imaging/DigitalPathology"
                     elif imaging_subfolder_name == "MultiplexMicroscopy":
-                        # MultiplexMicroscopy has levels
+                        # MultiplexMicroscopy has levels and the record-based ChannelMetadata
                         for level_name, level_id in imaging_subfolder_data.get("subfolders", {}).items():
-                            schema_name = f"MultiplexMicroscopy{level_name.replace('_', '')}"
                             subfolder_path = f"{folder_type}/Imaging/MultiplexMicroscopy/{level_name}"
-                            
+
+                            # ChannelMetadata is record-based; route to record_based output
+                            if level_name == "ChannelMetadata":
+                                schema_bindings["schema_bindings"]["record_based"].setdefault(
+                                    "ChannelMetadata", {"projects": []}
+                                )["projects"].append({
+                                    "name": project_name,
+                                    "subfolder": subfolder_path,
+                                    "synapse_id": level_id,
+                                })
+                                continue
+
+                            schema_name = f"MultiplexMicroscopy{level_name.replace('_', '')}"
                             if schema_name not in schema_bindings["schema_bindings"]["file_based"]:
                                 schema_bindings["schema_bindings"]["file_based"][schema_name] = {"projects": []}
-                            
+
                             schema_bindings["schema_bindings"]["file_based"][schema_name]["projects"].append({
                                 "name": project_name,
                                 "subfolder": subfolder_path,
@@ -353,30 +385,30 @@ Examples:
         print("Logging in to Synapse...")
         syn = synapseclient.Synapse()
         auth_token = os.environ.get("SYNAPSE_PAT")
-    username = os.environ.get("SYNAPSE_USERNAME")
-    if auth_token:
-        syn.login(authToken=auth_token)
-    elif username:
-        syn.login(username)
-    else:
-        syn.login()
+        username = os.environ.get("SYNAPSE_USERNAME")
+        if auth_token:
+            syn.login(authToken=auth_token)
+        elif username:
+            syn.login(username)
+        else:
+            syn.login()
         print("✓ Logged in successfully\n")
-        
+
         # Query Synapse for folder structure
         print("Querying Synapse for folder structure...")
         structure = get_folder_structure_from_synapse(syn, projects, version, folder_types)
-        
+
         # Generate schema binding structure
         print("\n" + "="*80)
         print("Generating schema binding structure...")
         print("="*80)
         schema_binding_data = generate_schema_binding_from_structure(structure, version, folder_types)
-        
+
         # Save to file
         schema_binding_file = f"schema_binding_{version}.yml"
         with open(schema_binding_file, 'w') as f:
             yaml.dump(schema_binding_data, f, default_flow_style=False, sort_keys=False)
-        
+
         print(f"\n✓ Schema binding file updated: {schema_binding_file}")
         print(f"\nNext steps:")
         print(f"1. Review {schema_binding_file}")
