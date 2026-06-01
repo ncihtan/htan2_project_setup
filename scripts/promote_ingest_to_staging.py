@@ -200,26 +200,51 @@ def _get_upsert_key(df):
 
 
 def _download_recordset_csv(syn, rs_id):
-    """Download a RecordSet's CSV and return a DataFrame. RecordSets are versioned CSV files."""
-    from synapseclient.models.recordset import RecordSet as _RS
-    rs = _RS(id=rs_id)
-    rs.get(synapse_client=syn)  # RecordSet.get() always downloads the file; no download_file param
-    path = getattr(rs, "path", None)
-    if path and os.path.exists(path):
-        return pd.read_csv(path)
-    return pd.DataFrame()
+    """Download a RecordSet CSV via REST + presigned URL — avoids RecordSet.get() entirely."""
+    import requests
+    from io import StringIO
+
+    entity_data = syn.restGET(f"/entity/{rs_id}")
+    fhid = entity_data.get("dataFileHandleId")
+    if not fhid:
+        return pd.DataFrame()
+    response = syn.restPOST(
+        "/fileHandle/batch",
+        body=json.dumps({
+            "requestedFiles": [{
+                "fileHandleId": fhid,
+                "associateObjectId": rs_id,
+                "associateObjectType": "FileEntity",
+            }],
+            "includePreSignedURLs": True,
+            "includeFileHandles": False,
+            "includePreviewPreSignedURLs": False,
+        }),
+        endpoint=syn.fileHandleEndpoint,
+    )
+    url = response["requestedFiles"][0].get("preSignedURL")
+    if not url:
+        return pd.DataFrame()
+    r = requests.get(url)
+    r.raise_for_status()
+    return pd.read_csv(StringIO(r.text))
 
 
 def _upload_recordset_csv(syn, rs_id, df):
-    """Write df to a temp CSV and store it as a new version of the RecordSet."""
+    """Store an updated CSV as a new version of the RecordSet.
+
+    Reads upsert_keys from the entity metadata so the store() call doesn't fail.
+    """
     from synapseclient.models.recordset import RecordSet as _RS
+
+    entity_data = syn.restGET(f"/entity/{rs_id}")
+    upsert_keys = entity_data.get("upsertKey", [])
+
     with tempfile.NamedTemporaryFile(suffix=".csv", mode="w", delete=False) as f:
         df.to_csv(f, index=False)
         tmp_path = f.name
     try:
-        rs = _RS(id=rs_id)
-        rs.get(synapse_client=syn)  # fetch current metadata/etag needed for store
-        rs.path = tmp_path
+        rs = _RS(id=rs_id, path=tmp_path, upsert_keys=upsert_keys)
         rs.store(synapse_client=syn)
     finally:
         if os.path.exists(tmp_path):
@@ -258,8 +283,7 @@ def promote_recordset_rows(syn, bq_client, rs_table, recordset_map, dry_run, pro
         try:
             ingest_df = _download_recordset_csv(syn, ingest_rs_id)
         except Exception as e:
-            import traceback
-            log.error(f"Failed to download ingest RecordSet {ingest_rs_id}: {e}\n{traceback.format_exc()}")
+            log.error(f"Failed to download ingest RecordSet {ingest_rs_id}: {e}")
             counts["error"] += len(row_indexes)
             continue
 
