@@ -201,13 +201,8 @@ def _get_upsert_key(df):
 
 def _download_recordset_csv(syn, rs_id):
     """Download a RecordSet's CSV and return a DataFrame. RecordSets are versioned CSV files."""
-    if RecordSetModel is not None:
-        rs = RecordSetModel(id=rs_id)
-        rs.get(synapse_client=syn, download_file=True)
-        path = rs.path
-    else:
-        entity = syn.get(rs_id, downloadFile=True)
-        path = entity.path
+    entity = syn.get(rs_id, downloadFile=True)
+    path = getattr(entity, "path", None)
     if path and os.path.exists(path):
         return pd.read_csv(path)
     return pd.DataFrame()
@@ -219,15 +214,9 @@ def _upload_recordset_csv(syn, rs_id, df):
         df.to_csv(f, index=False)
         tmp_path = f.name
     try:
-        if RecordSetModel is not None:
-            rs = RecordSetModel(id=rs_id)
-            rs.get(synapse_client=syn, download_file=False)
-            rs.path = tmp_path
-            rs.store(synapse_client=syn)
-        else:
-            entity = syn.get(rs_id, downloadFile=False)
-            entity.path = tmp_path
-            syn.store(entity)
+        entity = syn.get(rs_id, downloadFile=False)
+        entity.path = tmp_path
+        syn.store(entity)
     finally:
         if os.path.exists(tmp_path):
             os.unlink(tmp_path)
