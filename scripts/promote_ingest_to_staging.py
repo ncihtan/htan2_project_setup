@@ -9,15 +9,14 @@ For files: re-parents each file to the matching staging folder (synID preserved,
 For RecordSet rows: copies specified rows from the ingest RecordSet into the staging RecordSet
   (snapshot semantics — ingest rows are left in place).
 
-Bootstrap requirement: staging-side RecordSets and EntityViews must already exist.
-Run the existing create-curation-tasks.yml GHA with subfolder_filter=v8_staging first,
-then confirm all staging entries in schema_binding_config.yml have a fileview_id.
+Bootstrap requirement: staging-side RecordSets must already exist.
+Run create-staging-recordsets.yml before this script.
 
 Usage:
   python scripts/promote_ingest_to_staging.py \\
       --files-table   htan2-dcc.htan2_medallion_gold.<files_table_name> \\
       --records-table htan2-dcc.htan2_medallion_gold.gold_STAGING_INDEXING_TABLE_All_Record_Rows_Staged_For_Current_Release \\
-      [--dry-run] [--no-annotate] [--skip-files] [--skip-records]
+      [--dry-run] [--no-annotate] [--skip-files] [--skip-records] [--project-name htan2-testing1]
 """
 
 import argparse
@@ -62,6 +61,17 @@ def build_folder_map(config):
                 if "ingest" in ids and "staging" in ids:
                     result[ids["ingest"]] = ids["staging"]
     return result
+
+
+def get_project_ingest_folder_ids(config, project_name):
+    """Return the set of ingest folder synIDs belonging to a given project name."""
+    ids = set()
+    for section in ("file_based", "record_based"):
+        for schema_data in config["schema_bindings"].get(section, {}).values():
+            for entry in schema_data.get("projects", []):
+                if entry["name"] == project_name and "ingest" in entry.get("subfolder", ""):
+                    ids.add(entry["synapse_id"])
+    return ids
 
 
 def build_recordset_map(config):
@@ -118,7 +128,7 @@ def annotate_entity(syn, entity_id, ingest_folder_id):
     syn.restPUT(f"/entity/{entity_id}/annotations2", body=json.dumps(existing))
 
 
-def promote_files(syn, bq_client, files_table, folder_map, dry_run, annotate):
+def promote_files(syn, bq_client, files_table, folder_map, dry_run, annotate, project_folder_ids=None):
     """Move files from ingest folders to staging folders."""
     query = f"SELECT File_EntityId, Folder_EntityId, File_Name FROM `{files_table}`"
     rows = list(bq_client.query(query))
@@ -128,6 +138,8 @@ def promote_files(syn, bq_client, files_table, folder_map, dry_run, annotate):
     for row in rows:
         file_id = row.File_EntityId
         ingest_folder_id = row.Folder_EntityId
+        if project_folder_ids is not None and ingest_folder_id not in project_folder_ids:
+            continue
         file_name = getattr(row, "File_Name", file_id)
 
         staging_folder_id = folder_map.get(ingest_folder_id)
@@ -180,7 +192,7 @@ def _get_upsert_key(df):
     return None
 
 
-def promote_recordset_rows(syn, bq_client, rs_table, recordset_map, dry_run):
+def promote_recordset_rows(syn, bq_client, rs_table, recordset_map, dry_run, project_folder_ids=None):
     """Copy RecordSet rows from ingest RecordSets to staging RecordSets.
 
     RecordSet_Row_Index is treated as the Synapse table ROW_ID.
@@ -192,6 +204,8 @@ def promote_recordset_rows(syn, bq_client, rs_table, recordset_map, dry_run):
 
     by_folder = defaultdict(list)
     for row in rows:
+        if project_folder_ids is not None and row.Folder_EntityId not in project_folder_ids:
+            continue
         by_folder[row.Folder_EntityId].append(str(row.RecordSet_Row_Index))
 
     counts = {"copied": 0, "skipped": 0, "no_mapping": 0, "error": 0}
@@ -296,6 +310,10 @@ def main():
     )
     parser.add_argument("--skip-files", action="store_true", help="Skip file promotion")
     parser.add_argument("--skip-records", action="store_true", help="Skip RecordSet row promotion")
+    parser.add_argument(
+        "--project-name",
+        help="Limit promotion to one project (e.g. htan2-testing1). Filters both files and rows.",
+    )
     args = parser.parse_args()
 
     if args.dry_run:
@@ -327,6 +345,14 @@ def main():
         f"{len(recordset_map)} RecordSet pairs"
     )
 
+    project_folder_ids = None
+    if args.project_name:
+        project_folder_ids = get_project_ingest_folder_ids(config, args.project_name)
+        if not project_folder_ids:
+            log.error(f"No ingest folders found for project '{args.project_name}' in config")
+            sys.exit(1)
+        log.info(f"Filtering to project '{args.project_name}': {len(project_folder_ids)} ingest folders")
+
     file_counts = {"moved": 0, "skipped": 0, "no_mapping": 0, "error": 0}
     row_counts = {"copied": 0, "skipped": 0, "no_mapping": 0, "error": 0}
 
@@ -335,12 +361,14 @@ def main():
             syn, bq_client, args.files_table, folder_map,
             dry_run=args.dry_run,
             annotate=not args.no_annotate,
+            project_folder_ids=project_folder_ids,
         )
 
     if not args.skip_records:
         row_counts = promote_recordset_rows(
             syn, bq_client, args.records_table, recordset_map,
             dry_run=args.dry_run,
+            project_folder_ids=project_folder_ids,
         )
 
     prefix = "[DRY RUN] " if args.dry_run else ""
