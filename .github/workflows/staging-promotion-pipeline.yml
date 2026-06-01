@@ -113,7 +113,7 @@ jobs:
     - name: Authenticate to GCP
       uses: google-github-actions/auth@v2
       with:
-        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+        credentials_json: ${{ secrets.GCP_SERVIVE_ACCOUNT_KEY }}
 
     # ── Step 4: Promote files and RecordSet rows ──────────────────────────────
     - name: Promote ingest to staging
