@@ -258,7 +258,8 @@ def promote_recordset_rows(syn, bq_client, rs_table, recordset_map, dry_run, pro
         try:
             ingest_df = _download_recordset_csv(syn, ingest_rs_id)
         except Exception as e:
-            log.error(f"Failed to download ingest RecordSet {ingest_rs_id}: {e}")
+            import traceback
+            log.error(f"Failed to download ingest RecordSet {ingest_rs_id}: {e}\n{traceback.format_exc()}")
             counts["error"] += len(row_indexes)
             continue
 
