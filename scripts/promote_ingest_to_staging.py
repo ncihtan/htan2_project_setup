@@ -201,8 +201,10 @@ def _get_upsert_key(df):
 
 def _download_recordset_csv(syn, rs_id):
     """Download a RecordSet's CSV and return a DataFrame. RecordSets are versioned CSV files."""
-    entity = syn.get(rs_id, downloadFile=True)
-    path = getattr(entity, "path", None)
+    from synapseclient.models.recordset import RecordSet as _RS
+    rs = _RS(id=rs_id)
+    rs.get(synapse_client=syn)  # RecordSet.get() always downloads the file; no download_file param
+    path = getattr(rs, "path", None)
     if path and os.path.exists(path):
         return pd.read_csv(path)
     return pd.DataFrame()
@@ -210,13 +212,15 @@ def _download_recordset_csv(syn, rs_id):
 
 def _upload_recordset_csv(syn, rs_id, df):
     """Write df to a temp CSV and store it as a new version of the RecordSet."""
+    from synapseclient.models.recordset import RecordSet as _RS
     with tempfile.NamedTemporaryFile(suffix=".csv", mode="w", delete=False) as f:
         df.to_csv(f, index=False)
         tmp_path = f.name
     try:
-        entity = syn.get(rs_id, downloadFile=False)
-        entity.path = tmp_path
-        syn.store(entity)
+        rs = _RS(id=rs_id)
+        rs.get(synapse_client=syn)  # fetch current metadata/etag needed for store
+        rs.path = tmp_path
+        rs.store(synapse_client=syn)
     finally:
         if os.path.exists(tmp_path):
             os.unlink(tmp_path)
