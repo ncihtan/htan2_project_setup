@@ -24,11 +24,18 @@ import json
 import logging
 import os
 import sys
+import tempfile
 from collections import defaultdict
 from datetime import datetime, timezone
 
+import pandas as pd
 import synapseclient
 import yaml
+
+try:
+    from synapseclient.models.recordset import RecordSet as RecordSetModel
+except ImportError:
+    RecordSetModel = None
 
 logging.basicConfig(
     level=logging.INFO,
@@ -192,10 +199,45 @@ def _get_upsert_key(df):
     return None
 
 
+def _download_recordset_csv(syn, rs_id):
+    """Download a RecordSet's CSV and return a DataFrame. RecordSets are versioned CSV files."""
+    if RecordSetModel is not None:
+        rs = RecordSetModel(id=rs_id)
+        rs.get(synapse_client=syn, download_file=True)
+        path = rs.path
+    else:
+        entity = syn.get(rs_id, downloadFile=True)
+        path = entity.path
+    if path and os.path.exists(path):
+        return pd.read_csv(path)
+    return pd.DataFrame()
+
+
+def _upload_recordset_csv(syn, rs_id, df):
+    """Write df to a temp CSV and store it as a new version of the RecordSet."""
+    with tempfile.NamedTemporaryFile(suffix=".csv", mode="w", delete=False) as f:
+        df.to_csv(f, index=False)
+        tmp_path = f.name
+    try:
+        if RecordSetModel is not None:
+            rs = RecordSetModel(id=rs_id)
+            rs.get(synapse_client=syn, download_file=False)
+            rs.path = tmp_path
+            rs.store(synapse_client=syn)
+        else:
+            entity = syn.get(rs_id, downloadFile=False)
+            entity.path = tmp_path
+            syn.store(entity)
+    finally:
+        if os.path.exists(tmp_path):
+            os.unlink(tmp_path)
+
+
 def promote_recordset_rows(syn, bq_client, rs_table, recordset_map, dry_run, project_folder_ids=None):
     """Copy RecordSet rows from ingest RecordSets to staging RecordSets.
 
-    RecordSet_Row_Index is treated as the Synapse table ROW_ID.
+    RecordSets are versioned CSV files — rows are selected by 0-based RecordSet_Row_Index,
+    then appended to the staging RecordSet CSV and re-uploaded as a new version.
     Rows already present in staging (matched by upsert key) are skipped.
     """
     query = f"SELECT Folder_EntityId, RecordSet_Row_Index FROM `{rs_table}`"
@@ -206,7 +248,7 @@ def promote_recordset_rows(syn, bq_client, rs_table, recordset_map, dry_run, pro
     for row in rows:
         if project_folder_ids is not None and row.Folder_EntityId not in project_folder_ids:
             continue
-        by_folder[row.Folder_EntityId].append(str(row.RecordSet_Row_Index))
+        by_folder[row.Folder_EntityId].append(int(row.RecordSet_Row_Index))
 
     counts = {"copied": 0, "skipped": 0, "no_mapping": 0, "error": 0}
 
@@ -219,61 +261,56 @@ def promote_recordset_rows(syn, bq_client, rs_table, recordset_map, dry_run, pro
 
         ingest_rs_id, staging_rs_id = mapping
 
-        # Fetch specified rows from ingest RecordSet
+        # Download ingest RecordSet CSV and select rows by index
         try:
-            ids_str = ",".join(row_indexes)
-            result = syn.tableQuery(f"SELECT * FROM {ingest_rs_id} WHERE ROW_ID IN ({ids_str})")
-            df = result.asDataFrame()
+            ingest_df = _download_recordset_csv(syn, ingest_rs_id)
         except Exception as e:
-            log.error(f"Failed to query ingest RecordSet {ingest_rs_id}: {e}")
+            log.error(f"Failed to download ingest RecordSet {ingest_rs_id}: {e}")
             counts["error"] += len(row_indexes)
             continue
 
-        if df.empty:
-            log.warning(f"No rows found in {ingest_rs_id} for ROW_IDs: {ids_str}")
+        valid_indexes = [i for i in row_indexes if i < len(ingest_df)]
+        out_of_range = len(row_indexes) - len(valid_indexes)
+        if out_of_range:
+            log.warning(f"{out_of_range} row index(es) out of range for {ingest_rs_id} (has {len(ingest_df)} rows)")
+        if not valid_indexes:
             continue
 
-        # Skip rows already present in staging (idempotency)
-        upsert_key = _get_upsert_key(df)
-        if upsert_key:
-            try:
-                existing_df = syn.tableQuery(
-                    f"SELECT {upsert_key} FROM {staging_rs_id}"
-                ).asDataFrame()
-                already_present = set(existing_df[upsert_key].dropna())
-                new_mask = ~df[upsert_key].isin(already_present)
-                n_skipped = int((~new_mask).sum())
-                if n_skipped:
-                    log.info(
-                        f"Skipping {n_skipped} row(s) already in staging RecordSet {staging_rs_id}"
-                    )
-                    counts["skipped"] += n_skipped
-                df = df[new_mask]
-            except Exception as e:
-                log.warning(
-                    f"Could not check staging RecordSet {staging_rs_id} for duplicates ({e}) "
-                    f"— proceeding without idempotency check"
-                )
+        new_rows = ingest_df.iloc[valid_indexes].copy()
 
-        if df.empty:
+        # Download staging RecordSet CSV for idempotency check
+        try:
+            staging_df = _download_recordset_csv(syn, staging_rs_id)
+        except Exception as e:
+            log.warning(f"Could not download staging RecordSet {staging_rs_id} ({e}) — starting from empty")
+            staging_df = pd.DataFrame(columns=ingest_df.columns)
+
+        upsert_key = _get_upsert_key(new_rows)
+        if upsert_key and upsert_key in staging_df.columns:
+            already_present = set(staging_df[upsert_key].dropna())
+            new_mask = ~new_rows[upsert_key].isin(already_present)
+            n_skipped = int((~new_mask).sum())
+            if n_skipped:
+                log.info(f"Skipping {n_skipped} row(s) already in staging RecordSet {staging_rs_id}")
+                counts["skipped"] += n_skipped
+            new_rows = new_rows[new_mask]
+
+        if new_rows.empty:
             continue
-
-        df = df.drop(columns=["ROW_ID", "ROW_VERSION"], errors="ignore")
 
         if dry_run:
-            log.info(
-                f"[DRY RUN] Would copy {len(df)} row(s): {ingest_rs_id} → {staging_rs_id}"
-            )
-            counts["copied"] += len(df)
+            log.info(f"[DRY RUN] Would copy {len(new_rows)} row(s): {ingest_rs_id} → {staging_rs_id}")
+            counts["copied"] += len(new_rows)
             continue
 
         try:
-            syn.store(synapseclient.Table(staging_rs_id, df))
-            log.info(f"Copied {len(df)} row(s): {ingest_rs_id} → {staging_rs_id}")
-            counts["copied"] += len(df)
+            updated_df = pd.concat([staging_df, new_rows], ignore_index=True)
+            _upload_recordset_csv(syn, staging_rs_id, updated_df)
+            log.info(f"Copied {len(new_rows)} row(s): {ingest_rs_id} → {staging_rs_id}")
+            counts["copied"] += len(new_rows)
         except Exception as e:
-            log.error(f"Failed to copy rows to staging RecordSet {staging_rs_id}: {e}")
-            counts["error"] += len(df)
+            log.error(f"Failed to update staging RecordSet {staging_rs_id}: {e}")
+            counts["error"] += len(new_rows)
 
     return counts
 
