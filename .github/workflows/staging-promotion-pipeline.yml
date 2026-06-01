@@ -142,7 +142,7 @@ jobs:
 
     # ── Step 5: Commit config changes from bootstrap ──────────────────────────
     - name: Commit updated config
-      if: ${{ inputs.dry_run != true && inputs.skip_bootstrap != true }}
+      if: ${{ always() && inputs.dry_run != true && inputs.skip_bootstrap != true }}
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"

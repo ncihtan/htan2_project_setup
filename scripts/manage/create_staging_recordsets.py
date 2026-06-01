@@ -192,8 +192,21 @@ def main():
                 save_config(config, args.config)
 
             except Exception as e:
-                print(f"  ❌ {label}: {e}")
-                errors += 1
+                # 409 means the RecordSet already exists (e.g. from a previous partial run).
+                # Look it up by name and record its ID rather than failing.
+                if "409" in str(e) or "already exists" in str(e):
+                    existing_id = syn.findEntityId(rs_name, parent=folder_id)
+                    if existing_id:
+                        entry["fileview_id"] = existing_id
+                        print(f"  ✓  {label}: found existing RecordSet {existing_id} (already existed)")
+                        created += 1
+                        save_config(config, args.config)
+                    else:
+                        print(f"  ❌ {label}: 409 conflict but could not find existing RecordSet")
+                        errors += 1
+                else:
+                    print(f"  ❌ {label}: {e}")
+                    errors += 1
             finally:
                 if tmp_csv and os.path.exists(tmp_csv):
                     os.unlink(tmp_csv)
