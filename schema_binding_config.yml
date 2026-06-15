@@ -1115,6 +1115,9 @@ schema_bindings:
         subfolder: v8_staging/Clinical/Demographics
         synapse_id: syn72102453
         fileview_id: null
+        promoted_snapshot:
+          synid: syn74149099
+          version: 8
       - name: HTAN2_Skin
         subfolder: v8_staging/Clinical/Demographics
         synapse_id: syn72102517
@@ -1205,6 +1208,9 @@ schema_bindings:
         subfolder: v8_staging/Clinical/Diagnosis
         synapse_id: syn72102454
         fileview_id: null
+        promoted_snapshot:
+          synid: syn74149254
+          version: 21
       - name: HTAN2_Skin
         subfolder: v8_staging/Clinical/Diagnosis
         synapse_id: syn72102518
@@ -1295,6 +1301,9 @@ schema_bindings:
         subfolder: v8_staging/Clinical/Therapy
         synapse_id: syn72102455
         fileview_id: null
+        promoted_snapshot:
+          synid: syn74149408
+          version: 13
       - name: HTAN2_Skin
         subfolder: v8_staging/Clinical/Therapy
         synapse_id: syn72102519
@@ -1385,6 +1394,9 @@ schema_bindings:
         subfolder: v8_staging/Clinical/FollowUp
         synapse_id: syn72102456
         fileview_id: null
+        promoted_snapshot:
+          synid: syn74149714
+          version: 9
       - name: HTAN2_Skin
         subfolder: v8_staging/Clinical/FollowUp
         synapse_id: syn72102520
@@ -1475,6 +1487,9 @@ schema_bindings:
         subfolder: v8_staging/Clinical/MolecularTest
         synapse_id: syn72102457
         fileview_id: null
+        promoted_snapshot:
+          synid: syn74150058
+          version: 18
       - name: HTAN2_Skin
         subfolder: v8_staging/Clinical/MolecularTest
         synapse_id: syn72102521
@@ -1565,6 +1580,9 @@ schema_bindings:
         subfolder: v8_staging/Clinical/Exposure
         synapse_id: syn72102458
         fileview_id: null
+        promoted_snapshot:
+          synid: syn74150360
+          version: 16
       - name: HTAN2_Skin
         subfolder: v8_staging/Clinical/Exposure
         synapse_id: syn72102522
@@ -1655,6 +1673,9 @@ schema_bindings:
         subfolder: v8_staging/Clinical/FamilyHistory
         synapse_id: syn72102459
         fileview_id: null
+        promoted_snapshot:
+          synid: syn74150518
+          version: 13
       - name: HTAN2_Skin
         subfolder: v8_staging/Clinical/FamilyHistory
         synapse_id: syn72102523
@@ -1745,6 +1766,9 @@ schema_bindings:
         subfolder: v8_staging/Clinical/VitalStatus
         synapse_id: syn72102460
         fileview_id: null
+        promoted_snapshot:
+          synid: syn74150640
+          version: 12
       - name: HTAN2_Skin
         subfolder: v8_staging/Clinical/VitalStatus
         synapse_id: syn72102524
@@ -1835,6 +1859,9 @@ schema_bindings:
         subfolder: v8_staging/Biospecimen
         synapse_id: syn72102461
         fileview_id: null
+        promoted_snapshot:
+          synid: syn74150776
+          version: 31
       - name: HTAN2_Skin
         subfolder: v8_staging/Biospecimen
         synapse_id: syn72102525
@@ -1941,6 +1968,9 @@ schema_bindings:
         subfolder: v8_staging/Imaging/MultiplexMicroscopy/ChannelMetadata
         synapse_id: syn74457914
         fileview_id: null
+        promoted_snapshot:
+          synid: syn74459200
+          version: 9
       - name: HTAN2_Prostate
         subfolder: v8_release/Imaging/MultiplexMicroscopy/ChannelMetadata
         synapse_id: syn74457915
@@ -2048,6 +2078,9 @@ schema_bindings:
         subfolder: v8_staging/SpatialOmics/Panel
         synapse_id: syn72102480
         fileview_id: null
+        promoted_snapshot:
+          synid: syn74778982
+          version: 12
       - name: HTAN2_Skin
         subfolder: v8_staging/SpatialOmics/Panel
         synapse_id: syn72102544
