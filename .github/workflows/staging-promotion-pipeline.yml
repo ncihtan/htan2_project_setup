@@ -1,10 +1,9 @@
 name: Staging Promotion Pipeline
 
-# Runs the full ingest-to-staging promotion sequence:
-#   1. Create staging RecordSets for any record-based folders that don't have one yet
-#   2. Verify all targeted staging entries have a RecordSet ID in the config
-#   3. Promote files (syn.move) and RecordSet rows from ingest to staging
-#   4. Commit any config changes from step 1 back to the repo
+# Runs the ingest-to-staging promotion:
+#   1. Authenticate to GCP
+#   2. Promote files (syn.move) and snapshot RecordSet versions from ingest to staging
+#   3. Commit snapshot version references back to schema_binding_config.yml
 #
 # Set dry_run=true (the default) to preview all changes without touching Synapse.
 # Set project_name to a single project (e.g. htan2-testing1) for a smoke test.
@@ -13,7 +12,7 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'Dry run — preview changes without modifying Synapse'
+        description: 'Dry run — preview changes without modifying Synapse or config'
         type: boolean
         default: true
       project_name:
@@ -25,17 +24,13 @@ on:
         type: string
         required: true
       records_table:
-        description: 'BQ recordsets table — full reference (project.dataset.table)'
+        description: 'BQ records table — full reference (project.dataset.table)'
         type: string
         required: true
       annotate:
         description: 'Annotate moved files with promoted_at / promoted_from'
         type: boolean
         default: true
-      skip_bootstrap:
-        description: 'Skip RecordSet creation (already bootstrapped for all targeted projects)'
-        type: boolean
-        default: false
 
 env:
   PYTHON_VERSION: '3.11'
@@ -56,66 +51,13 @@ jobs:
     - name: Install dependencies
       run: pip install --upgrade pip && pip install -r requirements.txt
 
-    # ── Step 1: Bootstrap staging RecordSets ──────────────────────────────────
-    - name: Create staging RecordSets
-      if: ${{ inputs.skip_bootstrap != true }}
-      env:
-        SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
-        SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
-      run: |
-        CMD="python scripts/manage/create_staging_recordsets.py"
-
-        if [ "${{ inputs.dry_run }}" = "true" ]; then
-          CMD="$CMD --dry-run"
-        fi
-
-        if [ -n "${{ inputs.project_name }}" ]; then
-          CMD="$CMD --project-name ${{ inputs.project_name }}"
-        fi
-
-        echo "Running: $CMD"
-        $CMD
-
-    # ── Step 2: Verify RecordSet coverage ────────────────────────────────────
-    - name: Verify staging RecordSet coverage
-      run: |
-        python - <<'EOF'
-        import yaml
-
-        with open("schema_binding_config.yml") as f:
-            config = yaml.safe_load(f)
-
-        project_filter = "${{ inputs.project_name }}" or None
-        missing = []
-
-        for schema, data in config["schema_bindings"].get("record_based", {}).items():
-            for entry in data.get("projects", []):
-                if "staging" not in entry.get("subfolder", ""):
-                    continue
-                if project_filter and entry["name"] != project_filter:
-                    continue
-                if not entry.get("fileview_id"):
-                    missing.append(f"  {entry['name']}/{entry['subfolder']}")
-
-        if missing:
-            print(f"WARNING: {len(missing)} staging folder(s) still missing a RecordSet ID:")
-            for m in missing[:10]:
-                print(m)
-            if len(missing) > 10:
-                print(f"  ... and {len(missing) - 10} more")
-            print("RecordSet row promotion will be skipped for these folders.")
-        else:
-            scope = f"project '{project_filter}'" if project_filter else "all projects"
-            print(f"All staging record-based entries for {scope} have a RecordSet ID.")
-        EOF
-
-    # ── Step 3: Authenticate to GCP ──────────────────────────────────────────
+    # ── Step 1: Authenticate to GCP ──────────────────────────────────────────
     - name: Authenticate to GCP
       uses: google-github-actions/auth@v2
       with:
         credentials_json: ${{ secrets.GCP_SERVIVE_ACCOUNT_KEY }}
 
-    # ── Step 4: Promote files and RecordSet rows ──────────────────────────────
+    # ── Step 2: Promote files and snapshot RecordSets ─────────────────────────
     - name: Promote ingest to staging
       env:
         SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
@@ -140,9 +82,9 @@ jobs:
         echo "Running: $CMD"
         $CMD
 
-    # ── Step 5: Commit config changes from bootstrap ──────────────────────────
+    # ── Step 3: Commit snapshot version references ────────────────────────────
     - name: Commit updated config
-      if: ${{ always() && inputs.dry_run != true && inputs.skip_bootstrap != true }}
+      if: ${{ inputs.dry_run != true }}
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -150,6 +92,6 @@ jobs:
         if git diff --cached --quiet; then
           echo "No config changes to commit."
         else
-          git commit -m "Add staging RecordSet IDs to schema_binding_config.yml [skip ci]"
+          git commit -m "Update staging snapshot versions in schema_binding_config.yml [skip ci]"
           git push
         fi
