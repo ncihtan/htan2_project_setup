@@ -1,0 +1,627 @@
+record_based:
+    Demographics:
+      projects:
+      # ... [Keep ingest rows index 0 to 10 as they are] ...
+      - name: HTAN2_CRC
+        subfolder: v8_staging/Clinical/Demographics
+        synapse_id: syn72101963
+        fileview_id: syn74149006
+      - name: HTAN2_Gastric
+        subfolder: v8_staging/Clinical/Demographics
+        synapse_id: syn72102025
+        fileview_id: syn74149008
+      - name: HTAN2_Glioma
+        subfolder: v8_staging/Clinical/Demographics
+        synapse_id: syn72102085
+        fileview_id: syn74149022
+      - name: HTAN2_Lymphoma
+        subfolder: v8_staging/Clinical/Demographics
+        synapse_id: syn72102145
+        fileview_id: syn74149041
+      - name: HTAN2_Myeloma
+        subfolder: v8_staging/Clinical/Demographics
+        synapse_id: syn72102207
+        fileview_id: syn74149048
+      - name: HTAN2_Ovarian
+        subfolder: v8_staging/Clinical/Demographics
+        synapse_id: syn72102268
+        fileview_id: syn74149059
+      - name: HTAN2_Pancreatic
+        subfolder: v8_staging/Clinical/Demographics
+        synapse_id: syn72102329
+        fileview_id: syn74149074
+      - name: HTAN2_Pediatric
+        subfolder: v8_staging/Clinical/Demographics
+        synapse_id: syn72102391
+        fileview_id: syn74149084
+      - name: HTAN2_Prostate
+        subfolder: v8_staging/Clinical/Demographics
+        synapse_id: syn72102453
+        fileview_id: syn74149099.8
+        promoted_snapshot:
+          synid: syn74149099
+          version: 8
+      - name: HTAN2_Skin
+        subfolder: v8_staging/Clinical/Demographics
+        synapse_id: syn72102517
+        fileview_id: syn74149112
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/Demographics
+        synapse_id: syn73742706
+        fileview_id: syn73742792
+    Diagnosis:
+      projects:
+      # ... [Keep ingest rows index 0 to 10 as they are] ...
+      - name: HTAN2_CRC
+        subfolder: v8_staging/Clinical/Diagnosis
+        synapse_id: syn72101964
+        fileview_id: syn74149141
+      - name: HTAN2_Gastric
+        subfolder: v8_staging/Clinical/Diagnosis
+        synapse_id: syn72102026
+        fileview_id: syn74149163
+      - name: HTAN2_Glioma
+        subfolder: v8_staging/Clinical/Diagnosis
+        synapse_id: syn72102086
+        fileview_id: syn74149171
+      - name: HTAN2_Lymphoma
+        subfolder: v8_staging/Clinical/Diagnosis
+        synapse_id: syn72102146
+        fileview_id: syn74149182
+      - name: HTAN2_Myeloma
+        subfolder: v8_staging/Clinical/Diagnosis
+        synapse_id: syn72102208
+        fileview_id: syn74149202
+      - name: HTAN2_Ovarian
+        subfolder: v8_staging/Clinical/Diagnosis
+        synapse_id: syn72102270
+        fileview_id: syn74149214
+      - name: HTAN2_Pancreatic
+        subfolder: v8_staging/Clinical/Diagnosis
+        synapse_id: syn72102330
+        fileview_id: syn74149230
+      - name: HTAN2_Pediatric
+        subfolder: v8_staging/Clinical/Diagnosis
+        synapse_id: syn72102392
+        fileview_id: syn74149246
+      - name: HTAN2_Prostate
+        subfolder: v8_staging/Clinical/Diagnosis
+        synapse_id: syn72102454
+        fileview_id: syn74149254.21
+        promoted_snapshot:
+          synid: syn74149254
+          version: 21
+      - name: HTAN2_Skin
+        subfolder: v8_staging/Clinical/Diagnosis
+        synapse_id: syn72102518
+        fileview_id: syn74149262
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/Diagnosis
+        synapse_id: syn73742707
+        fileview_id: syn73742793
+    Therapy:
+      projects:
+      # ... [Keep ingest rows index 0 to 10 as they are] ...
+      - name: HTAN2_CRC
+        subfolder: v8_staging/Clinical/Therapy
+        synapse_id: syn72101965
+        fileview_id: syn74149292
+      - name: HTAN2_Gastric
+        subfolder: v8_staging/Clinical/Therapy
+        synapse_id: syn72102027
+        fileview_id: syn74149306
+      - name: HTAN2_Glioma
+        subfolder: v8_staging/Clinical/Therapy
+        synapse_id: syn72102087
+        fileview_id: syn74149318
+      - name: HTAN2_Lymphoma
+        subfolder: v8_staging/Clinical/Therapy
+        synapse_id: syn72102147
+        fileview_id: syn74149329
+      - name: HTAN2_Myeloma
+        subfolder: v8_staging/Clinical/Therapy
+        synapse_id: syn72102209
+        fileview_id: syn74149357
+      - name: HTAN2_Ovarian
+        subfolder: v8_staging/Clinical/Therapy
+        synapse_id: syn72102271
+        fileview_id: syn74149375
+      - name: HTAN2_Pancreatic
+        subfolder: v8_staging/Clinical/Therapy
+        synapse_id: syn72102331
+        fileview_id: syn74149389
+      - name: HTAN2_Pediatric
+        subfolder: v8_staging/Clinical/Therapy
+        synapse_id: syn72102393
+        fileview_id: syn74149399
+      - name: HTAN2_Prostate
+        subfolder: v8_staging/Clinical/Therapy
+        synapse_id: syn72102455
+        fileview_id: syn74149408.13
+        promoted_snapshot:
+          synid: syn74149408
+          version: 13
+      - name: HTAN2_Skin
+        subfolder: v8_staging/Clinical/Therapy
+        synapse_id: syn72102519
+        fileview_id: syn74149426
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/Therapy
+        synapse_id: syn73742708
+        fileview_id: syn73742799
+    FollowUp:
+      projects:
+      # ... [Keep ingest rows index 0 to 10 as they are] ...
+      - name: HTAN2_CRC
+        subfolder: v8_staging/Clinical/FollowUp
+        synapse_id: syn72101966
+        fileview_id: syn74149469
+      - name: HTAN2_Gastric
+        subfolder: v8_staging/Clinical/FollowUp
+        synapse_id: syn72102028
+        fileview_id: syn74149501
+      - name: HTAN2_Glioma
+        subfolder: v8_staging/Clinical/FollowUp
+        synapse_id: syn72102088
+        fileview_id: syn74149534
+      - name: HTAN2_Lymphoma
+        subfolder: v8_staging/Clinical/FollowUp
+        synapse_id: syn72102148
+        fileview_id: syn74149556
+      - name: HTAN2_Myeloma
+        subfolder: v8_staging/Clinical/FollowUp
+        synapse_id: syn72102210
+        fileview_id: syn74149591
+      - name: HTAN2_Ovarian
+        subfolder: v8_staging/Clinical/FollowUp
+        synapse_id: syn72102272
+        fileview_id: syn74149622
+      - name: HTAN2_Pancreatic
+        subfolder: v8_staging/Clinical/FollowUp
+        synapse_id: syn72102332
+        fileview_id: syn74149647
+      - name: HTAN2_Pediatric
+        subfolder: v8_staging/Clinical/FollowUp
+        synapse_id: syn72102394
+        fileview_id: syn74149680
+      - name: HTAN2_Prostate
+        subfolder: v8_staging/Clinical/FollowUp
+        synapse_id: syn72102456
+        fileview_id: syn74149714.9
+        promoted_snapshot:
+          synid: syn74149714
+          version: 9
+      - name: HTAN2_Skin
+        subfolder: v8_staging/Clinical/FollowUp
+        synapse_id: syn72102520
+        fileview_id: syn74149737
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/FollowUp
+        synapse_id: syn73742709
+        fileview_id: syn73742796
+    MolecularTest:
+      projects:
+      # ... [Keep ingest rows index 0 to 10 as they are] ...
+      - name: HTAN2_CRC
+        subfolder: v8_staging/Clinical/MolecularTest
+        synapse_id: syn72101967
+        fileview_id: syn74149794
+      - name: HTAN2_Gastric
+        subfolder: v8_staging/Clinical/MolecularTest
+        synapse_id: syn72102029
+        fileview_id: syn74149824
+      - name: HTAN2_Glioma
+        subfolder: v8_staging/Clinical/MolecularTest
+        synapse_id: syn72102089
+        fileview_id: syn74149861
+      - name: HTAN2_Lymphoma
+        subfolder: v8_staging/Clinical/MolecularTest
+        synapse_id: syn72102149
+        fileview_id: syn74149890
+      - name: HTAN2_Myeloma
+        subfolder: v8_staging/Clinical/MolecularTest
+        synapse_id: syn72102211
+        fileview_id: syn74149916
+      - name: HTAN2_Ovarian
+        subfolder: v8_staging/Clinical/MolecularTest
+        synapse_id: syn72102273
+        fileview_id: syn74149962
+      - name: HTAN2_Pancreatic
+        subfolder: v8_staging/Clinical/MolecularTest
+        synapse_id: syn72102334
+        fileview_id: syn74149992
+      - name: HTAN2_Pediatric
+        subfolder: v8_staging/Clinical/MolecularTest
+        synapse_id: syn72102395
+        fileview_id: syn74150019
+      - name: HTAN2_Prostate
+        subfolder: v8_staging/Clinical/MolecularTest
+        synapse_id: syn72102457
+        fileview_id: syn74150058.18
+        promoted_snapshot:
+          synid: syn74150058
+          version: 18
+      - name: HTAN2_Skin
+        subfolder: v8_staging/Clinical/MolecularTest
+        synapse_id: syn72102521
+        fileview_id: syn74150083
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/MolecularTest
+        synapse_id: syn73742710
+        fileview_id: syn73742797
+    Exposure:
+      projects:
+      # ... [Keep ingest rows index 0 to 10 as they are] ...
+      - name: HTAN2_CRC
+        subfolder: v8_staging/Clinical/Exposure
+        synapse_id: syn72101968
+        fileview_id: syn74150122
+      - name: HTAN2_Gastric
+        subfolder: v8_staging/Clinical/Exposure
+        synapse_id: syn72102030
+        fileview_id: syn74150152
+      - name: HTAN2_Glioma
+        subfolder: v8_staging/Clinical/Exposure
+        synapse_id: syn72102090
+        fileview_id: syn74150182
+      - name: HTAN2_Lymphoma
+        subfolder: v8_staging/Clinical/Exposure
+        synapse_id: syn72102150
+        fileview_id: syn74150204
+      - name: HTAN2_Myeloma
+        subfolder: v8_staging/Clinical/Exposure
+        synapse_id: syn72102212
+        fileview_id: syn74150237
+      - name: HTAN2_Ovarian
+        subfolder: v8_staging/Clinical/Exposure
+        synapse_id: syn72102274
+        fileview_id: syn74150266
+      - name: HTAN2_Pancreatic
+        subfolder: v8_staging/Clinical/Exposure
+        synapse_id: syn72102336
+        fileview_id: syn74150296
+      - name: HTAN2_Pediatric
+        subfolder: v8_staging/Clinical/Exposure
+        synapse_id: syn72102396
+        fileview_id: syn74150329
+      - name: HTAN2_Prostate
+        subfolder: v8_staging/Clinical/Exposure
+        synapse_id: syn72102458
+        fileview_id: syn74150360.16
+        promoted_snapshot:
+          synid: syn74150360
+          version: 16
+      - name: HTAN2_Skin
+        subfolder: v8_staging/Clinical/Exposure
+        synapse_id: syn72102522
+        fileview_id: syn74150393
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/Exposure
+        synapse_id: syn73742711
+        fileview_id: syn73742794
+    FamilyHistory:
+      projects:
+      # ... [Keep ingest rows index 0 to 10 as they are] ...
+      - name: HTAN2_CRC
+        subfolder: v8_staging/Clinical/FamilyHistory
+        synapse_id: syn72101969
+        fileview_id: syn74150421
+      - name: HTAN2_Gastric
+        subfolder: v8_staging/Clinical/FamilyHistory
+        synapse_id: syn72102031
+        fileview_id: syn74150427
+      - name: HTAN2_Glioma
+        subfolder: v8_staging/Clinical/FamilyHistory
+        synapse_id: syn72102091
+        fileview_id: syn74150437
+      - name: HTAN2_Lymphoma
+        subfolder: v8_staging/Clinical/FamilyHistory
+        synapse_id: syn72102151
+        fileview_id: syn74150451
+      - name: HTAN2_Myeloma
+        subfolder: v8_staging/Clinical/FamilyHistory
+        synapse_id: syn72102213
+        fileview_id: syn74150459
+      - name: HTAN2_Ovarian
+        subfolder: v8_staging/Clinical/FamilyHistory
+        synapse_id: syn72102275
+        fileview_id: syn74150473
+      - name: HTAN2_Pancreatic
+        subfolder: v8_staging/Clinical/FamilyHistory
+        synapse_id: syn72102337
+        fileview_id: syn74150486
+      - name: HTAN2_Pediatric
+        subfolder: v8_staging/Clinical/FamilyHistory
+        synapse_id: syn72102397
+        fileview_id: syn74150505
+      - name: HTAN2_Prostate
+        subfolder: v8_staging/Clinical/FamilyHistory
+        synapse_id: syn72102459
+        fileview_id: syn74150518.13
+        promoted_snapshot:
+          synid: syn74150518
+          version: 13
+      - name: HTAN2_Skin
+        subfolder: v8_staging/Clinical/FamilyHistory
+        synapse_id: syn72102523
+        fileview_id: syn74150532
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/FamilyHistory
+        synapse_id: syn73742712
+        fileview_id: syn73742795
+    VitalStatus:
+      projects:
+      # ... [Keep ingest rows index 0 to 10 as they are] ...
+      - name: HTAN2_CRC
+        subfolder: v8_staging/Clinical/VitalStatus
+        synapse_id: syn72101970
+        fileview_id: syn74150550
+      - name: HTAN2_Gastric
+        subfolder: v8_staging/Clinical/VitalStatus
+        synapse_id: syn72102032
+        fileview_id: syn74150560
+      - name: HTAN2_Glioma
+        subfolder: v8_staging/Clinical/VitalStatus
+        synapse_id: syn72102092
+        fileview_id: syn74150571
+      - name: HTAN2_Lymphoma
+        subfolder: v8_staging/Clinical/VitalStatus
+        synapse_id: syn72102152
+        fileview_id: syn74150576
+      - name: HTAN2_Myeloma
+        subfolder: v8_staging/Clinical/VitalStatus
+        synapse_id: syn72102214
+        fileview_id: syn74150591
+      - name: HTAN2_Ovarian
+        subfolder: v8_staging/Clinical/VitalStatus
+        synapse_id: syn72102276
+        fileview_id: syn74150608
+      - name: HTAN2_Pancreatic
+        subfolder: v8_staging/Clinical/VitalStatus
+        synapse_id: syn72102338
+        fileview_id: syn74150612
+      - name: HTAN2_Pediatric
+        subfolder: v8_staging/Clinical/VitalStatus
+        synapse_id: syn72102398
+        fileview_id: syn74150629
+      - name: HTAN2_Prostate
+        subfolder: v8_staging/Clinical/VitalStatus
+        synapse_id: syn72102460
+        fileview_id: syn74150640.12
+        promoted_snapshot:
+          synid: syn74150640
+          version: 12
+      - name: HTAN2_Skin
+        subfolder: v8_staging/Clinical/VitalStatus
+        synapse_id: syn72102524
+        fileview_id: syn74150653
+      - name: htan2-testing1
+        subfolder: v8_staging/Clinical/VitalStatus
+        synapse_id: syn73742713
+        fileview_id: syn73742800
+    Biospecimen:
+      projects:
+      # ... [Keep ingest rows index 0 to 10 as they are] ...
+      - name: HTAN2_CRC
+        subfolder: v8_staging/Biospecimen
+        synapse_id: syn72101971
+        fileview_id: syn74150671
+      - name: HTAN2_Gastric
+        subfolder: v8_staging/Biospecimen
+        synapse_id: syn72102033
+        fileview_id: syn74150681
+      - name: HTAN2_Glioma
+        subfolder: v8_staging/Biospecimen
+        synapse_id: syn72102093
+        fileview_id: syn74150695
+      - name: HTAN2_Lymphoma
+        subfolder: v8_staging/Biospecimen
+        synapse_id: syn72102153
+        fileview_id: syn74150715
+      - name: HTAN2_Myeloma
+        subfolder: v8_staging/Biospecimen
+        synapse_id: syn72102215
+        fileview_id: syn74150725
+      - name: HTAN2_Ovarian
+        subfolder: v8_staging/Biospecimen
+        synapse_id: syn72102277
+        fileview_id: syn74150736
+      - name: HTAN2_Pancreatic
+        subfolder: v8_staging/Biospecimen
+        synapse_id: syn72102339
+        fileview_id: syn74150748
+      - name: HTAN2_Pediatric
+        subfolder: v8_staging/Biospecimen
+        synapse_id: syn72102399
+        fileview_id: syn74150761
+      - name: HTAN2_Prostate
+        subfolder: v8_staging/Biospecimen
+        synapse_id: syn72102461
+        fileview_id: syn74150776.31
+        promoted_snapshot:
+          synid: syn74150776
+          version: 31
+      - name: HTAN2_Skin
+        subfolder: v8_staging/Biospecimen
+        synapse_id: syn72102525
+        fileview_id: syn74150785
+      - name: htan2-testing1
+        subfolder: v8_staging/Biospecimen
+        synapse_id: syn73742714
+        fileview_id: syn74150789
+    ChannelMetadata:
+      projects:
+      - name: HTAN2_CRC
+        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457969
+        fileview_id: syn74778947
+      - name: HTAN2_CRC
+        subfolder: v8_staging/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457970
+        fileview_id: syn74778947
+      - name: HTAN2_CRC
+        subfolder: v8_release/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457971
+      - name: HTAN2_Gastric
+        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457972
+        fileview_id: syn74778948
+      - name: HTAN2_Gastric
+        subfolder: v8_staging/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457973
+        fileview_id: syn74778948
+      - name: HTAN2_Gastric
+        subfolder: v8_release/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457974
+      - name: HTAN2_Glioma
+        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457975
+        fileview_id: syn74778949
+      - name: HTAN2_Glioma
+        subfolder: v8_staging/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457976
+        fileview_id: syn74778949
+      - name: HTAN2_Glioma
+        subfolder: v8_release/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457977
+      - name: HTAN2_Lymphoma
+        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457978
+        fileview_id: syn74778950
+      - name: HTAN2_Lymphoma
+        subfolder: v8_staging/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457979
+        fileview_id: syn74778950
+      - name: HTAN2_Lymphoma
+        subfolder: v8_release/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457980
+      - name: HTAN2_Myeloma
+        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457981
+        fileview_id: syn74778951
+      - name: HTAN2_Myeloma
+        subfolder: v8_staging/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457982
+        fileview_id: syn74778951
+      - name: HTAN2_Myeloma
+        subfolder: v8_release/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457983
+      - name: HTAN2_Ovarian
+        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457984
+        fileview_id: syn74778952
+      - name: HTAN2_Ovarian
+        subfolder: v8_staging/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457985
+        fileview_id: syn74778952
+      - name: HTAN2_Ovarian
+        subfolder: v8_release/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457986
+      - name: HTAN2_Pancreatic
+        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457987
+        fileview_id: syn74778953
+      - name: HTAN2_Pancreatic
+        subfolder: v8_staging/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457988
+        fileview_id: syn74778953
+      - name: HTAN2_Pancreatic
+        subfolder: v8_release/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457989
+      - name: HTAN2_Pediatric
+        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457990
+        fileview_id: syn74778954
+      - name: HTAN2_Pediatric
+        subfolder: v8_staging/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457992
+        fileview_id: syn74778954
+      - name: HTAN2_Pediatric
+        subfolder: v8_release/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457994
+      - name: HTAN2_Prostate
+        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457912
+        fileview_id: syn74459200
+      - name: HTAN2_Prostate
+        subfolder: v8_staging/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457914
+        fileview_id: syn74459200.9
+        promoted_snapshot:
+          synid: syn74459200
+          version: 9
+      - name: HTAN2_Prostate
+        subfolder: v8_release/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457915
+      - name: HTAN2_Skin
+        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457995
+        fileview_id: syn74778957
+      - name: HTAN2_Skin
+        subfolder: v8_staging/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457996
+        fileview_id: syn74778957
+      - name: HTAN2_Skin
+        subfolder: v8_release/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457997
+      - name: htan2-testing1
+        subfolder: v8_ingest/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74389558
+        fileview_id: syn74778958
+      - name: htan2-testing1
+        subfolder: v8_staging/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457998
+        fileview_id: syn74778958
+      - name: htan2-testing1
+        subfolder: v8_release/Imaging/MultiplexMicroscopy/ChannelMetadata
+        synapse_id: syn74457999
+    SpatialPanel:
+      projects:
+      # ... [Keep ingest rows index 0 to 10 as they are] ...
+      - name: HTAN2_CRC
+        subfolder: v8_staging/SpatialOmics/Panel
+        synapse_id: syn72101992
+        fileview_id: syn74778963
+      - name: HTAN2_Gastric
+        subfolder: v8_staging/SpatialOmics/Panel
+        synapse_id: syn72102052
+        fileview_id: syn74778964
+      - name: HTAN2_Glioma
+        subfolder: v8_staging/SpatialOmics/Panel
+        synapse_id: syn72102112
+        fileview_id: syn74778969
+      - name: HTAN2_Lymphoma
+        subfolder: v8_staging/SpatialOmics/Panel
+        synapse_id: syn72102174
+        fileview_id: syn74778970
+      - name: HTAN2_Myeloma
+        subfolder: v8_staging/SpatialOmics/Panel
+        synapse_id: syn72102234
+        fileview_id: syn74778973
+      - name: HTAN2_Ovarian
+        subfolder: v8_staging/SpatialOmics/Panel
+        synapse_id: syn72102296
+        fileview_id: syn74778976
+      - name: HTAN2_Pancreatic
+        subfolder: v8_staging/SpatialOmics/Panel
+        synapse_id: syn72102358
+        fileview_id: syn74778978
+      - name: HTAN2_Pediatric
+        subfolder: v8_staging/SpatialOmics/Panel
+        synapse_id: syn72102418
+        fileview_id: syn74778979
+      - name: HTAN2_Prostate
+        subfolder: v8_staging/SpatialOmics/Panel
+        synapse_id: syn72102480
+        fileview_id: syn74778982.12
+        promoted_snapshot:
+          synid: syn74778982
+          version: 12
+      - name: HTAN2_Skin
+        subfolder: v8_staging/SpatialOmics/Panel
+        synapse_id: syn72102544
+        fileview_id: syn74778985
+      - name: htan2-testing1
+        subfolder: v8_staging/SpatialOmics/Panel
+        synapse_id: syn73742730
+        fileview_id: syn74778990
