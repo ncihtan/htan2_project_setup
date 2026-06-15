@@ -6,9 +6,14 @@ Reads from two BigQuery tables:
   - Records table: Folder_EntityId per ingest folder whose RecordSet is ready to snapshot
 
 For files: re-parents each file to the matching staging folder (synID preserved).
-For RecordSets: reads the current versionNumber of the ingest RecordSet and records it
-  as promoted_snapshot in the staging entry of schema_binding_config.yml.
-  The ingest RecordSet is not modified — its existing version IS the snapshot.
+  Also snapshots the staging EntityView and stores the versioned synID (e.g. syn123.4)
+  in the staging entry's fileview_id.
+
+For RecordSets: reads the current versionNumber of the ingest RecordSet and stores
+  the versioned synID (e.g. syn456.8) in the staging entry's fileview_id.
+
+Pre-requisite: run create_staging_fileviews.py once before first promotion to
+  create staging EntityViews for file-based folders and set record-based fileview_ids.
 
 Usage:
   python scripts/promote_ingest_to_staging.py \\
@@ -77,12 +82,30 @@ def get_project_ingest_folder_ids(config, project_name):
     return ids
 
 
-def build_ingest_recordset_map(config):
-    """Return {ingest_folder_synid: (ingest_rs_id, staging_entry)} for record-based schemas.
+def build_staging_fileview_map(config):
+    """Return {ingest_folder_synid: (staging_ev_id, staging_entry)} for file-based schemas."""
+    result = {}
+    for schema_name, schema_data in config["schema_bindings"].get("file_based", {}).items():
+        by_project = defaultdict(dict)
+        for entry in schema_data.get("projects", []):
+            subfolder = entry["subfolder"]
+            if "ingest" in subfolder:
+                by_project[entry["name"]]["ingest_folder"] = entry["synapse_id"]
+            elif "staging" in subfolder:
+                fv = entry.get("fileview_id")
+                # fileview_id may be a plain synID (unversioned) or synID.version — strip version
+                staging_ev_id = str(fv).split(".")[0] if fv else None
+                by_project[entry["name"]]["staging_ev"] = staging_ev_id
+                by_project[entry["name"]]["staging_entry"] = entry
+        for project, ids in by_project.items():
+            ingest_folder = ids.get("ingest_folder")
+            if ingest_folder:
+                result[ingest_folder] = (ids.get("staging_ev"), ids.get("staging_entry"))
+    return result
 
-    staging_entry is a live reference into the config dict — updating it in place updates
-    the config before save_config() is called.
-    """
+
+def build_ingest_recordset_map(config):
+    """Return {ingest_folder_synid: (ingest_rs_id, staging_entry)} for record-based schemas."""
     result = {}
     for schema_name, schema_data in config["schema_bindings"].get("record_based", {}).items():
         by_project = defaultdict(dict)
@@ -175,12 +198,61 @@ def promote_files(syn, bq_client, files_table, folder_map, dry_run, annotate, pr
     return counts
 
 
+def snapshot_staging_fileviews(syn, bq_client, files_table, staging_fv_map, dry_run, project_folder_ids=None):
+    """Snapshot staging EntityViews for file-based folders in the BQ files table.
+
+    For each distinct ingest Folder_EntityId in the BQ files table, creates a snapshot
+    version of the corresponding staging EntityView and stores the versioned synID
+    (e.g. syn123.4) in the staging config entry's fileview_id.
+    Config entries are updated in place — caller saves config after this returns.
+    """
+    query = f"SELECT DISTINCT Folder_EntityId FROM `{files_table}`"
+    rows = list(bq_client.query(query))
+    ingest_folder_ids = {row.Folder_EntityId for row in rows}
+    log.info(f"BQ files table: {len(ingest_folder_ids)} distinct ingest folder(s) for EV snapshot")
+
+    if project_folder_ids is not None:
+        ingest_folder_ids = {f for f in ingest_folder_ids if f in project_folder_ids}
+        log.info(f"After project filter: {len(ingest_folder_ids)} folder(s)")
+
+    counts = {"snapshotted": 0, "skipped": 0, "no_mapping": 0, "error": 0}
+
+    for ingest_folder_id in sorted(ingest_folder_ids):
+        mapping = staging_fv_map.get(ingest_folder_id)
+        if not mapping:
+            counts["no_mapping"] += 1
+            continue
+
+        staging_ev_id, staging_entry = mapping
+        if not staging_ev_id:
+            log.warning(f"No staging EntityView for ingest folder {ingest_folder_id} — run create_staging_fileviews.py first")
+            counts["no_mapping"] += 1
+            continue
+
+        if dry_run:
+            log.info(f"[DRY RUN] Would snapshot staging EV {staging_ev_id} (ingest folder {ingest_folder_id})")
+            counts["snapshotted"] += 1
+            continue
+
+        try:
+            version = syn.create_snapshot_version(staging_ev_id)
+            versioned_id = f"{staging_ev_id}.{version}"
+            if staging_entry is not None:
+                staging_entry["fileview_id"] = versioned_id
+            log.info(f"Snapshotted staging EV {versioned_id} (ingest folder {ingest_folder_id})")
+            counts["snapshotted"] += 1
+        except Exception as e:
+            log.error(f"Failed to snapshot staging EV {staging_ev_id}: {e}")
+            counts["error"] += 1
+
+    return counts
+
+
 def snapshot_ingest_recordsets(syn, bq_client, rs_table, ingest_recordset_map, dry_run, project_folder_ids=None):
     """Record the current version of each ready ingest RecordSet as the staging snapshot.
 
-    For each distinct Folder_EntityId in the BQ records table, reads the current
-    versionNumber from the ingest RecordSet and writes promoted_snapshot into the
-    staging config entry. The ingest RecordSet is not modified.
+    Reads the current versionNumber from the ingest RecordSet and stores the versioned
+    synID (e.g. syn456.8) in the staging entry's fileview_id.
     Config entries are updated in place — caller saves config after this returns.
     """
     query = f"SELECT DISTINCT Folder_EntityId FROM `{rs_table}`"
@@ -211,21 +283,23 @@ def snapshot_ingest_recordsets(syn, bq_client, rs_table, ingest_recordset_map, d
             counts["error"] += 1
             continue
 
-        # Idempotency: skip if staging already records this exact version
-        existing = (staging_entry or {}).get("promoted_snapshot", {})
-        if existing.get("synid") == ingest_rs_id and existing.get("version") == version:
-            log.info(f"Already snapshotted {ingest_rs_id} at v{version}, skipping")
+        versioned_id = f"{ingest_rs_id}.{version}"
+
+        # Idempotency: skip if staging fileview_id already matches this versioned ID
+        existing_fv = (staging_entry or {}).get("fileview_id")
+        if existing_fv == versioned_id:
+            log.info(f"Already snapshotted {versioned_id}, skipping")
             counts["skipped"] += 1
             continue
 
         if dry_run:
-            log.info(f"[DRY RUN] Would snapshot {ingest_rs_id} v{version} (folder {ingest_folder_id})")
+            log.info(f"[DRY RUN] Would snapshot {versioned_id} (folder {ingest_folder_id})")
             counts["snapshotted"] += 1
             continue
 
         if staging_entry is not None:
-            staging_entry["promoted_snapshot"] = {"synid": ingest_rs_id, "version": version}
-        log.info(f"Snapshotted {ingest_rs_id} v{version} (folder {ingest_folder_id})")
+            staging_entry["fileview_id"] = versioned_id
+        log.info(f"Snapshotted {versioned_id} (folder {ingest_folder_id})")
         counts["snapshotted"] += 1
 
     return counts
@@ -289,9 +363,11 @@ def main():
 
     config = load_config(args.config)
     folder_map = build_folder_map(config)
+    staging_fv_map = build_staging_fileview_map(config)
     ingest_recordset_map = build_ingest_recordset_map(config)
     log.info(
         f"Config loaded: {len(folder_map)} ingest→staging folder pairs, "
+        f"{len(staging_fv_map)} staging file EVs, "
         f"{len(ingest_recordset_map)} ingest RecordSets"
     )
 
@@ -303,8 +379,10 @@ def main():
             sys.exit(1)
         log.info(f"Filtering to project '{args.project_name}': {len(project_folder_ids)} ingest folders")
 
-    file_counts = {"moved": 0, "skipped": 0, "no_mapping": 0, "error": 0}
-    snap_counts = {"snapshotted": 0, "skipped": 0, "no_mapping": 0, "error": 0}
+    file_counts  = {"moved": 0, "skipped": 0, "no_mapping": 0, "error": 0}
+    ev_counts    = {"snapshotted": 0, "skipped": 0, "no_mapping": 0, "error": 0}
+    snap_counts  = {"snapshotted": 0, "skipped": 0, "no_mapping": 0, "error": 0}
+    config_dirty = False
 
     if not args.skip_files:
         file_counts = promote_files(
@@ -313,6 +391,13 @@ def main():
             annotate=not args.no_annotate,
             project_folder_ids=project_folder_ids,
         )
+        ev_counts = snapshot_staging_fileviews(
+            syn, bq_client, args.files_table, staging_fv_map,
+            dry_run=args.dry_run,
+            project_folder_ids=project_folder_ids,
+        )
+        if not args.dry_run and ev_counts["snapshotted"] > 0:
+            config_dirty = True
 
     if not args.skip_records:
         snap_counts = snapshot_ingest_recordsets(
@@ -321,21 +406,25 @@ def main():
             project_folder_ids=project_folder_ids,
         )
         if not args.dry_run and snap_counts["snapshotted"] > 0:
-            save_config(config, args.config)
-            log.info("Config updated with snapshot versions — commit schema_binding_config.yml to persist")
+            config_dirty = True
+
+    if config_dirty:
+        save_config(config, args.config)
+        log.info("Config updated with versioned fileview IDs — commit schema_binding_config.yml to persist")
 
     prefix = "[DRY RUN] " if args.dry_run else ""
     log.info(
         f"\n{prefix}=== Promotion Summary ===\n"
         f"  Files moved:                  {file_counts['moved']}\n"
         f"  Files already in staging:     {file_counts['skipped']}\n"
+        f"  Staging EVs snapshotted:      {ev_counts['snapshotted']}\n"
         f"  RecordSets snapshotted:       {snap_counts['snapshotted']}\n"
         f"  RecordSets already current:   {snap_counts['skipped']}\n"
-        f"  Items with no mapping:        {file_counts['no_mapping'] + snap_counts['no_mapping']}\n"
-        f"  Errors:                       {file_counts['error'] + snap_counts['error']}"
+        f"  Items with no mapping:        {file_counts['no_mapping'] + ev_counts['no_mapping'] + snap_counts['no_mapping']}\n"
+        f"  Errors:                       {file_counts['error'] + ev_counts['error'] + snap_counts['error']}"
     )
 
-    if file_counts["error"] + snap_counts["error"] > 0:
+    if file_counts["error"] + ev_counts["error"] + snap_counts["error"] > 0:
         sys.exit(1)
 
 
