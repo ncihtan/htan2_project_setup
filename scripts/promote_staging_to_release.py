@@ -73,25 +73,28 @@ def build_folder_map(config):
 
 
 def build_staging_recordset_map(config):
-    """Return {ingest_folder_synid: (staging_fv_id, release_entry)} for record-based schemas."""
+    """Return {staging_folder_synid: (staging_fv_id, release_entry)} for record-based schemas.
+
+    Keyed on staging folder synID because the BQ release records table references
+    staging folders (not ingest folders).
+    """
     result = {}
     for schema_name, schema_data in config["schema_bindings"].get("record_based", {}).items():
         by_project = defaultdict(dict)
         for entry in schema_data.get("projects", []):
             subfolder = entry["subfolder"]
-            if "ingest" in subfolder:
-                by_project[entry["name"]]["ingest_folder"] = entry["synapse_id"]
-            elif "staging" in subfolder:
+            if "staging" in subfolder:
+                by_project[entry["name"]]["staging_folder"] = entry["synapse_id"]
                 by_project[entry["name"]]["staging_fv"] = entry.get("fileview_id")
             elif "release" in subfolder:
                 by_project[entry["name"]]["release_entry"] = entry
         for project, ids in by_project.items():
-            ingest_folder = ids.get("ingest_folder")
+            staging_folder = ids.get("staging_folder")
             staging_fv = ids.get("staging_fv")
             release_entry = ids.get("release_entry")
-            if ingest_folder and staging_fv:
-                result[ingest_folder] = (staging_fv, release_entry)
-            elif ingest_folder and not staging_fv:
+            if staging_folder and staging_fv:
+                result[staging_folder] = (staging_fv, release_entry)
+            elif staging_folder and not staging_fv:
                 log.warning(
                     f"No staging fileview_id for {schema_name}/{project} "
                     "— staging may not have been promoted yet"
@@ -200,10 +203,10 @@ def snapshot_staging_recordsets(syn, bq_client, rs_table, staging_recordset_map,
 
     counts = {"snapshotted": 0, "skipped": 0, "no_mapping": 0, "error": 0}
 
-    for ingest_folder_id in sorted(folder_ids):
-        mapping = staging_recordset_map.get(ingest_folder_id)
+    for staging_folder_id in sorted(folder_ids):
+        mapping = staging_recordset_map.get(staging_folder_id)
         if not mapping:
-            log.warning(f"No staging mapping for ingest folder {ingest_folder_id} — skipping")
+            log.warning(f"No staging mapping for staging folder {staging_folder_id} — skipping")
             counts["no_mapping"] += 1
             continue
 
@@ -217,13 +220,13 @@ def snapshot_staging_recordsets(syn, bq_client, rs_table, staging_recordset_map,
             continue
 
         if dry_run:
-            log.info(f"[DRY RUN] Would release {staging_fv_id} (folder {ingest_folder_id})")
+            log.info(f"[DRY RUN] Would release {staging_fv_id} (staging folder {staging_folder_id})")
             counts["snapshotted"] += 1
             continue
 
         if release_entry is not None:
             release_entry["fileview_id"] = staging_fv_id
-        log.info(f"Released {staging_fv_id} (folder {ingest_folder_id})")
+        log.info(f"Released {staging_fv_id} (staging folder {staging_folder_id})")
         counts["snapshotted"] += 1
 
     return counts
@@ -287,18 +290,15 @@ def main():
         f"{len(staging_recordset_map)} staging RecordSet refs"
     )
 
-    # --project-name filter: files use staging folder IDs, records use ingest folder IDs
+    # --project-name filter: both files and records use staging folder IDs
     staging_folder_ids = None
-    ingest_folder_ids = None
     if args.project_name:
         staging_folder_ids = get_project_folder_ids(config, args.project_name, "staging")
-        ingest_folder_ids = get_project_folder_ids(config, args.project_name, "ingest")
-        if not staging_folder_ids and not ingest_folder_ids:
-            log.error(f"No folders found for project '{args.project_name}' in config")
+        if not staging_folder_ids:
+            log.error(f"No staging folders found for project '{args.project_name}' in config")
             sys.exit(1)
         log.info(
-            f"Filtering to project '{args.project_name}': "
-            f"{len(staging_folder_ids)} staging folders, {len(ingest_folder_ids)} ingest folders"
+            f"Filtering to project '{args.project_name}': {len(staging_folder_ids)} staging folders"
         )
 
     file_counts = {"moved": 0, "skipped": 0, "no_mapping": 0, "error": 0}
@@ -316,7 +316,7 @@ def main():
         snap_counts = snapshot_staging_recordsets(
             syn, bq_client, args.records_table, staging_recordset_map,
             dry_run=args.dry_run,
-            project_folder_ids=ingest_folder_ids,
+            project_folder_ids=staging_folder_ids,
         )
         if not args.dry_run and snap_counts["snapshotted"] > 0:
             save_config(config, args.config)

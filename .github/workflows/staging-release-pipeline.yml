@@ -20,14 +20,6 @@ on:
         description: 'Smoke test: limit to one project (e.g. htan2-testing1). Empty = all projects.'
         required: false
         default: ''
-      files_table:
-        description: 'BQ files table — full reference (project.dataset.table)'
-        type: string
-        required: true
-      records_table:
-        description: 'BQ records table — full reference (project.dataset.table)'
-        type: string
-        required: true
       annotate:
         description: 'Annotate moved files with released_at / released_from'
         type: boolean
@@ -84,8 +76,8 @@ jobs:
         SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
       run: |
         CMD="python scripts/promote_staging_to_release.py"
-        CMD="$CMD --files-table ${{ inputs.files_table }}"
-        CMD="$CMD --records-table ${{ inputs.records_table }}"
+        CMD="$CMD --files-table htan2-dcc.htan2_medallion_gold.gold_APPROVED_STAGING_INDEXING_TABLE_All_File_Staged_For_Current_Release"
+        CMD="$CMD --records-table htan2-dcc.htan2_medallion_gold.gold_APPROVED_STAGING_INDEXING_TABLE_All_Record_Rows_Staged_For_Current_Release"
 
         if [ "${{ inputs.dry_run }}" = "true" ]; then
           CMD="$CMD --dry-run"
