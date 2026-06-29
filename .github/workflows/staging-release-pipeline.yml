@@ -1,0 +1,100 @@
+name: Staging Release Pipeline
+
+# Runs the staging-to-release promotion:
+#   1. Authenticate to GCP
+#   2. Promote files (syn.move) and copy RecordSet snapshot refs from staging to release
+#   3. Commit release snapshot references back to schema_binding_config.yml
+#
+# Pre-requisite: run create_release_fileviews.py once to bootstrap release EntityViews
+#   and upsert release folder entries into schema_binding_config.yml.
+#
+# Set dry_run=true (the default) to preview all changes without touching Synapse.
+# Set project_name to a single project (e.g. htan2-testing1) for a smoke test.
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run — preview changes without modifying Synapse or config'
+        type: boolean
+        default: true
+      project_name:
+        description: 'Smoke test: limit to one project (e.g. htan2-testing1). Empty = all projects.'
+        required: false
+        default: ''
+      files_table:
+        description: 'BQ files table — full reference (project.dataset.table)'
+        type: string
+        required: true
+      records_table:
+        description: 'BQ records table — full reference (project.dataset.table)'
+        type: string
+        required: true
+      annotate:
+        description: 'Annotate moved files with released_at / released_from'
+        type: boolean
+        default: true
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install dependencies
+      run: pip install --upgrade pip && pip install -r requirements.txt
+
+    # ── Step 1: Authenticate to GCP ──────────────────────────────────────────
+    - name: Authenticate to GCP
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SERVIVE_ACCOUNT_KEY }}
+
+    # ── Step 2: Promote files and copy RecordSet snapshot refs ────────────────
+    - name: Promote staging to release
+      env:
+        SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
+        SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
+      run: |
+        CMD="python scripts/promote_staging_to_release.py"
+        CMD="$CMD --files-table ${{ inputs.files_table }}"
+        CMD="$CMD --records-table ${{ inputs.records_table }}"
+
+        if [ "${{ inputs.dry_run }}" = "true" ]; then
+          CMD="$CMD --dry-run"
+        fi
+
+        if [ "${{ inputs.annotate }}" = "false" ]; then
+          CMD="$CMD --no-annotate"
+        fi
+
+        if [ -n "${{ inputs.project_name }}" ]; then
+          CMD="$CMD --project-name ${{ inputs.project_name }}"
+        fi
+
+        echo "Running: $CMD"
+        $CMD
+
+    # ── Step 3: Commit release snapshot references ────────────────────────────
+    - name: Commit updated config
+      if: ${{ inputs.dry_run != true }}
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add schema_binding_config.yml
+        if git diff --cached --quiet; then
+          echo "No config changes to commit."
+        else
+          git commit -m "Update release snapshot versions in schema_binding_config.yml [skip ci]"
+          git push
+        fi
