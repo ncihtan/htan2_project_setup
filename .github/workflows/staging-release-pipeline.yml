@@ -2,11 +2,9 @@ name: Staging Release Pipeline
 
 # Runs the staging-to-release promotion:
 #   1. Authenticate to GCP
-#   2. Promote files (syn.move) and copy RecordSet snapshot refs from staging to release
-#   3. Commit release snapshot references back to schema_binding_config.yml
-#
-# Pre-requisite: run create_release_fileviews.py once to bootstrap release EntityViews
-#   and upsert release folder entries into schema_binding_config.yml.
+#   2. Bootstrap release EntityViews and upsert release folder entries into config
+#   3. Promote files (syn.move) and copy RecordSet snapshot refs from staging to release
+#   4. Commit config changes back to the repo
 #
 # Set dry_run=true (the default) to preview all changes without touching Synapse.
 # Set project_name to a single project (e.g. htan2-testing1) for a smoke test.
@@ -60,7 +58,26 @@ jobs:
       with:
         credentials_json: ${{ secrets.GCP_SERVIVE_ACCOUNT_KEY }}
 
-    # ── Step 2: Promote files and copy RecordSet snapshot refs ────────────────
+    # ── Step 2: Bootstrap release EntityViews ────────────────────────────────
+    - name: Bootstrap release fileviews
+      env:
+        SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
+        SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
+      run: |
+        CMD="python scripts/manage/create_release_fileviews.py"
+
+        if [ "${{ inputs.dry_run }}" = "true" ]; then
+          CMD="$CMD --dry-run"
+        fi
+
+        if [ -n "${{ inputs.project_name }}" ]; then
+          CMD="$CMD --project-name ${{ inputs.project_name }}"
+        fi
+
+        echo "Running: $CMD"
+        $CMD
+
+    # ── Step 3: Promote files and copy RecordSet snapshot refs ────────────────
     - name: Promote staging to release
       env:
         SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
@@ -85,7 +102,7 @@ jobs:
         echo "Running: $CMD"
         $CMD
 
-    # ── Step 3: Commit release snapshot references ────────────────────────────
+    # ── Step 4: Commit config changes ────────────────────────────────────────
     - name: Commit updated config
       if: ${{ inputs.dry_run != true }}
       run: |
