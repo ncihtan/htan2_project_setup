@@ -93,5 +93,6 @@ jobs:
           echo "No config changes to commit."
         else
           git commit -m "Update staging snapshot versions in schema_binding_config.yml [skip ci]"
+          git pull --rebase origin main
           git push
         fi
