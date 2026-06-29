@@ -1873,7 +1873,7 @@ schema_bindings:
       - name: HTAN2_Prostate
         subfolder: v8_release/Clinical/Demographics
         synapse_id: syn72102483
-        fileview_id: null
+        fileview_id: syn74149099.8
       - name: HTAN2_Skin
         subfolder: v8_release/Clinical/Demographics
         synapse_id: syn72102547
