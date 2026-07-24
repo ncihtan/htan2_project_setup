@@ -9,6 +9,11 @@ import yaml
 import argparse
 
 # Import shared utilities
+import sys
+from pathlib import Path
+# Add parent directories to path to import htan2_synapse
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 from htan2_synapse import (
     find_contributor_team,
     HTAN_DCC_ADMINS_TEAM_ID,
