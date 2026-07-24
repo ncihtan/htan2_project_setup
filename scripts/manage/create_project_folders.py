@@ -470,13 +470,13 @@ Examples:
         print("Logging in to Synapse...")
         syn = synapseclient.Synapse()
         auth_token = os.environ.get("SYNAPSE_PAT")
-    username = os.environ.get("SYNAPSE_USERNAME")
-    if auth_token:
-        syn.login(authToken=auth_token)
-    elif username:
-        syn.login(username)
-    else:
-        syn.login()
+        username = os.environ.get("SYNAPSE_USERNAME")
+        if auth_token:
+            syn.login(authToken=auth_token)
+        elif username:
+            syn.login(username)
+        else:
+            syn.login()
         print("✓ Logged in successfully\n")
     else:
         syn = None
