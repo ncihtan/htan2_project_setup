@@ -91,8 +91,9 @@ def main():
     parser.add_argument(
         "--folder-structure-file",
         type=str,
-        default="folder_structure_v8.yml",
-        help="Path to folder structure YAML file. Default: folder_structure_v8.yml"
+        default=None,
+        help="Path to folder structure YAML file. Default: derived from "
+             "--version (e.g. folder_structure_v9.yml)"
     )
     parser.add_argument(
         "--dry-run",
@@ -101,7 +102,18 @@ def main():
     )
     
     args = parser.parse_args()
-    
+
+    # Derive the folder structure file from the version when not given
+    if args.folder_structure_file is None:
+        ver = args.version or "v8"
+        if not ver.startswith("v"):
+            try:
+                int(ver)
+                ver = f"v{ver}"
+            except ValueError:
+                pass
+        args.folder_structure_file = f"folder_structure_{ver}.yml"
+
     # Adjust folder types based on version
     if args.version:
         folder_types = []
