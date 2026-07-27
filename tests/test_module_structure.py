@@ -67,8 +67,8 @@ def _generated_targets():
 
 def _config_targets():
     """(section, schema_name, path) set from committed schema_binding_config.yml (all versions)."""
-    cfg = yaml.safe_load(open(CONFIG_YML))
-    sb = cfg["schema_bindings"]
+    with open(CONFIG_YML) as f:
+        cfg = yaml.safe_load(f)
     out = set()
     for section in ("file_based", "record_based"):
         for schema_name, sc in sb.get(section, {}).items():
