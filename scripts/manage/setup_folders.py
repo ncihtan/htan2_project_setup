@@ -117,18 +117,21 @@ Example:
             
             run_command(perm_cmd, f"Setting permissions for {version}_{folder_type}")
     
-    # Step 3: Update schema bindings with real IDs for all folder types
+    # Step 3: Update schema bindings with real IDs for all folder types.
+    # NOTE: update_schema_bindings.py writes schema_binding_<version>.yml in 'w'
+    # (overwrite) mode, so it MUST be called once with all folder types. Calling
+    # it per-type in a loop clobbers the file and leaves only the last type
+    # (release) — which is why previously only v*_release folders got bound.
     print("\n🔗 Step 3: Updating schema bindings with real IDs...")
-    for folder_type in ["ingest", "staging", "release"]:
-        update_cmd = [
-            "python", "scripts/manage/update_schema_bindings.py",
-            "--version", version,
-            "--folder-type", folder_type
-        ]
-        if args.dry_run:
-            update_cmd.append("--dry-run")
-        
-        run_command(update_cmd, f"Schema Binding Update for {version}_{folder_type}")
+    update_cmd = [
+        "python", "scripts/manage/update_schema_bindings.py",
+        "--version", version,
+        "--folder-type", "ingest", "staging", "release",
+    ]
+    if args.dry_run:
+        update_cmd.append("--dry-run")
+
+    run_command(update_cmd, f"Schema Binding Update for {version} (ingest, staging, release)")
     
     # Step 4: Merge into main config (all folder types)
     if not args.skip_merge:
