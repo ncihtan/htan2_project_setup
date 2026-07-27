@@ -27,30 +27,15 @@ from collections import defaultdict
 import synapseclient
 import yaml
 
-sys.path.insert(0, ".")
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from htan2_synapse import (
     load_projects,
-    RECORD_BASED_MODULES,
-    FILE_BASED_MODULES,
-    IMAGING_SUBFOLDERS,
-    IMAGING_RECORD_BASED_SUBFOLDERS,
-    SPATIAL_RECORD_BASED_SUBFOLDERS,
+    iter_binding_targets,
 )
 
 CONFIG_PATH = "schema_binding_config.yml"
 VERSION = "v8"
-
-# Schema name map: (module, level) → schema_name, matching update_schema_bindings.py logic
-def _schema_name(module, level):
-    if module == "WES":
-        return {"Level_1": "BulkWESLevel1", "Level_2": "BulkWESLevel2", "Level_3": "BulkWESLevel3"}.get(level, level)
-    if module == "scRNA_seq":
-        return f"scRNA_seqLevel{level.replace('Level_', '').replace('_', '_')}"
-    if module == "SpatialOmics":
-        return f"SpatialOmicsLevel{level.replace('Level_', '')}"
-    if module == "MultiplexMicroscopy":
-        return f"MultiplexMicroscopy{level.replace('_', '')}"
-    return level
 
 
 def save_config(config, path):
@@ -140,67 +125,20 @@ def discover_and_upsert(syn, config, projects, dry_run, project_filter):
             discovered.append((section, schema_name, entry))
             print(f"    {subfolder_path}: {folder_id}")
 
-        # Clinical (record-based)
-        clinical_id = find_folder_id(syn, release_root, "Clinical")
-        if clinical_id:
-            for subfolder in RECORD_BASED_MODULES.get("Clinical", []):
-                fid = find_folder_id(syn, clinical_id, subfolder)
-                if fid:
-                    record("record_based", subfolder,
-                           f"{VERSION}_release/Clinical/{subfolder}", fid)
-
-        # Biospecimen (record-based)
-        bio_id = find_folder_id(syn, release_root, "Biospecimen")
-        if bio_id:
-            record("record_based", "Biospecimen",
-                   f"{VERSION}_release/Biospecimen", bio_id)
-
-        # WES, scRNA_seq (file-based levels)
-        for module in ["WES", "scRNA_seq"]:
-            module_id = find_folder_id(syn, release_root, module)
-            if not module_id:
+        # Walk every schema-bound folder from the single source of truth. Schema names,
+        # file/record routing, and paths all come from iter_binding_targets(), so new
+        # assays (MSI, scATAC, MolecularAssignment) are picked up automatically.
+        for target in iter_binding_targets():
+            fid = release_root
+            for seg in target["path"].split("/"):
+                fid = find_folder_id(syn, fid, seg)
+                if not fid:
+                    break
+            if not fid:
                 continue
-            for level in FILE_BASED_MODULES.get(module, []):
-                fid = find_folder_id(syn, module_id, level)
-                if fid:
-                    record("file_based", _schema_name(module, level),
-                           f"{VERSION}_release/{module}/{level}", fid)
-
-        # SpatialOmics: file-based levels + Panel (record-based)
-        so_id = find_folder_id(syn, release_root, "SpatialOmics")
-        if so_id:
-            for level in FILE_BASED_MODULES.get("SpatialOmics", []):
-                fid = find_folder_id(syn, so_id, level)
-                if fid:
-                    record("file_based", _schema_name("SpatialOmics", level),
-                           f"{VERSION}_release/SpatialOmics/{level}", fid)
-            for rs_sub in SPATIAL_RECORD_BASED_SUBFOLDERS.get("SpatialOmics", []):
-                fid = find_folder_id(syn, so_id, rs_sub)
-                if fid:
-                    schema_name = "SpatialPanel" if rs_sub == "Panel" else rs_sub
-                    record("record_based", schema_name,
-                           f"{VERSION}_release/SpatialOmics/{rs_sub}", fid)
-
-        # Imaging
-        imaging_id = find_folder_id(syn, release_root, "Imaging")
-        if imaging_id:
-            dp_id = find_folder_id(syn, imaging_id, "DigitalPathology")
-            if dp_id:
-                record("file_based", "DigitalPathology",
-                       f"{VERSION}_release/Imaging/DigitalPathology", dp_id)
-
-            mm_id = find_folder_id(syn, imaging_id, "MultiplexMicroscopy")
-            if mm_id:
-                for level in IMAGING_SUBFOLDERS.get("MultiplexMicroscopy", []):
-                    fid = find_folder_id(syn, mm_id, level)
-                    if fid:
-                        record("file_based", _schema_name("MultiplexMicroscopy", level),
-                               f"{VERSION}_release/Imaging/MultiplexMicroscopy/{level}", fid)
-                for rs_sub in IMAGING_RECORD_BASED_SUBFOLDERS.get("MultiplexMicroscopy", []):
-                    fid = find_folder_id(syn, mm_id, rs_sub)
-                    if fid:
-                        record("record_based", rs_sub,
-                               f"{VERSION}_release/Imaging/MultiplexMicroscopy/{rs_sub}", fid)
+            section = "file_based" if target["kind"] == "file" else "record_based"
+            record(section, target["schema_name"],
+                   f"{VERSION}_release/{target['path']}", fid)
 
     return discovered
 

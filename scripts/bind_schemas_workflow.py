@@ -14,26 +14,20 @@ import sys
 import yaml
 from typing import Dict, List, Optional
 
+# Import shared utilities
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from htan2_synapse import schema_file_name
+
 
 def map_schema_name_to_file(schema_name: str, schema_version: str = "v1.0.0") -> str:
-    """Map schema name from config to expected schema file name pattern."""
-    version_suffix = f"-{schema_version}"
+    """Map an internal schema name to its data-model file name.
 
-    if schema_name == "DigitalPathology":
-        return f"HTAN.DigitalPathologyData{version_suffix}-schema.json"
-    elif schema_name == "Biospecimen":
-        return f"HTAN.BiospecimenData{version_suffix}-schema.json"
-    elif schema_name == "scRNA_seqLevel1":
-        return f"HTAN.scRNALevel1{version_suffix}-schema.json"
-    elif schema_name == "scRNA_seqLevel2":
-        return f"HTAN.scRNALevel2{version_suffix}-schema.json"
-    elif schema_name == "scRNA_seqLevel3_4":
-        return f"HTAN.scRNALevel3and4{version_suffix}-schema.json"
-    elif schema_name.startswith("SpatialOmics"):
-        level_part = schema_name.replace("SpatialOmics", "Spatial")
-        return f"HTAN.{level_part}{version_suffix}-schema.json"
-    else:
-        return f"HTAN.{schema_name}{version_suffix}-schema.json"
+    Thin wrapper over the single source of truth (htan2_synapse.schema_file_name,
+    registry-derived). Kept for callers/back-compat.
+    """
+    return schema_file_name(schema_name, schema_version)
 
 
 def find_schema_file(schema_name: str, files: List[str], schema_version: str = "v1.0.0") -> Optional[str]:
