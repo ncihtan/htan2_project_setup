@@ -1,0 +1,12 @@
+{
+  "$id": "https://w3id.org/htan/molecularassignment",
+  "type": "object",
+  "properties": {
+    "HTAN_DATA_FILE_ID": {
+      "type": "string"
+    },
+    "CHANNEL_INDEX": {
+      "type": "integer"
+    }
+  }
+}

@@ -1,0 +1,189 @@
+schema_version: v2.0.0
+modules:
+  Clinical:
+    umbrella: null
+    entries:
+    - subfolder: Demographics
+      kind: record
+      schema_name: Demographics
+      class: Demographics
+      bind_to_module: false
+    - subfolder: Diagnosis
+      kind: record
+      schema_name: Diagnosis
+      class: Diagnosis
+      bind_to_module: false
+    - subfolder: Therapy
+      kind: record
+      schema_name: Therapy
+      class: Therapy
+      bind_to_module: false
+    - subfolder: FollowUp
+      kind: record
+      schema_name: FollowUp
+      class: FollowUp
+      bind_to_module: false
+    - subfolder: MolecularTest
+      kind: record
+      schema_name: MolecularTest
+      class: MolecularTest
+      bind_to_module: false
+    - subfolder: Exposure
+      kind: record
+      schema_name: Exposure
+      class: Exposure
+      bind_to_module: false
+    - subfolder: FamilyHistory
+      kind: record
+      schema_name: FamilyHistory
+      class: FamilyHistory
+      bind_to_module: false
+    - subfolder: VitalStatus
+      kind: record
+      schema_name: VitalStatus
+      class: VitalStatus
+      bind_to_module: false
+  Biospecimen:
+    umbrella: null
+    entries:
+    - subfolder: null
+      kind: record
+      schema_name: Biospecimen
+      class: BiospecimenData
+      bind_to_module: true
+  WES:
+    umbrella: null
+    entries:
+    - subfolder: Level_1
+      kind: file
+      schema_name: BulkWESLevel1
+      class: BulkWESLevel1
+      bind_to_module: false
+    - subfolder: Level_2
+      kind: file
+      schema_name: BulkWESLevel2
+      class: BulkWESLevel2
+      bind_to_module: false
+    - subfolder: Level_3
+      kind: file
+      schema_name: BulkWESLevel3
+      class: BulkWESLevel3
+      bind_to_module: false
+  scRNA_seq:
+    umbrella: null
+    entries:
+    - subfolder: Level_1
+      kind: file
+      schema_name: scRNA_seqLevel1
+      class: scRNALevel1
+      bind_to_module: false
+    - subfolder: Level_2
+      kind: file
+      schema_name: scRNA_seqLevel2
+      class: scRNALevel2
+      bind_to_module: false
+    - subfolder: Level_3_4
+      kind: file
+      schema_name: scRNA_seqLevel3_4
+      class: scRNALevel3and4
+      bind_to_module: false
+  SpatialOmics:
+    umbrella: null
+    entries:
+    - subfolder: Level_1
+      kind: file
+      schema_name: SpatialOmicsLevel1
+      class: SpatialLevel1
+      bind_to_module: false
+    - subfolder: Level_3
+      kind: file
+      schema_name: SpatialOmicsLevel3
+      class: SpatialLevel3
+      bind_to_module: false
+    - subfolder: Level_4
+      kind: file
+      schema_name: SpatialOmicsLevel4
+      class: SpatialLevel4
+      bind_to_module: false
+    - subfolder: Panel
+      kind: record
+      schema_name: SpatialPanel
+      class: SpatialPanel
+      bind_to_module: false
+  DigitalPathology:
+    umbrella: Imaging
+    entries:
+    - subfolder: null
+      kind: file
+      schema_name: DigitalPathology
+      class: DigitalPathologyData
+      bind_to_module: true
+  MultiplexMicroscopy:
+    umbrella: Imaging
+    entries:
+    - subfolder: Level_2
+      kind: file
+      schema_name: MultiplexMicroscopyLevel2
+      class: MultiplexMicroscopyLevel2
+      bind_to_module: false
+    - subfolder: Level_3
+      kind: file
+      schema_name: MultiplexMicroscopyLevel3
+      class: MultiplexMicroscopyLevel3
+      bind_to_module: false
+    - subfolder: Level_4
+      kind: file
+      schema_name: MultiplexMicroscopyLevel4
+      class: MultiplexMicroscopyLevel4
+      bind_to_module: false
+    - subfolder: ChannelMetadata
+      kind: record
+      schema_name: ChannelMetadata
+      class: ChannelMetadata
+      bind_to_module: false
+  scATAC_seq:
+    umbrella: null
+    entries:
+    - subfolder: Level_1
+      kind: file
+      schema_name: scATAC_seqLevel1
+      class: scATACLevel1
+      bind_to_module: false
+    - subfolder: Level_2
+      kind: file
+      schema_name: scATAC_seqLevel2
+      class: scATACLevel2
+      bind_to_module: false
+    - subfolder: Level_3_4
+      kind: file
+      schema_name: scATAC_seqLevel3_4
+      class: scATACLevel3and4
+      bind_to_module: false
+  MassSpectrometryImaging:
+    umbrella: null
+    entries:
+    - subfolder: Level_1
+      kind: file
+      schema_name: MassSpectrometryImagingLevel1
+      class: MassSpectrometryImagingLevel1
+      bind_to_module: false
+    - subfolder: Level_2
+      kind: file
+      schema_name: MassSpectrometryImagingLevel2
+      class: MassSpectrometryImagingLevel2
+      bind_to_module: false
+    - subfolder: Level_3
+      kind: file
+      schema_name: MassSpectrometryImagingLevel3
+      class: MassSpectrometryImagingLevel3
+      bind_to_module: false
+    - subfolder: Level_4
+      kind: file
+      schema_name: MassSpectrometryImagingLevel4
+      class: MassSpectrometryImagingLevel4
+      bind_to_module: false
+    - subfolder: MolecularAssignment
+      kind: record
+      schema_name: MolecularAssignment
+      class: MolecularAssignment
+      bind_to_module: false

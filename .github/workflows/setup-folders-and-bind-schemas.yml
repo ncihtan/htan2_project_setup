@@ -37,29 +37,10 @@ jobs:
     - name: Install dependencies
       run: pip install --upgrade pip && pip install -r requirements.txt
     
-    - name: Setup Folders
-      env:
-        SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
-        SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
-      run: |
-        echo "=========================================="
-        echo "Phase 1: Setting up folders for v${{ github.event.inputs.version }}"
-        echo "=========================================="
-        
-        # Run the complete folder setup
-        python scripts/manage/setup_folders.py --version ${{ github.event.inputs.version }}
-        
-        echo ""
-        echo "✓ Folder setup complete"
-        echo "Generated files:"
-        echo "  - folder_structure_v${{ github.event.inputs.version }}.yml"
-        echo "  - schema_binding_v${{ github.event.inputs.version }}.yml"
-        echo "  - schema_binding_config.yml (updated)"
-    
     - name: Download schemas from htan2-data-model
       run: |
         echo "=========================================="
-        echo "Phase 2: Downloading schemas"
+        echo "Phase 1: Downloading schemas"
         echo "=========================================="
         
         # Create schemas directory
@@ -102,7 +83,38 @@ jobs:
         # Create a list of available schema names for later use
         echo "$SCHEMA_FILES" > available_schemas.txt
         echo "Available schemas saved to available_schemas.txt"
-    
+
+    - name: Generate module structure from data model
+      run: |
+        echo "=========================================="
+        echo "Phase 2: Generating module structure"
+        echo "=========================================="
+        # Rebuild the committed module_structure.yml from the downloaded schemas +
+        # module_registry.yml. Fails the job here (before any Synapse mutation) if the
+        # data model ships a schema not covered by the registry, instead of silently
+        # dropping the new assay.
+        python scripts/manage/generate_module_structure.py \
+          --schema-version ${{ github.event.inputs.schema_version }}
+
+    - name: Setup Folders
+      env:
+        SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
+        SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
+      run: |
+        echo "=========================================="
+        echo "Phase 3: Setting up folders for v${{ github.event.inputs.version }}"
+        echo "=========================================="
+
+        # Run the complete folder setup (uses the freshly generated module structure)
+        python scripts/manage/setup_folders.py --version ${{ github.event.inputs.version }}
+
+        echo ""
+        echo "✓ Folder setup complete"
+        echo "Generated files:"
+        echo "  - folder_structure_v${{ github.event.inputs.version }}.yml"
+        echo "  - schema_binding_v${{ github.event.inputs.version }}.yml"
+        echo "  - schema_binding_config.yml (updated)"
+
     - name: Bind schemas to project folders
       env:
         SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
@@ -132,7 +144,8 @@ jobs:
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git add schema_binding_config.yml \
                 "schema_binding_${VERSION}.yml" \
-                "folder_structure_${VERSION}.yml"
+                "folder_structure_${VERSION}.yml" \
+                htan2_synapse/module_structure.yml
         if git diff --cached --quiet; then
           echo "No config changes to commit."
         else

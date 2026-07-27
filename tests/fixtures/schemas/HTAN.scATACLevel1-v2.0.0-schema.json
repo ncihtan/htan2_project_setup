@@ -1,0 +1,12 @@
+{
+  "$id": "https://w3id.org/htan/scataclevel1",
+  "type": "object",
+  "properties": {
+    "FILENAME": {
+      "type": "string"
+    },
+    "HTAN_DATA_FILE_ID": {
+      "type": "string"
+    }
+  }
+}
