@@ -1,0 +1,2414 @@
+v9:
+  projects:
+    HTAN2:
+      synapse_id: syn63296487
+      folders:
+        v9_ingest:
+          synapse_id: syn76425570
+          modules:
+            Clinical:
+              synapse_id: syn76425572
+              subfolders:
+                Demographics: syn76425573
+                Diagnosis: syn76425574
+                Therapy: syn76425575
+                FollowUp: syn76425576
+                MolecularTest: syn76425577
+                Exposure: syn76425578
+                FamilyHistory: syn76425579
+                VitalStatus: syn76425580
+            Biospecimen:
+              synapse_id: syn76425581
+              subfolders: {}
+            WES:
+              synapse_id: syn76425582
+              subfolders:
+                Level_1: syn76425583
+                Level_2: syn76425584
+                Level_3: syn76425585
+            scRNA_seq:
+              synapse_id: syn76425586
+              subfolders:
+                Level_1: syn76425587
+                Level_2: syn76425588
+                Level_3_4: syn76425590
+            SpatialOmics:
+              synapse_id: syn76425599
+              subfolders:
+                Level_1: syn76425600
+                Level_3: syn76425602
+                Level_4: syn76425603
+              record_based_subfolders:
+                Panel: syn76425605
+            Imaging:
+              synapse_id: syn76425591
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76425593
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76425594
+                  subfolders:
+                    Level_2: syn76425595
+                    Level_3: syn76425596
+                    Level_4: syn76425597
+                  record_based_subfolders:
+                    ChannelMetadata: syn76425598
+            scATAC_seq:
+              synapse_id: syn76458928
+              subfolders:
+                Level_1: syn76458929
+                Level_2: syn76458931
+                Level_3_4: syn76458932
+            MassSpectrometryImaging:
+              synapse_id: syn76458933
+              subfolders:
+                Level_1: syn76458934
+                Level_2: syn76458935
+                Level_3: syn76458936
+                Level_4: syn76458937
+              record_based_subfolders:
+                MolecularAssignment: syn76458938
+        v9_staging:
+          synapse_id: syn76425606
+          modules:
+            Clinical:
+              synapse_id: syn76425607
+              subfolders:
+                Demographics: syn76425608
+                Diagnosis: syn76425609
+                Therapy: syn76425610
+                FollowUp: syn76425611
+                MolecularTest: syn76425612
+                Exposure: syn76425613
+                FamilyHistory: syn76425614
+                VitalStatus: syn76425615
+            Biospecimen:
+              synapse_id: syn76425616
+              subfolders: {}
+            WES:
+              synapse_id: syn76425617
+              subfolders:
+                Level_1: syn76425618
+                Level_2: syn76425619
+                Level_3: syn76425620
+            scRNA_seq:
+              synapse_id: syn76425621
+              subfolders:
+                Level_1: syn76425622
+                Level_2: syn76425623
+                Level_3_4: syn76425624
+            SpatialOmics:
+              synapse_id: syn76425632
+              subfolders:
+                Level_1: syn76425633
+                Level_3: syn76425634
+                Level_4: syn76425635
+              record_based_subfolders:
+                Panel: syn76425636
+            Imaging:
+              synapse_id: syn76425625
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76425626
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76425627
+                  subfolders:
+                    Level_2: syn76425628
+                    Level_3: syn76425629
+                    Level_4: syn76425630
+                  record_based_subfolders:
+                    ChannelMetadata: syn76425631
+            scATAC_seq:
+              synapse_id: syn76458941
+              subfolders:
+                Level_1: syn76458942
+                Level_2: syn76458943
+                Level_3_4: syn76458944
+            MassSpectrometryImaging:
+              synapse_id: syn76458945
+              subfolders:
+                Level_1: syn76458946
+                Level_2: syn76458947
+                Level_3: syn76458948
+                Level_4: syn76458949
+              record_based_subfolders:
+                MolecularAssignment: syn76458950
+        v9_release:
+          synapse_id: syn76425637
+          modules:
+            Clinical:
+              synapse_id: syn76425638
+              subfolders:
+                Demographics: syn76425639
+                Diagnosis: syn76425640
+                Therapy: syn76425641
+                FollowUp: syn76425642
+                MolecularTest: syn76425643
+                Exposure: syn76425644
+                FamilyHistory: syn76425645
+                VitalStatus: syn76425646
+            Biospecimen:
+              synapse_id: syn76425647
+              subfolders: {}
+            WES:
+              synapse_id: syn76425648
+              subfolders:
+                Level_1: syn76425649
+                Level_2: syn76425650
+                Level_3: syn76425651
+            scRNA_seq:
+              synapse_id: syn76425652
+              subfolders:
+                Level_1: syn76425653
+                Level_2: syn76425654
+                Level_3_4: syn76425655
+            SpatialOmics:
+              synapse_id: syn76425663
+              subfolders:
+                Level_1: syn76425664
+                Level_3: syn76425665
+                Level_4: syn76425666
+              record_based_subfolders:
+                Panel: syn76425667
+            Imaging:
+              synapse_id: syn76425656
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76425657
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76425658
+                  subfolders:
+                    Level_2: syn76425659
+                    Level_3: syn76425660
+                    Level_4: syn76425661
+                  record_based_subfolders:
+                    ChannelMetadata: syn76425662
+            scATAC_seq:
+              synapse_id: syn76458951
+              subfolders:
+                Level_1: syn76458952
+                Level_2: syn76458953
+                Level_3_4: syn76458954
+            MassSpectrometryImaging:
+              synapse_id: syn76458955
+              subfolders:
+                Level_1: syn76458956
+                Level_2: syn76458957
+                Level_3: syn76458958
+                Level_4: syn76458959
+              record_based_subfolders:
+                MolecularAssignment: syn76458960
+    HTAN2_CRC:
+      synapse_id: syn63298073
+      folders:
+        v9_ingest:
+          synapse_id: syn76425668
+          modules:
+            Clinical:
+              synapse_id: syn76425669
+              subfolders:
+                Demographics: syn76425670
+                Diagnosis: syn76425671
+                Therapy: syn76425672
+                FollowUp: syn76425673
+                MolecularTest: syn76425674
+                Exposure: syn76425675
+                FamilyHistory: syn76425676
+                VitalStatus: syn76425677
+            Biospecimen:
+              synapse_id: syn76425678
+              subfolders: {}
+            WES:
+              synapse_id: syn76425679
+              subfolders:
+                Level_1: syn76425680
+                Level_2: syn76425681
+                Level_3: syn76425682
+            scRNA_seq:
+              synapse_id: syn76425684
+              subfolders:
+                Level_1: syn76425685
+                Level_2: syn76425686
+                Level_3_4: syn76425687
+            SpatialOmics:
+              synapse_id: syn76425695
+              subfolders:
+                Level_1: syn76425696
+                Level_3: syn76425697
+                Level_4: syn76425698
+              record_based_subfolders:
+                Panel: syn76425699
+            Imaging:
+              synapse_id: syn76425688
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76425689
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76425690
+                  subfolders:
+                    Level_2: syn76425691
+                    Level_3: syn76425692
+                    Level_4: syn76425693
+                  record_based_subfolders:
+                    ChannelMetadata: syn76425694
+            scATAC_seq:
+              synapse_id: syn76458961
+              subfolders:
+                Level_1: syn76458962
+                Level_2: syn76458963
+                Level_3_4: syn76458964
+            MassSpectrometryImaging:
+              synapse_id: syn76458965
+              subfolders:
+                Level_1: syn76458966
+                Level_2: syn76458967
+                Level_3: syn76458968
+                Level_4: syn76458969
+              record_based_subfolders:
+                MolecularAssignment: syn76458970
+        v9_staging:
+          synapse_id: syn76425700
+          modules:
+            Clinical:
+              synapse_id: syn76425701
+              subfolders:
+                Demographics: syn76425702
+                Diagnosis: syn76425703
+                Therapy: syn76425704
+                FollowUp: syn76425705
+                MolecularTest: syn76425706
+                Exposure: syn76425707
+                FamilyHistory: syn76425708
+                VitalStatus: syn76425709
+            Biospecimen:
+              synapse_id: syn76425710
+              subfolders: {}
+            WES:
+              synapse_id: syn76425711
+              subfolders:
+                Level_1: syn76425712
+                Level_2: syn76425713
+                Level_3: syn76425714
+            scRNA_seq:
+              synapse_id: syn76425715
+              subfolders:
+                Level_1: syn76425716
+                Level_2: syn76425717
+                Level_3_4: syn76425718
+            SpatialOmics:
+              synapse_id: syn76425728
+              subfolders:
+                Level_1: syn76425729
+                Level_3: syn76425730
+                Level_4: syn76425731
+              record_based_subfolders:
+                Panel: syn76425732
+            Imaging:
+              synapse_id: syn76425720
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76425721
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76425723
+                  subfolders:
+                    Level_2: syn76425724
+                    Level_3: syn76425725
+                    Level_4: syn76425726
+                  record_based_subfolders:
+                    ChannelMetadata: syn76425727
+            scATAC_seq:
+              synapse_id: syn76458971
+              subfolders:
+                Level_1: syn76458972
+                Level_2: syn76458973
+                Level_3_4: syn76458974
+            MassSpectrometryImaging:
+              synapse_id: syn76458975
+              subfolders:
+                Level_1: syn76458976
+                Level_2: syn76458977
+                Level_3: syn76458978
+                Level_4: syn76458979
+              record_based_subfolders:
+                MolecularAssignment: syn76458980
+        v9_release:
+          synapse_id: syn76425733
+          modules:
+            Clinical:
+              synapse_id: syn76425736
+              subfolders:
+                Demographics: syn76425737
+                Diagnosis: syn76425738
+                Therapy: syn76425739
+                FollowUp: syn76425740
+                MolecularTest: syn76425741
+                Exposure: syn76425742
+                FamilyHistory: syn76425743
+                VitalStatus: syn76425744
+            Biospecimen:
+              synapse_id: syn76425745
+              subfolders: {}
+            WES:
+              synapse_id: syn76425746
+              subfolders:
+                Level_1: syn76425747
+                Level_2: syn76425748
+                Level_3: syn76425749
+            scRNA_seq:
+              synapse_id: syn76425750
+              subfolders:
+                Level_1: syn76425751
+                Level_2: syn76425752
+                Level_3_4: syn76425753
+            SpatialOmics:
+              synapse_id: syn76425761
+              subfolders:
+                Level_1: syn76425762
+                Level_3: syn76425763
+                Level_4: syn76425764
+              record_based_subfolders:
+                Panel: syn76425765
+            Imaging:
+              synapse_id: syn76425754
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76425755
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76425756
+                  subfolders:
+                    Level_2: syn76425757
+                    Level_3: syn76425758
+                    Level_4: syn76425759
+                  record_based_subfolders:
+                    ChannelMetadata: syn76425760
+            scATAC_seq:
+              synapse_id: syn76458984
+              subfolders:
+                Level_1: syn76458985
+                Level_2: syn76458986
+                Level_3_4: syn76458988
+            MassSpectrometryImaging:
+              synapse_id: syn76458989
+              subfolders:
+                Level_1: syn76458991
+                Level_2: syn76458992
+                Level_3: syn76458994
+                Level_4: syn76458997
+              record_based_subfolders:
+                MolecularAssignment: syn76458998
+    HTAN2_Gastric:
+      synapse_id: syn63298051
+      folders:
+        v9_ingest:
+          synapse_id: syn76425766
+          modules:
+            Clinical:
+              synapse_id: syn76425767
+              subfolders:
+                Demographics: syn76425768
+                Diagnosis: syn76425769
+                Therapy: syn76425770
+                FollowUp: syn76425771
+                MolecularTest: syn76425772
+                Exposure: syn76425773
+                FamilyHistory: syn76425774
+                VitalStatus: syn76425775
+            Biospecimen:
+              synapse_id: syn76425776
+              subfolders: {}
+            WES:
+              synapse_id: syn76425777
+              subfolders:
+                Level_1: syn76425778
+                Level_2: syn76425779
+                Level_3: syn76425780
+            scRNA_seq:
+              synapse_id: syn76425781
+              subfolders:
+                Level_1: syn76425782
+                Level_2: syn76425783
+                Level_3_4: syn76425784
+            SpatialOmics:
+              synapse_id: syn76425792
+              subfolders:
+                Level_1: syn76425793
+                Level_3: syn76425794
+                Level_4: syn76425795
+              record_based_subfolders:
+                Panel: syn76425796
+            Imaging:
+              synapse_id: syn76425785
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76425786
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76425787
+                  subfolders:
+                    Level_2: syn76425788
+                    Level_3: syn76425789
+                    Level_4: syn76425790
+                  record_based_subfolders:
+                    ChannelMetadata: syn76425791
+            scATAC_seq:
+              synapse_id: syn76459008
+              subfolders:
+                Level_1: syn76459009
+                Level_2: syn76459010
+                Level_3_4: syn76459012
+            MassSpectrometryImaging:
+              synapse_id: syn76459014
+              subfolders:
+                Level_1: syn76459016
+                Level_2: syn76459017
+                Level_3: syn76459018
+                Level_4: syn76459020
+              record_based_subfolders:
+                MolecularAssignment: syn76459021
+        v9_staging:
+          synapse_id: syn76425797
+          modules:
+            Clinical:
+              synapse_id: syn76425800
+              subfolders:
+                Demographics: syn76425801
+                Diagnosis: syn76425802
+                Therapy: syn76425803
+                FollowUp: syn76425805
+                MolecularTest: syn76425806
+                Exposure: syn76425807
+                FamilyHistory: syn76425808
+                VitalStatus: syn76425809
+            Biospecimen:
+              synapse_id: syn76425810
+              subfolders: {}
+            WES:
+              synapse_id: syn76425811
+              subfolders:
+                Level_1: syn76425812
+                Level_2: syn76425813
+                Level_3: syn76425814
+            scRNA_seq:
+              synapse_id: syn76425815
+              subfolders:
+                Level_1: syn76425816
+                Level_2: syn76425817
+                Level_3_4: syn76425818
+            SpatialOmics:
+              synapse_id: syn76425826
+              subfolders:
+                Level_1: syn76425827
+                Level_3: syn76425828
+                Level_4: syn76425829
+              record_based_subfolders:
+                Panel: syn76425830
+            Imaging:
+              synapse_id: syn76425819
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76425820
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76425821
+                  subfolders:
+                    Level_2: syn76425822
+                    Level_3: syn76425823
+                    Level_4: syn76425824
+                  record_based_subfolders:
+                    ChannelMetadata: syn76425825
+            scATAC_seq:
+              synapse_id: syn76459028
+              subfolders:
+                Level_1: syn76459029
+                Level_2: syn76459030
+                Level_3_4: syn76459031
+            MassSpectrometryImaging:
+              synapse_id: syn76459033
+              subfolders:
+                Level_1: syn76459035
+                Level_2: syn76459036
+                Level_3: syn76459037
+                Level_4: syn76459038
+              record_based_subfolders:
+                MolecularAssignment: syn76459039
+        v9_release:
+          synapse_id: syn76425831
+          modules:
+            Clinical:
+              synapse_id: syn76425832
+              subfolders:
+                Demographics: syn76425833
+                Diagnosis: syn76425834
+                Therapy: syn76425835
+                FollowUp: syn76425836
+                MolecularTest: syn76425837
+                Exposure: syn76425838
+                FamilyHistory: syn76425839
+                VitalStatus: syn76425840
+            Biospecimen:
+              synapse_id: syn76425841
+              subfolders: {}
+            WES:
+              synapse_id: syn76425842
+              subfolders:
+                Level_1: syn76425843
+                Level_2: syn76425844
+                Level_3: syn76425845
+            scRNA_seq:
+              synapse_id: syn76425846
+              subfolders:
+                Level_1: syn76425847
+                Level_2: syn76425848
+                Level_3_4: syn76425849
+            SpatialOmics:
+              synapse_id: syn76425857
+              subfolders:
+                Level_1: syn76425858
+                Level_3: syn76425859
+                Level_4: syn76425860
+              record_based_subfolders:
+                Panel: syn76425861
+            Imaging:
+              synapse_id: syn76425850
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76425851
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76425852
+                  subfolders:
+                    Level_2: syn76425853
+                    Level_3: syn76425854
+                    Level_4: syn76425855
+                  record_based_subfolders:
+                    ChannelMetadata: syn76425856
+            scATAC_seq:
+              synapse_id: syn76459042
+              subfolders:
+                Level_1: syn76459043
+                Level_2: syn76459044
+                Level_3_4: syn76459046
+            MassSpectrometryImaging:
+              synapse_id: syn76459048
+              subfolders:
+                Level_1: syn76459049
+                Level_2: syn76459050
+                Level_3: syn76459051
+                Level_4: syn76459052
+              record_based_subfolders:
+                MolecularAssignment: syn76459053
+    HTAN2_Glioma:
+      synapse_id: syn63298048
+      folders:
+        v9_ingest:
+          synapse_id: syn76425862
+          modules:
+            Clinical:
+              synapse_id: syn76425863
+              subfolders:
+                Demographics: syn76425864
+                Diagnosis: syn76425865
+                Therapy: syn76425866
+                FollowUp: syn76425867
+                MolecularTest: syn76425868
+                Exposure: syn76425869
+                FamilyHistory: syn76425870
+                VitalStatus: syn76425871
+            Biospecimen:
+              synapse_id: syn76425872
+              subfolders: {}
+            WES:
+              synapse_id: syn76425873
+              subfolders:
+                Level_1: syn76425874
+                Level_2: syn76425875
+                Level_3: syn76425876
+            scRNA_seq:
+              synapse_id: syn76425877
+              subfolders:
+                Level_1: syn76425878
+                Level_2: syn76425879
+                Level_3_4: syn76425880
+            SpatialOmics:
+              synapse_id: syn76425888
+              subfolders:
+                Level_1: syn76425889
+                Level_3: syn76425890
+                Level_4: syn76425891
+              record_based_subfolders:
+                Panel: syn76425892
+            Imaging:
+              synapse_id: syn76425881
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76425882
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76425883
+                  subfolders:
+                    Level_2: syn76425884
+                    Level_3: syn76425885
+                    Level_4: syn76425886
+                  record_based_subfolders:
+                    ChannelMetadata: syn76425887
+            scATAC_seq:
+              synapse_id: syn76459057
+              subfolders:
+                Level_1: syn76459058
+                Level_2: syn76459059
+                Level_3_4: syn76459060
+            MassSpectrometryImaging:
+              synapse_id: syn76459061
+              subfolders:
+                Level_1: syn76459062
+                Level_2: syn76459063
+                Level_3: syn76459064
+                Level_4: syn76459065
+              record_based_subfolders:
+                MolecularAssignment: syn76459066
+        v9_staging:
+          synapse_id: syn76425893
+          modules:
+            Clinical:
+              synapse_id: syn76425894
+              subfolders:
+                Demographics: syn76425895
+                Diagnosis: syn76425896
+                Therapy: syn76425897
+                FollowUp: syn76425898
+                MolecularTest: syn76425899
+                Exposure: syn76425900
+                FamilyHistory: syn76425901
+                VitalStatus: syn76425902
+            Biospecimen:
+              synapse_id: syn76425903
+              subfolders: {}
+            WES:
+              synapse_id: syn76425904
+              subfolders:
+                Level_1: syn76425905
+                Level_2: syn76425906
+                Level_3: syn76425907
+            scRNA_seq:
+              synapse_id: syn76425908
+              subfolders:
+                Level_1: syn76425909
+                Level_2: syn76425910
+                Level_3_4: syn76425911
+            SpatialOmics:
+              synapse_id: syn76425920
+              subfolders:
+                Level_1: syn76425921
+                Level_3: syn76425922
+                Level_4: syn76425923
+              record_based_subfolders:
+                Panel: syn76425924
+            Imaging:
+              synapse_id: syn76425912
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76425913
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76425914
+                  subfolders:
+                    Level_2: syn76425916
+                    Level_3: syn76425917
+                    Level_4: syn76425918
+                  record_based_subfolders:
+                    ChannelMetadata: syn76425919
+            scATAC_seq:
+              synapse_id: syn76459067
+              subfolders:
+                Level_1: syn76459068
+                Level_2: syn76459070
+                Level_3_4: syn76459072
+            MassSpectrometryImaging:
+              synapse_id: syn76459073
+              subfolders:
+                Level_1: syn76459074
+                Level_2: syn76459075
+                Level_3: syn76459076
+                Level_4: syn76459077
+              record_based_subfolders:
+                MolecularAssignment: syn76459078
+        v9_release:
+          synapse_id: syn76425925
+          modules:
+            Clinical:
+              synapse_id: syn76425926
+              subfolders:
+                Demographics: syn76425927
+                Diagnosis: syn76425928
+                Therapy: syn76425929
+                FollowUp: syn76425930
+                MolecularTest: syn76425931
+                Exposure: syn76425933
+                FamilyHistory: syn76425934
+                VitalStatus: syn76425936
+            Biospecimen:
+              synapse_id: syn76425937
+              subfolders: {}
+            WES:
+              synapse_id: syn76425938
+              subfolders:
+                Level_1: syn76425939
+                Level_2: syn76425940
+                Level_3: syn76425941
+            scRNA_seq:
+              synapse_id: syn76425942
+              subfolders:
+                Level_1: syn76425943
+                Level_2: syn76425944
+                Level_3_4: syn76425945
+            SpatialOmics:
+              synapse_id: syn76425953
+              subfolders:
+                Level_1: syn76425954
+                Level_3: syn76425955
+                Level_4: syn76425956
+              record_based_subfolders:
+                Panel: syn76425957
+            Imaging:
+              synapse_id: syn76425946
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76425947
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76425948
+                  subfolders:
+                    Level_2: syn76425949
+                    Level_3: syn76425950
+                    Level_4: syn76425951
+                  record_based_subfolders:
+                    ChannelMetadata: syn76425952
+            scATAC_seq:
+              synapse_id: syn76459081
+              subfolders:
+                Level_1: syn76459082
+                Level_2: syn76459083
+                Level_3_4: syn76459084
+            MassSpectrometryImaging:
+              synapse_id: syn76459085
+              subfolders:
+                Level_1: syn76459086
+                Level_2: syn76459087
+                Level_3: syn76459088
+                Level_4: syn76459089
+              record_based_subfolders:
+                MolecularAssignment: syn76459090
+    HTAN2_Lymphoma:
+      synapse_id: syn63298076
+      folders:
+        v9_ingest:
+          synapse_id: syn76425958
+          modules:
+            Clinical:
+              synapse_id: syn76425959
+              subfolders:
+                Demographics: syn76425960
+                Diagnosis: syn76425961
+                Therapy: syn76425962
+                FollowUp: syn76425963
+                MolecularTest: syn76425964
+                Exposure: syn76425965
+                FamilyHistory: syn76425966
+                VitalStatus: syn76425967
+            Biospecimen:
+              synapse_id: syn76425968
+              subfolders: {}
+            WES:
+              synapse_id: syn76425969
+              subfolders:
+                Level_1: syn76425970
+                Level_2: syn76425971
+                Level_3: syn76425972
+            scRNA_seq:
+              synapse_id: syn76425973
+              subfolders:
+                Level_1: syn76425974
+                Level_2: syn76425975
+                Level_3_4: syn76425977
+            SpatialOmics:
+              synapse_id: syn76425986
+              subfolders:
+                Level_1: syn76425987
+                Level_3: syn76425988
+                Level_4: syn76425989
+              record_based_subfolders:
+                Panel: syn76425990
+            Imaging:
+              synapse_id: syn76425979
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76425980
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76425981
+                  subfolders:
+                    Level_2: syn76425982
+                    Level_3: syn76425983
+                    Level_4: syn76425984
+                  record_based_subfolders:
+                    ChannelMetadata: syn76425985
+            scATAC_seq:
+              synapse_id: syn76459091
+              subfolders:
+                Level_1: syn76459092
+                Level_2: syn76459093
+                Level_3_4: syn76459094
+            MassSpectrometryImaging:
+              synapse_id: syn76459096
+              subfolders:
+                Level_1: syn76459098
+                Level_2: syn76459099
+                Level_3: syn76459100
+                Level_4: syn76459101
+              record_based_subfolders:
+                MolecularAssignment: syn76459102
+        v9_staging:
+          synapse_id: syn76425991
+          modules:
+            Clinical:
+              synapse_id: syn76425992
+              subfolders:
+                Demographics: syn76425993
+                Diagnosis: syn76425994
+                Therapy: syn76425995
+                FollowUp: syn76425996
+                MolecularTest: syn76425997
+                Exposure: syn76425998
+                FamilyHistory: syn76425999
+                VitalStatus: syn76426000
+            Biospecimen:
+              synapse_id: syn76426001
+              subfolders: {}
+            WES:
+              synapse_id: syn76426002
+              subfolders:
+                Level_1: syn76426003
+                Level_2: syn76426006
+                Level_3: syn76426008
+            scRNA_seq:
+              synapse_id: syn76426010
+              subfolders:
+                Level_1: syn76426012
+                Level_2: syn76426013
+                Level_3_4: syn76426014
+            SpatialOmics:
+              synapse_id: syn76426024
+              subfolders:
+                Level_1: syn76426026
+                Level_3: syn76426027
+                Level_4: syn76426029
+              record_based_subfolders:
+                Panel: syn76426030
+            Imaging:
+              synapse_id: syn76426015
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426016
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426018
+                  subfolders:
+                    Level_2: syn76426020
+                    Level_3: syn76426021
+                    Level_4: syn76426022
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426023
+            scATAC_seq:
+              synapse_id: syn76459107
+              subfolders:
+                Level_1: syn76459108
+                Level_2: syn76459109
+                Level_3_4: syn76459110
+            MassSpectrometryImaging:
+              synapse_id: syn76459111
+              subfolders:
+                Level_1: syn76459112
+                Level_2: syn76459113
+                Level_3: syn76459114
+                Level_4: syn76459115
+              record_based_subfolders:
+                MolecularAssignment: syn76459116
+        v9_release:
+          synapse_id: syn76426031
+          modules:
+            Clinical:
+              synapse_id: syn76426034
+              subfolders:
+                Demographics: syn76426035
+                Diagnosis: syn76426036
+                Therapy: syn76426037
+                FollowUp: syn76426038
+                MolecularTest: syn76426039
+                Exposure: syn76426040
+                FamilyHistory: syn76426041
+                VitalStatus: syn76426042
+            Biospecimen:
+              synapse_id: syn76426043
+              subfolders: {}
+            WES:
+              synapse_id: syn76426044
+              subfolders:
+                Level_1: syn76426045
+                Level_2: syn76426046
+                Level_3: syn76426047
+            scRNA_seq:
+              synapse_id: syn76426048
+              subfolders:
+                Level_1: syn76426049
+                Level_2: syn76426051
+                Level_3_4: syn76426053
+            SpatialOmics:
+              synapse_id: syn76426061
+              subfolders:
+                Level_1: syn76426062
+                Level_3: syn76426063
+                Level_4: syn76426064
+              record_based_subfolders:
+                Panel: syn76426065
+            Imaging:
+              synapse_id: syn76426054
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426055
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426056
+                  subfolders:
+                    Level_2: syn76426057
+                    Level_3: syn76426058
+                    Level_4: syn76426059
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426060
+            scATAC_seq:
+              synapse_id: syn76459117
+              subfolders:
+                Level_1: syn76459118
+                Level_2: syn76459119
+                Level_3_4: syn76459120
+            MassSpectrometryImaging:
+              synapse_id: syn76459121
+              subfolders:
+                Level_1: syn76459122
+                Level_2: syn76459123
+                Level_3: syn76459124
+                Level_4: syn76459125
+              record_based_subfolders:
+                MolecularAssignment: syn76459126
+    HTAN2_Myeloma:
+      synapse_id: syn63298063
+      folders:
+        v9_ingest:
+          synapse_id: syn76426066
+          modules:
+            Clinical:
+              synapse_id: syn76426067
+              subfolders:
+                Demographics: syn76426068
+                Diagnosis: syn76426069
+                Therapy: syn76426070
+                FollowUp: syn76426071
+                MolecularTest: syn76426072
+                Exposure: syn76426073
+                FamilyHistory: syn76426074
+                VitalStatus: syn76426075
+            Biospecimen:
+              synapse_id: syn76426076
+              subfolders: {}
+            WES:
+              synapse_id: syn76426077
+              subfolders:
+                Level_1: syn76426078
+                Level_2: syn76426079
+                Level_3: syn76426080
+            scRNA_seq:
+              synapse_id: syn76426081
+              subfolders:
+                Level_1: syn76426082
+                Level_2: syn76426083
+                Level_3_4: syn76426084
+            SpatialOmics:
+              synapse_id: syn76426092
+              subfolders:
+                Level_1: syn76426093
+                Level_3: syn76426094
+                Level_4: syn76426095
+              record_based_subfolders:
+                Panel: syn76426096
+            Imaging:
+              synapse_id: syn76426085
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426086
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426087
+                  subfolders:
+                    Level_2: syn76426088
+                    Level_3: syn76426089
+                    Level_4: syn76426090
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426091
+            scATAC_seq:
+              synapse_id: syn76459127
+              subfolders:
+                Level_1: syn76459128
+                Level_2: syn76459129
+                Level_3_4: syn76459130
+            MassSpectrometryImaging:
+              synapse_id: syn76459132
+              subfolders:
+                Level_1: syn76459134
+                Level_2: syn76459135
+                Level_3: syn76459136
+                Level_4: syn76459137
+              record_based_subfolders:
+                MolecularAssignment: syn76459138
+        v9_staging:
+          synapse_id: syn76426097
+          modules:
+            Clinical:
+              synapse_id: syn76426098
+              subfolders:
+                Demographics: syn76426099
+                Diagnosis: syn76426100
+                Therapy: syn76426101
+                FollowUp: syn76426102
+                MolecularTest: syn76426103
+                Exposure: syn76426104
+                FamilyHistory: syn76426105
+                VitalStatus: syn76426106
+            Biospecimen:
+              synapse_id: syn76426107
+              subfolders: {}
+            WES:
+              synapse_id: syn76426108
+              subfolders:
+                Level_1: syn76426109
+                Level_2: syn76426110
+                Level_3: syn76426111
+            scRNA_seq:
+              synapse_id: syn76426112
+              subfolders:
+                Level_1: syn76426113
+                Level_2: syn76426114
+                Level_3_4: syn76426115
+            SpatialOmics:
+              synapse_id: syn76426123
+              subfolders:
+                Level_1: syn76426124
+                Level_3: syn76426125
+                Level_4: syn76426126
+              record_based_subfolders:
+                Panel: syn76426127
+            Imaging:
+              synapse_id: syn76426116
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426117
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426118
+                  subfolders:
+                    Level_2: syn76426119
+                    Level_3: syn76426120
+                    Level_4: syn76426121
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426122
+            scATAC_seq:
+              synapse_id: syn76459141
+              subfolders:
+                Level_1: syn76459142
+                Level_2: syn76459143
+                Level_3_4: syn76459144
+            MassSpectrometryImaging:
+              synapse_id: syn76459145
+              subfolders:
+                Level_1: syn76459146
+                Level_2: syn76459147
+                Level_3: syn76459148
+                Level_4: syn76459149
+              record_based_subfolders:
+                MolecularAssignment: syn76459150
+        v9_release:
+          synapse_id: syn76426128
+          modules:
+            Clinical:
+              synapse_id: syn76426131
+              subfolders:
+                Demographics: syn76426132
+                Diagnosis: syn76426133
+                Therapy: syn76426134
+                FollowUp: syn76426135
+                MolecularTest: syn76426136
+                Exposure: syn76426137
+                FamilyHistory: syn76426138
+                VitalStatus: syn76426139
+            Biospecimen:
+              synapse_id: syn76426140
+              subfolders: {}
+            WES:
+              synapse_id: syn76426141
+              subfolders:
+                Level_1: syn76426142
+                Level_2: syn76426143
+                Level_3: syn76426144
+            scRNA_seq:
+              synapse_id: syn76426145
+              subfolders:
+                Level_1: syn76426146
+                Level_2: syn76426147
+                Level_3_4: syn76426148
+            SpatialOmics:
+              synapse_id: syn76426156
+              subfolders:
+                Level_1: syn76426157
+                Level_3: syn76426158
+                Level_4: syn76426159
+              record_based_subfolders:
+                Panel: syn76426160
+            Imaging:
+              synapse_id: syn76426149
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426150
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426151
+                  subfolders:
+                    Level_2: syn76426152
+                    Level_3: syn76426153
+                    Level_4: syn76426154
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426155
+            scATAC_seq:
+              synapse_id: syn76459157
+              subfolders:
+                Level_1: syn76459158
+                Level_2: syn76459160
+                Level_3_4: syn76459161
+            MassSpectrometryImaging:
+              synapse_id: syn76459162
+              subfolders:
+                Level_1: syn76459163
+                Level_2: syn76459164
+                Level_3: syn76459165
+                Level_4: syn76459166
+              record_based_subfolders:
+                MolecularAssignment: syn76459167
+    HTAN2_Ovarian:
+      synapse_id: syn63298044
+      folders:
+        v9_ingest:
+          synapse_id: syn76426161
+          modules:
+            Clinical:
+              synapse_id: syn76426162
+              subfolders:
+                Demographics: syn76426163
+                Diagnosis: syn76426164
+                Therapy: syn76426165
+                FollowUp: syn76426166
+                MolecularTest: syn76426167
+                Exposure: syn76426168
+                FamilyHistory: syn76426169
+                VitalStatus: syn76426170
+            Biospecimen:
+              synapse_id: syn76426171
+              subfolders: {}
+            WES:
+              synapse_id: syn76426172
+              subfolders:
+                Level_1: syn76426173
+                Level_2: syn76426174
+                Level_3: syn76426175
+            scRNA_seq:
+              synapse_id: syn76426176
+              subfolders:
+                Level_1: syn76426177
+                Level_2: syn76426178
+                Level_3_4: syn76426179
+            SpatialOmics:
+              synapse_id: syn76426187
+              subfolders:
+                Level_1: syn76426188
+                Level_3: syn76426189
+                Level_4: syn76426190
+              record_based_subfolders:
+                Panel: syn76426191
+            Imaging:
+              synapse_id: syn76426180
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426181
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426182
+                  subfolders:
+                    Level_2: syn76426183
+                    Level_3: syn76426184
+                    Level_4: syn76426185
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426186
+            scATAC_seq:
+              synapse_id: syn76459168
+              subfolders:
+                Level_1: syn76459169
+                Level_2: syn76459170
+                Level_3_4: syn76459171
+            MassSpectrometryImaging:
+              synapse_id: syn76459172
+              subfolders:
+                Level_1: syn76459173
+                Level_2: syn76459174
+                Level_3: syn76459175
+                Level_4: syn76459176
+              record_based_subfolders:
+                MolecularAssignment: syn76459177
+        v9_staging:
+          synapse_id: syn76426192
+          modules:
+            Clinical:
+              synapse_id: syn76426193
+              subfolders:
+                Demographics: syn76426194
+                Diagnosis: syn76426195
+                Therapy: syn76426196
+                FollowUp: syn76426197
+                MolecularTest: syn76426198
+                Exposure: syn76426199
+                FamilyHistory: syn76426200
+                VitalStatus: syn76426201
+            Biospecimen:
+              synapse_id: syn76426202
+              subfolders: {}
+            WES:
+              synapse_id: syn76426203
+              subfolders:
+                Level_1: syn76426204
+                Level_2: syn76426205
+                Level_3: syn76426206
+            scRNA_seq:
+              synapse_id: syn76426207
+              subfolders:
+                Level_1: syn76426208
+                Level_2: syn76426209
+                Level_3_4: syn76426210
+            SpatialOmics:
+              synapse_id: syn76426219
+              subfolders:
+                Level_1: syn76426220
+                Level_3: syn76426221
+                Level_4: syn76426222
+              record_based_subfolders:
+                Panel: syn76426223
+            Imaging:
+              synapse_id: syn76426211
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426212
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426214
+                  subfolders:
+                    Level_2: syn76426215
+                    Level_3: syn76426216
+                    Level_4: syn76426217
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426218
+            scATAC_seq:
+              synapse_id: syn76459180
+              subfolders:
+                Level_1: syn76459181
+                Level_2: syn76459182
+                Level_3_4: syn76459183
+            MassSpectrometryImaging:
+              synapse_id: syn76459184
+              subfolders:
+                Level_1: syn76459185
+                Level_2: syn76459186
+                Level_3: syn76459187
+                Level_4: syn76459188
+              record_based_subfolders:
+                MolecularAssignment: syn76459189
+        v9_release:
+          synapse_id: syn76426224
+          modules:
+            Clinical:
+              synapse_id: syn76426225
+              subfolders:
+                Demographics: syn76426226
+                Diagnosis: syn76426227
+                Therapy: syn76426228
+                FollowUp: syn76426229
+                MolecularTest: syn76426230
+                Exposure: syn76426231
+                FamilyHistory: syn76426232
+                VitalStatus: syn76426233
+            Biospecimen:
+              synapse_id: syn76426234
+              subfolders: {}
+            WES:
+              synapse_id: syn76426235
+              subfolders:
+                Level_1: syn76426236
+                Level_2: syn76426237
+                Level_3: syn76426238
+            scRNA_seq:
+              synapse_id: syn76426239
+              subfolders:
+                Level_1: syn76426240
+                Level_2: syn76426243
+                Level_3_4: syn76426244
+            SpatialOmics:
+              synapse_id: syn76426254
+              subfolders:
+                Level_1: syn76426255
+                Level_3: syn76426256
+                Level_4: syn76426257
+              record_based_subfolders:
+                Panel: syn76426258
+            Imaging:
+              synapse_id: syn76426247
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426248
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426249
+                  subfolders:
+                    Level_2: syn76426250
+                    Level_3: syn76426251
+                    Level_4: syn76426252
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426253
+            scATAC_seq:
+              synapse_id: syn76459190
+              subfolders:
+                Level_1: syn76459191
+                Level_2: syn76459192
+                Level_3_4: syn76459193
+            MassSpectrometryImaging:
+              synapse_id: syn76459194
+              subfolders:
+                Level_1: syn76459195
+                Level_2: syn76459196
+                Level_3: syn76459197
+                Level_4: syn76459199
+              record_based_subfolders:
+                MolecularAssignment: syn76459201
+    HTAN2_Pancreatic:
+      synapse_id: syn63298065
+      folders:
+        v9_ingest:
+          synapse_id: syn76426259
+          modules:
+            Clinical:
+              synapse_id: syn76426260
+              subfolders:
+                Demographics: syn76426261
+                Diagnosis: syn76426262
+                Therapy: syn76426263
+                FollowUp: syn76426264
+                MolecularTest: syn76426265
+                Exposure: syn76426266
+                FamilyHistory: syn76426267
+                VitalStatus: syn76426268
+            Biospecimen:
+              synapse_id: syn76426269
+              subfolders: {}
+            WES:
+              synapse_id: syn76426270
+              subfolders:
+                Level_1: syn76426271
+                Level_2: syn76426272
+                Level_3: syn76426273
+            scRNA_seq:
+              synapse_id: syn76426274
+              subfolders:
+                Level_1: syn76426275
+                Level_2: syn76426276
+                Level_3_4: syn76426277
+            SpatialOmics:
+              synapse_id: syn76426285
+              subfolders:
+                Level_1: syn76426287
+                Level_3: syn76426289
+                Level_4: syn76426290
+              record_based_subfolders:
+                Panel: syn76426291
+            Imaging:
+              synapse_id: syn76426278
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426279
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426280
+                  subfolders:
+                    Level_2: syn76426281
+                    Level_3: syn76426282
+                    Level_4: syn76426283
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426284
+            scATAC_seq:
+              synapse_id: syn76459202
+              subfolders:
+                Level_1: syn76459203
+                Level_2: syn76459204
+                Level_3_4: syn76459205
+            MassSpectrometryImaging:
+              synapse_id: syn76459206
+              subfolders:
+                Level_1: syn76459207
+                Level_2: syn76459208
+                Level_3: syn76459209
+                Level_4: syn76459210
+              record_based_subfolders:
+                MolecularAssignment: syn76459211
+        v9_staging:
+          synapse_id: syn76426292
+          modules:
+            Clinical:
+              synapse_id: syn76426294
+              subfolders:
+                Demographics: syn76426295
+                Diagnosis: syn76426296
+                Therapy: syn76426297
+                FollowUp: syn76426298
+                MolecularTest: syn76426299
+                Exposure: syn76426300
+                FamilyHistory: syn76426301
+                VitalStatus: syn76426302
+            Biospecimen:
+              synapse_id: syn76426303
+              subfolders: {}
+            WES:
+              synapse_id: syn76426304
+              subfolders:
+                Level_1: syn76426305
+                Level_2: syn76426306
+                Level_3: syn76426307
+            scRNA_seq:
+              synapse_id: syn76426308
+              subfolders:
+                Level_1: syn76426309
+                Level_2: syn76426310
+                Level_3_4: syn76426311
+            SpatialOmics:
+              synapse_id: syn76426319
+              subfolders:
+                Level_1: syn76426320
+                Level_3: syn76426321
+                Level_4: syn76426322
+              record_based_subfolders:
+                Panel: syn76426323
+            Imaging:
+              synapse_id: syn76426312
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426313
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426314
+                  subfolders:
+                    Level_2: syn76426315
+                    Level_3: syn76426316
+                    Level_4: syn76426317
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426318
+            scATAC_seq:
+              synapse_id: syn76459214
+              subfolders:
+                Level_1: syn76459215
+                Level_2: syn76459216
+                Level_3_4: syn76459217
+            MassSpectrometryImaging:
+              synapse_id: syn76459218
+              subfolders:
+                Level_1: syn76459220
+                Level_2: syn76459222
+                Level_3: syn76459224
+                Level_4: syn76459226
+              record_based_subfolders:
+                MolecularAssignment: syn76459228
+        v9_release:
+          synapse_id: syn76426324
+          modules:
+            Clinical:
+              synapse_id: syn76426325
+              subfolders:
+                Demographics: syn76426326
+                Diagnosis: syn76426327
+                Therapy: syn76426328
+                FollowUp: syn76426329
+                MolecularTest: syn76426330
+                Exposure: syn76426331
+                FamilyHistory: syn76426332
+                VitalStatus: syn76426333
+            Biospecimen:
+              synapse_id: syn76426334
+              subfolders: {}
+            WES:
+              synapse_id: syn76426335
+              subfolders:
+                Level_1: syn76426337
+                Level_2: syn76426339
+                Level_3: syn76426340
+            scRNA_seq:
+              synapse_id: syn76426341
+              subfolders:
+                Level_1: syn76426342
+                Level_2: syn76426343
+                Level_3_4: syn76426344
+            SpatialOmics:
+              synapse_id: syn76426352
+              subfolders:
+                Level_1: syn76426353
+                Level_3: syn76426354
+                Level_4: syn76426355
+              record_based_subfolders:
+                Panel: syn76426356
+            Imaging:
+              synapse_id: syn76426345
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426346
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426347
+                  subfolders:
+                    Level_2: syn76426348
+                    Level_3: syn76426349
+                    Level_4: syn76426350
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426351
+            scATAC_seq:
+              synapse_id: syn76459230
+              subfolders:
+                Level_1: syn76459231
+                Level_2: syn76459232
+                Level_3_4: syn76459233
+            MassSpectrometryImaging:
+              synapse_id: syn76459234
+              subfolders:
+                Level_1: syn76459235
+                Level_2: syn76459236
+                Level_3: syn76459237
+                Level_4: syn76459238
+              record_based_subfolders:
+                MolecularAssignment: syn76459239
+    HTAN2_Pediatric:
+      synapse_id: syn63298059
+      folders:
+        v9_ingest:
+          synapse_id: syn76426357
+          modules:
+            Clinical:
+              synapse_id: syn76426360
+              subfolders:
+                Demographics: syn76426362
+                Diagnosis: syn76426363
+                Therapy: syn76426365
+                FollowUp: syn76426366
+                MolecularTest: syn76426367
+                Exposure: syn76426368
+                FamilyHistory: syn76426369
+                VitalStatus: syn76426370
+            Biospecimen:
+              synapse_id: syn76426371
+              subfolders: {}
+            WES:
+              synapse_id: syn76426372
+              subfolders:
+                Level_1: syn76426373
+                Level_2: syn76426374
+                Level_3: syn76426375
+            scRNA_seq:
+              synapse_id: syn76426376
+              subfolders:
+                Level_1: syn76426377
+                Level_2: syn76426378
+                Level_3_4: syn76426379
+            SpatialOmics:
+              synapse_id: syn76426388
+              subfolders:
+                Level_1: syn76426389
+                Level_3: syn76426391
+                Level_4: syn76426392
+              record_based_subfolders:
+                Panel: syn76426394
+            Imaging:
+              synapse_id: syn76426380
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426381
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426382
+                  subfolders:
+                    Level_2: syn76426383
+                    Level_3: syn76426384
+                    Level_4: syn76426385
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426386
+            scATAC_seq:
+              synapse_id: syn76459240
+              subfolders:
+                Level_1: syn76459242
+                Level_2: syn76459244
+                Level_3_4: syn76459245
+            MassSpectrometryImaging:
+              synapse_id: syn76459246
+              subfolders:
+                Level_1: syn76459247
+                Level_2: syn76459248
+                Level_3: syn76459249
+                Level_4: syn76459250
+              record_based_subfolders:
+                MolecularAssignment: syn76459251
+        v9_staging:
+          synapse_id: syn76426395
+          modules:
+            Clinical:
+              synapse_id: syn76426398
+              subfolders:
+                Demographics: syn76426399
+                Diagnosis: syn76426400
+                Therapy: syn76426401
+                FollowUp: syn76426402
+                MolecularTest: syn76426403
+                Exposure: syn76426404
+                FamilyHistory: syn76426405
+                VitalStatus: syn76426406
+            Biospecimen:
+              synapse_id: syn76426407
+              subfolders: {}
+            WES:
+              synapse_id: syn76426408
+              subfolders:
+                Level_1: syn76426409
+                Level_2: syn76426410
+                Level_3: syn76426411
+            scRNA_seq:
+              synapse_id: syn76426412
+              subfolders:
+                Level_1: syn76426413
+                Level_2: syn76426414
+                Level_3_4: syn76426415
+            SpatialOmics:
+              synapse_id: syn76426423
+              subfolders:
+                Level_1: syn76426424
+                Level_3: syn76426425
+                Level_4: syn76426427
+              record_based_subfolders:
+                Panel: syn76426429
+            Imaging:
+              synapse_id: syn76426416
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426417
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426418
+                  subfolders:
+                    Level_2: syn76426419
+                    Level_3: syn76426420
+                    Level_4: syn76426421
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426422
+            scATAC_seq:
+              synapse_id: syn76459256
+              subfolders:
+                Level_1: syn76459257
+                Level_2: syn76459258
+                Level_3_4: syn76459259
+            MassSpectrometryImaging:
+              synapse_id: syn76459260
+              subfolders:
+                Level_1: syn76459261
+                Level_2: syn76459262
+                Level_3: syn76459264
+                Level_4: syn76459266
+              record_based_subfolders:
+                MolecularAssignment: syn76459267
+        v9_release:
+          synapse_id: syn76426430
+          modules:
+            Clinical:
+              synapse_id: syn76426431
+              subfolders:
+                Demographics: syn76426432
+                Diagnosis: syn76426433
+                Therapy: syn76426434
+                FollowUp: syn76426435
+                MolecularTest: syn76426436
+                Exposure: syn76426437
+                FamilyHistory: syn76426438
+                VitalStatus: syn76426439
+            Biospecimen:
+              synapse_id: syn76426441
+              subfolders: {}
+            WES:
+              synapse_id: syn76426443
+              subfolders:
+                Level_1: syn76426444
+                Level_2: syn76426445
+                Level_3: syn76426446
+            scRNA_seq:
+              synapse_id: syn76426447
+              subfolders:
+                Level_1: syn76426448
+                Level_2: syn76426449
+                Level_3_4: syn76426450
+            SpatialOmics:
+              synapse_id: syn76426458
+              subfolders:
+                Level_1: syn76426459
+                Level_3: syn76426460
+                Level_4: syn76426461
+              record_based_subfolders:
+                Panel: syn76426462
+            Imaging:
+              synapse_id: syn76426451
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426452
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426453
+                  subfolders:
+                    Level_2: syn76426454
+                    Level_3: syn76426455
+                    Level_4: syn76426456
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426457
+            scATAC_seq:
+              synapse_id: syn76459272
+              subfolders:
+                Level_1: syn76459273
+                Level_2: syn76459274
+                Level_3_4: syn76459275
+            MassSpectrometryImaging:
+              synapse_id: syn76459276
+              subfolders:
+                Level_1: syn76459277
+                Level_2: syn76459278
+                Level_3: syn76459279
+                Level_4: syn76459280
+              record_based_subfolders:
+                MolecularAssignment: syn76459281
+    HTAN2_Prostate:
+      synapse_id: syn63298068
+      folders:
+        v9_ingest:
+          synapse_id: syn76426463
+          modules:
+            Clinical:
+              synapse_id: syn76426464
+              subfolders:
+                Demographics: syn76426465
+                Diagnosis: syn76426466
+                Therapy: syn76426468
+                FollowUp: syn76426469
+                MolecularTest: syn76426471
+                Exposure: syn76426472
+                FamilyHistory: syn76426473
+                VitalStatus: syn76426474
+            Biospecimen:
+              synapse_id: syn76426475
+              subfolders: {}
+            WES:
+              synapse_id: syn76426476
+              subfolders:
+                Level_1: syn76426477
+                Level_2: syn76426479
+                Level_3: syn76426480
+            scRNA_seq:
+              synapse_id: syn76426482
+              subfolders:
+                Level_1: syn76426483
+                Level_2: syn76426484
+                Level_3_4: syn76426485
+            SpatialOmics:
+              synapse_id: syn76426493
+              subfolders:
+                Level_1: syn76426494
+                Level_3: syn76426495
+                Level_4: syn76426496
+              record_based_subfolders:
+                Panel: syn76426497
+            Imaging:
+              synapse_id: syn76426486
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426487
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426488
+                  subfolders:
+                    Level_2: syn76426489
+                    Level_3: syn76426490
+                    Level_4: syn76426491
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426492
+            scATAC_seq:
+              synapse_id: syn76459286
+              subfolders:
+                Level_1: syn76459287
+                Level_2: syn76459288
+                Level_3_4: syn76459289
+            MassSpectrometryImaging:
+              synapse_id: syn76459290
+              subfolders:
+                Level_1: syn76459291
+                Level_2: syn76459292
+                Level_3: syn76459293
+                Level_4: syn76459294
+              record_based_subfolders:
+                MolecularAssignment: syn76459295
+        v9_staging:
+          synapse_id: syn76426498
+          modules:
+            Clinical:
+              synapse_id: syn76426503
+              subfolders:
+                Demographics: syn76426504
+                Diagnosis: syn76426505
+                Therapy: syn76426506
+                FollowUp: syn76426507
+                MolecularTest: syn76426508
+                Exposure: syn76426509
+                FamilyHistory: syn76426510
+                VitalStatus: syn76426511
+            Biospecimen:
+              synapse_id: syn76426513
+              subfolders: {}
+            WES:
+              synapse_id: syn76426515
+              subfolders:
+                Level_1: syn76426516
+                Level_2: syn76426517
+                Level_3: syn76426518
+            scRNA_seq:
+              synapse_id: syn76426520
+              subfolders:
+                Level_1: syn76426521
+                Level_2: syn76426522
+                Level_3_4: syn76426523
+            SpatialOmics:
+              synapse_id: syn76426533
+              subfolders:
+                Level_1: syn76426534
+                Level_3: syn76426535
+                Level_4: syn76426536
+              record_based_subfolders:
+                Panel: syn76426537
+            Imaging:
+              synapse_id: syn76426524
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426526
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426528
+                  subfolders:
+                    Level_2: syn76426529
+                    Level_3: syn76426530
+                    Level_4: syn76426531
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426532
+            scATAC_seq:
+              synapse_id: syn76459297
+              subfolders:
+                Level_1: syn76459298
+                Level_2: syn76459299
+                Level_3_4: syn76459300
+            MassSpectrometryImaging:
+              synapse_id: syn76459301
+              subfolders:
+                Level_1: syn76459302
+                Level_2: syn76459303
+                Level_3: syn76459304
+                Level_4: syn76459305
+              record_based_subfolders:
+                MolecularAssignment: syn76459306
+        v9_release:
+          synapse_id: syn76426538
+          modules:
+            Clinical:
+              synapse_id: syn76426539
+              subfolders:
+                Demographics: syn76426540
+                Diagnosis: syn76426541
+                Therapy: syn76426542
+                FollowUp: syn76426543
+                MolecularTest: syn76426544
+                Exposure: syn76426545
+                FamilyHistory: syn76426546
+                VitalStatus: syn76426547
+            Biospecimen:
+              synapse_id: syn76426548
+              subfolders: {}
+            WES:
+              synapse_id: syn76426549
+              subfolders:
+                Level_1: syn76426550
+                Level_2: syn76426551
+                Level_3: syn76426552
+            scRNA_seq:
+              synapse_id: syn76426553
+              subfolders:
+                Level_1: syn76426554
+                Level_2: syn76426555
+                Level_3_4: syn76426556
+            SpatialOmics:
+              synapse_id: syn76426568
+              subfolders:
+                Level_1: syn76426569
+                Level_3: syn76426570
+                Level_4: syn76426571
+              record_based_subfolders:
+                Panel: syn76426572
+            Imaging:
+              synapse_id: syn76426557
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426559
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426561
+                  subfolders:
+                    Level_2: syn76426563
+                    Level_3: syn76426565
+                    Level_4: syn76426566
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426567
+            scATAC_seq:
+              synapse_id: syn76459307
+              subfolders:
+                Level_1: syn76459308
+                Level_2: syn76459309
+                Level_3_4: syn76459310
+            MassSpectrometryImaging:
+              synapse_id: syn76459311
+              subfolders:
+                Level_1: syn76459312
+                Level_2: syn76459313
+                Level_3: syn76459342
+                Level_4: syn76459343
+              record_based_subfolders:
+                MolecularAssignment: syn76459344
+    HTAN2_Skin:
+      synapse_id: syn63298054
+      folders:
+        v9_ingest:
+          synapse_id: syn76426573
+          modules:
+            Clinical:
+              synapse_id: syn76426574
+              subfolders:
+                Demographics: syn76426575
+                Diagnosis: syn76426576
+                Therapy: syn76426577
+                FollowUp: syn76426578
+                MolecularTest: syn76426579
+                Exposure: syn76426580
+                FamilyHistory: syn76426581
+                VitalStatus: syn76426582
+            Biospecimen:
+              synapse_id: syn76426583
+              subfolders: {}
+            WES:
+              synapse_id: syn76426584
+              subfolders:
+                Level_1: syn76426585
+                Level_2: syn76426586
+                Level_3: syn76426587
+            scRNA_seq:
+              synapse_id: syn76426588
+              subfolders:
+                Level_1: syn76426589
+                Level_2: syn76426590
+                Level_3_4: syn76426591
+            SpatialOmics:
+              synapse_id: syn76426599
+              subfolders:
+                Level_1: syn76426600
+                Level_3: syn76426601
+                Level_4: syn76426603
+              record_based_subfolders:
+                Panel: syn76426604
+            Imaging:
+              synapse_id: syn76426592
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426593
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426594
+                  subfolders:
+                    Level_2: syn76426595
+                    Level_3: syn76426596
+                    Level_4: syn76426597
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426598
+            scATAC_seq:
+              synapse_id: syn76459347
+              subfolders:
+                Level_1: syn76459348
+                Level_2: syn76459349
+                Level_3_4: syn76459350
+            MassSpectrometryImaging:
+              synapse_id: syn76459351
+              subfolders:
+                Level_1: syn76459352
+                Level_2: syn76459353
+                Level_3: syn76459354
+                Level_4: syn76459355
+              record_based_subfolders:
+                MolecularAssignment: syn76459356
+        v9_staging:
+          synapse_id: syn76426606
+          modules:
+            Clinical:
+              synapse_id: syn76426610
+              subfolders:
+                Demographics: syn76426612
+                Diagnosis: syn76426613
+                Therapy: syn76426614
+                FollowUp: syn76426615
+                MolecularTest: syn76426616
+                Exposure: syn76426617
+                FamilyHistory: syn76426618
+                VitalStatus: syn76426619
+            Biospecimen:
+              synapse_id: syn76426620
+              subfolders: {}
+            WES:
+              synapse_id: syn76426621
+              subfolders:
+                Level_1: syn76426622
+                Level_2: syn76426623
+                Level_3: syn76426624
+            scRNA_seq:
+              synapse_id: syn76426625
+              subfolders:
+                Level_1: syn76426626
+                Level_2: syn76426627
+                Level_3_4: syn76426628
+            SpatialOmics:
+              synapse_id: syn76426636
+              subfolders:
+                Level_1: syn76426637
+                Level_3: syn76426638
+                Level_4: syn76426639
+              record_based_subfolders:
+                Panel: syn76426640
+            Imaging:
+              synapse_id: syn76426629
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426630
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426631
+                  subfolders:
+                    Level_2: syn76426632
+                    Level_3: syn76426633
+                    Level_4: syn76426634
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426635
+            scATAC_seq:
+              synapse_id: syn76459359
+              subfolders:
+                Level_1: syn76459360
+                Level_2: syn76459361
+                Level_3_4: syn76459362
+            MassSpectrometryImaging:
+              synapse_id: syn76459363
+              subfolders:
+                Level_1: syn76459364
+                Level_2: syn76459365
+                Level_3: syn76459366
+                Level_4: syn76459367
+              record_based_subfolders:
+                MolecularAssignment: syn76459369
+        v9_release:
+          synapse_id: syn76426641
+          modules:
+            Clinical:
+              synapse_id: syn76426642
+              subfolders:
+                Demographics: syn76426643
+                Diagnosis: syn76426644
+                Therapy: syn76426645
+                FollowUp: syn76426646
+                MolecularTest: syn76426647
+                Exposure: syn76426648
+                FamilyHistory: syn76426649
+                VitalStatus: syn76426650
+            Biospecimen:
+              synapse_id: syn76426651
+              subfolders: {}
+            WES:
+              synapse_id: syn76426652
+              subfolders:
+                Level_1: syn76426653
+                Level_2: syn76426654
+                Level_3: syn76426655
+            scRNA_seq:
+              synapse_id: syn76426656
+              subfolders:
+                Level_1: syn76426657
+                Level_2: syn76426658
+                Level_3_4: syn76426659
+            SpatialOmics:
+              synapse_id: syn76426667
+              subfolders:
+                Level_1: syn76426668
+                Level_3: syn76426669
+                Level_4: syn76426670
+              record_based_subfolders:
+                Panel: syn76426671
+            Imaging:
+              synapse_id: syn76426660
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426661
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426662
+                  subfolders:
+                    Level_2: syn76426663
+                    Level_3: syn76426664
+                    Level_4: syn76426665
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426666
+            scATAC_seq:
+              synapse_id: syn76459371
+              subfolders:
+                Level_1: syn76459373
+                Level_2: syn76459375
+                Level_3_4: syn76459376
+            MassSpectrometryImaging:
+              synapse_id: syn76459377
+              subfolders:
+                Level_1: syn76459378
+                Level_2: syn76459379
+                Level_3: syn76459380
+                Level_4: syn76459381
+              record_based_subfolders:
+                MolecularAssignment: syn76459382
+    htan2-testing1:
+      synapse_id: syn63834783
+      folders:
+        v9_ingest:
+          synapse_id: syn76426672
+          modules:
+            Clinical:
+              synapse_id: syn76426673
+              subfolders:
+                Demographics: syn76426674
+                Diagnosis: syn76426675
+                Therapy: syn76426676
+                FollowUp: syn76426677
+                MolecularTest: syn76426678
+                Exposure: syn76426679
+                FamilyHistory: syn76426680
+                VitalStatus: syn76426681
+            Biospecimen:
+              synapse_id: syn76426682
+              subfolders: {}
+            WES:
+              synapse_id: syn76426683
+              subfolders:
+                Level_1: syn76426684
+                Level_2: syn76426685
+                Level_3: syn76426686
+            scRNA_seq:
+              synapse_id: syn76426687
+              subfolders:
+                Level_1: syn76426688
+                Level_2: syn76426689
+                Level_3_4: syn76426690
+            SpatialOmics:
+              synapse_id: syn76426700
+              subfolders:
+                Level_1: syn76426701
+                Level_3: syn76426702
+                Level_4: syn76426703
+              record_based_subfolders:
+                Panel: syn76426704
+            Imaging:
+              synapse_id: syn76426692
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426693
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426695
+                  subfolders:
+                    Level_2: syn76426696
+                    Level_3: syn76426697
+                    Level_4: syn76426698
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426699
+            scATAC_seq:
+              synapse_id: syn76459383
+              subfolders:
+                Level_1: syn76459384
+                Level_2: syn76459385
+                Level_3_4: syn76459386
+            MassSpectrometryImaging:
+              synapse_id: syn76459387
+              subfolders:
+                Level_1: syn76459388
+                Level_2: syn76459389
+                Level_3: syn76459390
+                Level_4: syn76459391
+              record_based_subfolders:
+                MolecularAssignment: syn76459392
+        v9_staging:
+          synapse_id: syn76426705
+          modules:
+            Clinical:
+              synapse_id: syn76426706
+              subfolders:
+                Demographics: syn76426707
+                Diagnosis: syn76426708
+                Therapy: syn76426709
+                FollowUp: syn76426710
+                MolecularTest: syn76426711
+                Exposure: syn76426712
+                FamilyHistory: syn76426713
+                VitalStatus: syn76426715
+            Biospecimen:
+              synapse_id: syn76426717
+              subfolders: {}
+            WES:
+              synapse_id: syn76426719
+              subfolders:
+                Level_1: syn76426721
+                Level_2: syn76426722
+                Level_3: syn76426723
+            scRNA_seq:
+              synapse_id: syn76426724
+              subfolders:
+                Level_1: syn76426725
+                Level_2: syn76426726
+                Level_3_4: syn76426727
+            SpatialOmics:
+              synapse_id: syn76426735
+              subfolders:
+                Level_1: syn76426736
+                Level_3: syn76426737
+                Level_4: syn76426738
+              record_based_subfolders:
+                Panel: syn76426739
+            Imaging:
+              synapse_id: syn76426728
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426729
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426730
+                  subfolders:
+                    Level_2: syn76426731
+                    Level_3: syn76426732
+                    Level_4: syn76426733
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426734
+            scATAC_seq:
+              synapse_id: syn76459395
+              subfolders:
+                Level_1: syn76459396
+                Level_2: syn76459397
+                Level_3_4: syn76459398
+            MassSpectrometryImaging:
+              synapse_id: syn76459399
+              subfolders:
+                Level_1: syn76459400
+                Level_2: syn76459401
+                Level_3: syn76459402
+                Level_4: syn76459403
+              record_based_subfolders:
+                MolecularAssignment: syn76459404
+        v9_release:
+          synapse_id: syn76426740
+          modules:
+            Clinical:
+              synapse_id: syn76426743
+              subfolders:
+                Demographics: syn76426744
+                Diagnosis: syn76426745
+                Therapy: syn76426746
+                FollowUp: syn76426747
+                MolecularTest: syn76426748
+                Exposure: syn76426749
+                FamilyHistory: syn76426750
+                VitalStatus: syn76426751
+            Biospecimen:
+              synapse_id: syn76426752
+              subfolders: {}
+            WES:
+              synapse_id: syn76426753
+              subfolders:
+                Level_1: syn76426754
+                Level_2: syn76426755
+                Level_3: syn76426756
+            scRNA_seq:
+              synapse_id: syn76426757
+              subfolders:
+                Level_1: syn76426758
+                Level_2: syn76426759
+                Level_3_4: syn76426760
+            SpatialOmics:
+              synapse_id: syn76426768
+              subfolders:
+                Level_1: syn76426769
+                Level_3: syn76426770
+                Level_4: syn76426772
+              record_based_subfolders:
+                Panel: syn76426773
+            Imaging:
+              synapse_id: syn76426761
+              subfolders:
+                DigitalPathology:
+                  synapse_id: syn76426762
+                  subfolders: {}
+                MultiplexMicroscopy:
+                  synapse_id: syn76426763
+                  subfolders:
+                    Level_2: syn76426764
+                    Level_3: syn76426765
+                    Level_4: syn76426766
+                  record_based_subfolders:
+                    ChannelMetadata: syn76426767
+            scATAC_seq:
+              synapse_id: syn76459405
+              subfolders:
+                Level_1: syn76459406
+                Level_2: syn76459407
+                Level_3_4: syn76459408
+            MassSpectrometryImaging:
+              synapse_id: syn76459409
+              subfolders:
+                Level_1: syn76459410
+                Level_2: syn76459411
+                Level_3: syn76459412
+                Level_4: syn76459413
+              record_based_subfolders:
+                MolecularAssignment: syn76459414
