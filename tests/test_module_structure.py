@@ -69,6 +69,7 @@ def _config_targets():
     """(section, schema_name, path) set from committed schema_binding_config.yml (all versions)."""
     with open(CONFIG_YML) as f:
         cfg = yaml.safe_load(f)
+    sb = cfg["schema_bindings"]
     out = set()
     for section in ("file_based", "record_based"):
         for schema_name, sc in sb.get(section, {}).items():
@@ -98,10 +99,19 @@ def test_a_no_schema_name_path_collision():
         )
 
 
+# Assays new in v2.0.0 — the legacy map predates them, so parity-with-legacy does not
+# apply (e.g. scATAC's legacy else-branch produces the wrong file name). These are
+# validated by test_c_new_assays_resolve_to_expected_files instead.
+_NEW_IN_V2 = ("scATAC_seq", "MassSpectrometryImaging", "MolecularAssignment")
+
+
 def test_c_schema_file_name_parity_with_legacy():
-    """schema_file_name reproduces the legacy map for every existing schema_name,
+    """schema_file_name reproduces the legacy map for every *pre-existing* schema_name,
     across both schema versions in play."""
-    existing_names = {name for _, name, _ in _config_targets()}
+    existing_names = {
+        name for _, name, _ in _config_targets()
+        if not name.startswith(_NEW_IN_V2)
+    }
     for version in ("v1.0.0", "v2.0.0"):
         for name in existing_names:
             assert config.schema_file_name(name, version) == _legacy_schema_file(name, version), name
