@@ -1,0 +1,72 @@
+name: Carry Forward Recordsets
+
+on:
+  # Manual trigger — seed a new version's record-based recordsets with rows from a
+  # prior release. Run AFTER setup-folders + create-curation-tasks have created the
+  # target recordsets (this tool only seeds existing recordsets, it does not create them).
+  workflow_dispatch:
+    inputs:
+      source:
+        description: 'Source subfolder prefix to copy FROM (e.g. v8_ingest holds all curated data; v8_release only the promoted snapshots)'
+        required: true
+        default: 'v8_ingest'
+      target:
+        description: 'Target subfolder prefix to copy INTO (e.g. v9_ingest)'
+        required: true
+        default: 'v9_ingest'
+      schema:
+        description: 'Only carry this schema (e.g. Biospecimen). Leave empty for all record-based schemas.'
+        required: false
+        default: ''
+      project_name:
+        description: 'Only this project (e.g. HTAN2_CRC). Leave empty for all projects.'
+        required: false
+        default: ''
+      dry_run:
+        description: 'Dry run — preview row counts and column drift without writing'
+        type: boolean
+        required: false
+        default: true
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  carry-forward-recordsets:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install dependencies
+      run: pip install --upgrade pip && pip install -r requirements.txt
+
+    - name: Carry forward recordsets
+      env:
+        SYNAPSE_PAT: ${{ secrets.SYNAPSE_PAT }}
+        SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
+      run: |
+        CMD="python scripts/manage/carry_forward_recordsets.py"
+        CMD="$CMD --source ${{ github.event.inputs.source }}"
+        CMD="$CMD --target ${{ github.event.inputs.target }}"
+
+        if [ -n "${{ github.event.inputs.schema }}" ]; then
+          CMD="$CMD --schema ${{ github.event.inputs.schema }}"
+        fi
+
+        if [ -n "${{ github.event.inputs.project_name }}" ]; then
+          CMD="$CMD --project-name ${{ github.event.inputs.project_name }}"
+        fi
+
+        if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+          CMD="$CMD --dry-run"
+        fi
+
+        echo "Running: $CMD"
+        $CMD
