@@ -100,11 +100,16 @@ def read_recordset_columns(syn, record_set_id: str) -> List[str]:
 
 
 def write_recordset_rows(syn, record_set_id: str, df: pd.DataFrame) -> None:
-    """Store a DataFrame as a new version of an existing recordset."""
+    """Store a DataFrame as a new version of an existing recordset.
+
+    Fetch the existing recordset first (without downloading its CSV — download_file is a
+    dataclass field, not a get() argument) so its upsert_keys and schema binding are
+    preserved, then point it at the new CSV and store a new version.
+    """
     with tempfile.TemporaryDirectory() as td:
         csv_path = os.path.join(td, "records.csv")
         df.to_csv(csv_path, index=False)
-        rs = RecordSet(id=record_set_id).get(synapse_client=syn, download_file=False)
+        rs = RecordSet(id=record_set_id, download_file=False).get(synapse_client=syn)
         rs.path = csv_path
         rs.store(synapse_client=syn)
 
