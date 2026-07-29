@@ -1,0 +1,90 @@
+# HTAN2 module registry — hand-maintained source of truth for folder layout.
+#
+# This is the ONE place that reconciles the three naming systems used across the repo:
+#   1. folder path         — segments created under each vN_<ingest|staging|release> folder
+#   2. schema_name         — internal binding key stored in schema_binding_config.yml and
+#                            used as the curation-task dataType. LOAD-BEARING: renaming an
+#                            existing one orphans live Synapse bindings + curation tasks.
+#   3. class               — data-model file stem, i.e. HTAN.<class>-<version>-schema.json
+#
+# scripts/manage/generate_module_structure.py reads this file + the downloaded schemas/
+# directory and writes the committed artifact htan2_synapse/module_structure.yml, which
+# every other script consumes (via htan2_synapse.config). A schema present in the data
+# model but absent here makes the generator fail loudly — add a row rather than let a new
+# assay be silently dropped.
+#
+# Per-entry fields:
+#   subfolder        folder segment under the module (null when bind_to_module is true)
+#   kind             file | record   (must agree with FILENAME detection in the schema)
+#   schema_name      internal binding key (see above)
+#   class            data-model file stem token
+#   bind_to_module   optional; true = schema binds to the module folder itself, no subfolder
+#
+# Module-level fields:
+#   umbrella         optional; a grouping folder the module nests under (e.g. Imaging).
+#                    Folder path becomes <umbrella>/<module>/<subfolder>.
+
+modules:
+
+  Clinical:
+    entries:
+      - {subfolder: Demographics,  kind: record, schema_name: Demographics,  class: Demographics}
+      - {subfolder: Diagnosis,     kind: record, schema_name: Diagnosis,     class: Diagnosis}
+      - {subfolder: Therapy,       kind: record, schema_name: Therapy,       class: Therapy}
+      - {subfolder: FollowUp,      kind: record, schema_name: FollowUp,      class: FollowUp}
+      - {subfolder: MolecularTest, kind: record, schema_name: MolecularTest, class: MolecularTest}
+      - {subfolder: Exposure,      kind: record, schema_name: Exposure,      class: Exposure}
+      - {subfolder: FamilyHistory, kind: record, schema_name: FamilyHistory, class: FamilyHistory}
+      - {subfolder: VitalStatus,   kind: record, schema_name: VitalStatus,   class: VitalStatus}
+
+  Biospecimen:
+    entries:
+      - {subfolder: null, bind_to_module: true, kind: record, schema_name: Biospecimen, class: BiospecimenData}
+
+  WES:
+    entries:
+      - {subfolder: Level_1, kind: file, schema_name: BulkWESLevel1, class: BulkWESLevel1}
+      - {subfolder: Level_2, kind: file, schema_name: BulkWESLevel2, class: BulkWESLevel2}
+      - {subfolder: Level_3, kind: file, schema_name: BulkWESLevel3, class: BulkWESLevel3}
+
+  scRNA_seq:
+    entries:
+      - {subfolder: Level_1,   kind: file, schema_name: scRNA_seqLevel1,   class: scRNALevel1}
+      - {subfolder: Level_2,   kind: file, schema_name: scRNA_seqLevel2,   class: scRNALevel2}
+      - {subfolder: Level_3_4, kind: file, schema_name: scRNA_seqLevel3_4, class: scRNALevel3and4}
+
+  SpatialOmics:
+    entries:
+      - {subfolder: Level_1, kind: file,   schema_name: SpatialOmicsLevel1, class: SpatialLevel1}
+      - {subfolder: Level_3, kind: file,   schema_name: SpatialOmicsLevel3, class: SpatialLevel3}
+      - {subfolder: Level_4, kind: file,   schema_name: SpatialOmicsLevel4, class: SpatialLevel4}
+      - {subfolder: Panel,   kind: record, schema_name: SpatialPanel,       class: SpatialPanel}
+
+  DigitalPathology:
+    umbrella: Imaging
+    entries:
+      - {subfolder: null, bind_to_module: true, kind: file, schema_name: DigitalPathology, class: DigitalPathologyData}
+
+  MultiplexMicroscopy:
+    umbrella: Imaging
+    entries:
+      - {subfolder: Level_2,         kind: file,   schema_name: MultiplexMicroscopyLevel2, class: MultiplexMicroscopyLevel2}
+      - {subfolder: Level_3,         kind: file,   schema_name: MultiplexMicroscopyLevel3, class: MultiplexMicroscopyLevel3}
+      - {subfolder: Level_4,         kind: file,   schema_name: MultiplexMicroscopyLevel4, class: MultiplexMicroscopyLevel4}
+      - {subfolder: ChannelMetadata, kind: record, schema_name: ChannelMetadata,          class: ChannelMetadata}
+
+  # ---- New in data-model v2.0.0 ----
+
+  scATAC_seq:
+    entries:
+      - {subfolder: Level_1,   kind: file, schema_name: scATAC_seqLevel1,   class: scATACLevel1}
+      - {subfolder: Level_2,   kind: file, schema_name: scATAC_seqLevel2,   class: scATACLevel2}
+      - {subfolder: Level_3_4, kind: file, schema_name: scATAC_seqLevel3_4, class: scATACLevel3and4}
+
+  MassSpectrometryImaging:
+    entries:
+      - {subfolder: Level_1, kind: file, schema_name: MassSpectrometryImagingLevel1, class: MassSpectrometryImagingLevel1}
+      - {subfolder: Level_2, kind: file, schema_name: MassSpectrometryImagingLevel2, class: MassSpectrometryImagingLevel2}
+      - {subfolder: Level_3, kind: file, schema_name: MassSpectrometryImagingLevel3, class: MassSpectrometryImagingLevel3}
+      - {subfolder: Level_4, kind: file, schema_name: MassSpectrometryImagingLevel4, class: MassSpectrometryImagingLevel4}
+      - {subfolder: MolecularAssignment, kind: record, schema_name: MolecularAssignment, class: MolecularAssignment}

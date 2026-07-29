@@ -1,0 +1,12 @@
+{
+  "$id": "https://w3id.org/htan/bulkweslevel1",
+  "type": "object",
+  "properties": {
+    "FILENAME": {
+      "type": "string"
+    },
+    "HTAN_DATA_FILE_ID": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "$id": "https://w3id.org/htan/channelmetadata",
+  "type": "object",
+  "properties": {
+    "HTAN_PARTICIPANT_ID": {
+      "type": "string"
+    }
+  }
+}

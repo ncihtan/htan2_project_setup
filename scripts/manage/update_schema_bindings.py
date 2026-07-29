@@ -22,6 +22,7 @@ from htan2_synapse import (
     IMAGING_SUBFOLDERS,
     IMAGING_RECORD_BASED_SUBFOLDERS,
     SPATIAL_RECORD_BASED_SUBFOLDERS,
+    iter_binding_targets,
 )
 
 
@@ -162,145 +163,61 @@ def get_folder_structure_from_synapse(syn, projects: Dict[str, str], version: st
     return structure
 
 
+def _resolve_folder_id(modules: Dict, path_segments: list):
+    """Walk the discovered folder structure for a canonical path (e.g.
+    ["Imaging", "MultiplexMicroscopy", "Level_2"]) and return its synapse_id, or None.
+
+    Handles the two value shapes get_folder_structure_from_synapse produces: an
+    intermediate node is a dict {synapse_id, subfolders}, a leaf level is a plain id.
+    """
+    node = None
+    children = modules  # top-level module dicts
+    for seg in path_segments:
+        if seg not in children:
+            return None
+        val = children[seg]
+        node = val
+        children = val.get("subfolders", {}) if isinstance(val, dict) else {}
+    return node.get("synapse_id") if isinstance(node, dict) else node
+
+
 def generate_schema_binding_from_structure(structure: Dict, version: str, folder_types: list) -> Dict:
     """
-    Generate schema binding structure from folder structure.
-    Similar to generate_schema_binding_structure but uses real folder structure.
+    Generate schema binding structure from the discovered folder structure.
+
+    Canonical schema names and file-vs-record routing come from the single source of
+    truth (htan2_synapse.iter_binding_targets); this function only attaches the real
+    Synapse IDs discovered under each project/folder_type.
     """
-    schema_bindings = {
-        "schema_bindings": {
-            "file_based": {},
-            "record_based": {}
-        }
-    }
-    
+    schema_bindings = {"schema_bindings": {"file_based": {}, "record_based": {}}}
+    targets = list(iter_binding_targets())
+
     projects_data = structure[version]["projects"]
-    
+
     for project_name, project_data in projects_data.items():
         folders = project_data.get("folders", {})
-        
+
         for folder_type in folder_types:
             if folder_type not in folders:
                 continue
-            
-            folder_data = folders[folder_type]
-            modules = folder_data.get("modules", {})
-            
-            # Record-based schemas
-            if "Clinical" in modules:
-                clinical_data = modules["Clinical"]
-                for subfolder_name, subfolder_id in clinical_data.get("subfolders", {}).items():
-                    schema_name = subfolder_name
-                    subfolder_path = f"{folder_type}/Clinical/{subfolder_name}"
-                    
-                    if schema_name not in schema_bindings["schema_bindings"]["record_based"]:
-                        schema_bindings["schema_bindings"]["record_based"][schema_name] = {"projects": []}
-                    
-                    schema_bindings["schema_bindings"]["record_based"][schema_name]["projects"].append({
-                        "name": project_name,
-                        "subfolder": subfolder_path,
-                        "synapse_id": subfolder_id
-                    })
-            
-            if "Biospecimen" in modules:
-                biospecimen_data = modules["Biospecimen"]
-                biospecimen_id = biospecimen_data.get("synapse_id")
-                if biospecimen_id:
-                    schema_name = "Biospecimen"
-                    subfolder_path = f"{folder_type}/Biospecimen"
-                    
-                    if schema_name not in schema_bindings["schema_bindings"]["record_based"]:
-                        schema_bindings["schema_bindings"]["record_based"][schema_name] = {"projects": []}
-                    
-                    schema_bindings["schema_bindings"]["record_based"][schema_name]["projects"].append({
-                        "name": project_name,
-                        "subfolder": subfolder_path,
-                        "synapse_id": biospecimen_id
-                    })
-            
-            # File-based schemas
-            for module_name in ["WES", "scRNA_seq", "SpatialOmics"]:
-                if module_name in modules:
-                    module_data = modules[module_name]
-                    for subfolder_name, subfolder_id in module_data.get("subfolders", {}).items():
-                        # Map subfolder names to schema names
-                        schema_name_map = {
-                            "Level_1": f"Bulk{module_name}Level1" if module_name == "WES" else f"{module_name}Level1",
-                            "Level_2": f"Bulk{module_name}Level2" if module_name == "WES" else f"{module_name}Level2",
-                            "Level_3": f"Bulk{module_name}Level3" if module_name == "WES" else f"{module_name}Level3",
-                            "Level_3_4": f"{module_name}Level3_4",
-                            "Level_4": f"{module_name}Level4",
-                        }
 
-                        # SpatialPanel is record-based; route it to record_based output
-                        if module_name == "SpatialOmics" and subfolder_name == "Panel":
-                            if "SpatialPanel" not in schema_bindings["schema_bindings"]["record_based"]:
-                                schema_bindings["schema_bindings"]["record_based"]["SpatialPanel"] = {"projects": []}
-                            schema_bindings["schema_bindings"]["record_based"]["SpatialPanel"]["projects"].append({
-                                "name": project_name,
-                                "subfolder": f"{folder_type}/{module_name}/{subfolder_name}",
-                                "synapse_id": subfolder_id
-                            })
-                            continue
+            modules = folders[folder_type].get("modules", {})
 
-                        schema_name = schema_name_map.get(subfolder_name, subfolder_name)
-                        subfolder_path = f"{folder_type}/{module_name}/{subfolder_name}"
+            for target in targets:
+                folder_id = _resolve_folder_id(modules, target["path"].split("/"))
+                if not folder_id:
+                    continue
 
-                        if schema_name not in schema_bindings["schema_bindings"]["file_based"]:
-                            schema_bindings["schema_bindings"]["file_based"][schema_name] = {"projects": []}
+                section = "file_based" if target["kind"] == "file" else "record_based"
+                schema_name = target["schema_name"]
+                schema_bindings["schema_bindings"][section].setdefault(
+                    schema_name, {"projects": []}
+                )["projects"].append({
+                    "name": project_name,
+                    "subfolder": f"{folder_type}/{target['path']}",
+                    "synapse_id": folder_id,
+                })
 
-                        schema_bindings["schema_bindings"]["file_based"][schema_name]["projects"].append({
-                            "name": project_name,
-                            "subfolder": subfolder_path,
-                            "synapse_id": subfolder_id
-                        })
-            
-            # Imaging schemas
-            if "Imaging" in modules:
-                imaging_data = modules["Imaging"]
-                for imaging_subfolder_name, imaging_subfolder_data in imaging_data.get("subfolders", {}).items():
-                    if imaging_subfolder_name == "DigitalPathology":
-                        schema_name = "DigitalPathology"
-                        subfolder_id = imaging_subfolder_data.get("synapse_id")
-                        subfolder_path = f"{folder_type}/Imaging/DigitalPathology"
-                    elif imaging_subfolder_name == "MultiplexMicroscopy":
-                        # MultiplexMicroscopy has levels and the record-based ChannelMetadata
-                        for level_name, level_id in imaging_subfolder_data.get("subfolders", {}).items():
-                            subfolder_path = f"{folder_type}/Imaging/MultiplexMicroscopy/{level_name}"
-
-                            # ChannelMetadata is record-based; route to record_based output
-                            if level_name == "ChannelMetadata":
-                                schema_bindings["schema_bindings"]["record_based"].setdefault(
-                                    "ChannelMetadata", {"projects": []}
-                                )["projects"].append({
-                                    "name": project_name,
-                                    "subfolder": subfolder_path,
-                                    "synapse_id": level_id,
-                                })
-                                continue
-
-                            schema_name = f"MultiplexMicroscopy{level_name.replace('_', '')}"
-                            if schema_name not in schema_bindings["schema_bindings"]["file_based"]:
-                                schema_bindings["schema_bindings"]["file_based"][schema_name] = {"projects": []}
-
-                            schema_bindings["schema_bindings"]["file_based"][schema_name]["projects"].append({
-                                "name": project_name,
-                                "subfolder": subfolder_path,
-                                "synapse_id": level_id
-                            })
-                        continue
-                    else:
-                        continue
-                    
-                    if schema_name not in schema_bindings["schema_bindings"]["file_based"]:
-                        schema_bindings["schema_bindings"]["file_based"][schema_name] = {"projects": []}
-                    
-                    schema_bindings["schema_bindings"]["file_based"][schema_name]["projects"].append({
-                        "name": project_name,
-                        "subfolder": subfolder_path,
-                        "synapse_id": subfolder_id
-                    })
-    
     return schema_bindings
 
 
