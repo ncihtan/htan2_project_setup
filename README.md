@@ -95,6 +95,63 @@ python scripts/manage/update_fileview_ids.py \
 
 > **Note**: If a project has old-style tasks that are blocking new curator tasks, delete them first with `scripts/manage/delete_all_curation_tasks_and_fileviews.py`, then re-run with `--force`.
 
+### RecordSet upsert keys (primary keys)
+
+Every record-based task creates a RecordSet whose **upsert key** is its primary key: Synapse
+treats an incoming row whose key matches an existing row as an *update* rather than an
+*insert*. An under-specified key therefore does not error — it silently merges rows that
+should be distinct.
+
+Keys are declared per schema in [`htan2_synapse/module_registry.yml`](htan2_synapse/module_registry.yml)
+and validated when `module_structure.yml` is regenerated: every key must be a **required**
+property of the data-model schema, so generation fails loudly on a typo, a case mismatch, or
+a nullable column. Tables holding several rows per parent (Diagnosis, Therapy, FollowUp,
+MolecularTest, ChannelMetadata, SpatialPanel, MolecularAssignment) carry discriminator
+columns alongside the parent ID.
+
+Tasks created before this was registry-driven were keyed on whichever property sorted first
+in the schema's `required` array — Demographics was keyed on `ETHNIC_GROUP`. Fixing the
+creation path does not touch RecordSets that already exist, but they can be **patched in
+place** — no task deletion, no recreation, RecordSet contents and grids untouched:
+
+```bash
+# Report only — writes nothing
+python scripts/manage/fix_recordset_upsert_keys.py
+
+# Include a scan for rows that collide under the corrected key (slow: reads every CSV)
+python scripts/manage/fix_recordset_upsert_keys.py --verify-rows
+
+# Apply
+python scripts/manage/fix_recordset_upsert_keys.py --apply --subfolder-filter v9_ingest
+```
+
+`--verify-rows` is worth running once: it reports rows that cannot be told apart under the
+corrected key, which is the only way to see whether a wrong key already merged real records.
+
+### Grid session authorization (shared vs independent curation)
+
+> **Known gap, handled out-of-band — not yet part of this repo's tooling.**
+
+A curation task with no authorization recommendation makes the curator client create a
+**private grid session per user**, so contributors each work alone rather than on a shared
+grid. The mode is a property of the task (`suggested_authorization_mode`):
+
+- `SESSION_OWNER` — only the session owner, or members of the owner's team, can join
+- `SOURCE_BENEFACTOR` — anyone with EDIT (UPDATE) on the curated data's benefactor can join
+
+`SOURCE_BENEFACTOR` is generally what HTAN wants: the per-atlas contributors team already
+holds UPDATE on the ingest folders, so it grants that team a shared session with no
+project→team mapping to maintain.
+
+It is **not in any released Synapse client** (checked through v4.13.0) — only on `develop` —
+so it is currently applied by a local one-off script run from a dev virtualenv, and is
+deliberately absent from `requirements.txt` and the workflows. Fold it into
+`create_curation_tasks_from_config.py` once it ships in a release.
+
+> Until then: the released client does not serialize `suggested_authorization_mode`, and
+> creating a task whose `dataType` already exists *updates* that task. So if "Create Curation
+> Tasks" recreates a task, the mode is silently dropped and has to be re-applied.
+
 ---
 
 ## Folder Structure
@@ -211,6 +268,8 @@ htan2_project_setup/
 │   │   ├── update_schema_bindings.py
 │   │   ├── create_curation_tasks_from_config.py  # Create curation tasks + fileviews
 │   │   ├── update_fileview_ids.py    # Discover and save fileview/recordset IDs
+│   │   ├── fix_recordset_upsert_keys.py  # Repair primary keys on existing RecordSets
+│   │   ├── set_curation_task_authorization_mode.py  # Shared grid sessions (dev client only)
 │   │   ├── delete_all_curation_tasks_and_fileviews.py
 │   │   └── testing/                  # Testing/one-off scripts (not for production)
 │   │

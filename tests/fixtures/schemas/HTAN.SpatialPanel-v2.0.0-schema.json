@@ -1,9 +1,29 @@
 {
-  "$id": "https://w3id.org/htan/spatialpanel",
+  "$id": "https://w3id.org/htan/spatial/panel",
   "type": "object",
   "properties": {
-    "HTAN_PARTICIPANT_ID": {
+    "ENSEMBL_ID": {
+      "type": "string"
+    },
+    "HGNC_VERSION": {
+      "type": "string"
+    },
+    "HTAN_PANEL_ID": {
+      "type": "string"
+    },
+    "OTHER_TARGET_DESCRIPTION": {
+      "type": "string"
+    },
+    "TARGET_NAME": {
+      "type": "string"
+    },
+    "TARGET_TYPE": {
       "type": "string"
     }
-  }
+  },
+  "required": [
+    "HTAN_PANEL_ID",
+    "TARGET_TYPE",
+    "TARGET_NAME"
+  ]
 }

@@ -1,9 +1,28 @@
 {
-  "$id": "https://w3id.org/htan/demographics",
+  "$id": "https://w3id.org/htan/clinical",
   "type": "object",
   "properties": {
+    "ETHNIC_GROUP": {
+      "type": "string"
+    },
+    "GENDER_IDENTITY": {
+      "type": "string"
+    },
     "HTAN_PARTICIPANT_ID": {
       "type": "string"
+    },
+    "RACE": {
+      "type": "string"
+    },
+    "SEX": {
+      "type": "string"
     }
-  }
+  },
+  "required": [
+    "ETHNIC_GROUP",
+    "GENDER_IDENTITY",
+    "SEX",
+    "RACE",
+    "HTAN_PARTICIPANT_ID"
+  ]
 }

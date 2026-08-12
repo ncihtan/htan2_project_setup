@@ -6,6 +6,10 @@ New workflow (issue #9):
   2. Run this script — creates tasks and fileviews automatically via the curator extension
   3. Run update_fileview_ids.py — discovers and saves the new fileview IDs to config
 
+Record-based tasks get their RecordSet upsert keys (the primary key that decides whether an
+incoming row is an insert or an update) from module_registry.yml via htan2_synapse.config.
+See fix_recordset_upsert_keys.py to correct RecordSets that already exist.
+
 Requires: pip install 'synapseclient[curator]'
 """
 
@@ -13,8 +17,14 @@ import argparse
 import json
 import os
 import sys
+from pathlib import Path
+
 import yaml
 import synapseclient
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+
+import htan2_synapse.config as config  # noqa: E402
 
 try:
     from synapseclient.extensions.curator import (
@@ -78,19 +88,27 @@ def get_bound_schema_uri(syn, folder_id):
         return None
 
 
-def get_schema_upsert_keys(syn, schema_uri):
-    try:
-        schema = syn.restGET(f"/schema/type/registered/{schema_uri.split('/')[-1]}")
-        properties = schema.get('properties', {})
-        for key in ['HTAN_Participant_ID', 'HTAN_Biospecimen_ID', 'HTAN_Subject_ID']:
-            if key in properties:
-                return [key]
-        required = schema.get('required', [])
-        if required:
-            return [required[0]]
-    except Exception:
-        pass
-    return []
+def resolve_upsert_keys(syn, schema_name, schema_uri):
+    """Registered upsert keys for a schema, verified against the bound schema in Synapse.
+
+    The keys come from module_registry.yml (validated at generation time against the
+    data-model schemas); this re-checks them against the schema actually registered in
+    Synapse, which can lag the data model. Raises on any mismatch — there is deliberately
+    no fallback, because a key that does not identify a row makes Synapse silently
+    overwrite distinct records instead of inserting them.
+    """
+    keys = config.upsert_keys_for_schema(schema_name)
+
+    registered = syn.restGET(f"/schema/type/registered/{schema_uri.split('/')[-1]}")
+    properties = registered.get('properties', {})
+    missing = [k for k in keys if k not in properties]
+    if missing:
+        raise ValueError(
+            f"upsert key(s) {missing} are not properties of the schema registered in Synapse "
+            f"({schema_uri}). The bound schema is out of step with module_registry.yml — "
+            f"re-bind the current schema version, or update the registry."
+        )
+    return keys
 
 
 def get_project_id(syn, folder_id):
@@ -167,27 +185,19 @@ def process_projects(syn, projects, schema_name, is_record_based=False, dry_run=
                 continue
 
             task_type = "record-based" if is_record_based else "file-based"
+            # Resolved before the dry-run bail-out so a dry run surfaces key problems.
+            upsert_keys = resolve_upsert_keys(syn, schema_name, schema_uri) if is_record_based else None
+
             if dry_run:
-                print(f"  [DRY RUN] {data_type} ({task_type}) for {project_name}/{subfolder}")
+                keys_note = f" upsert_keys={upsert_keys}" if upsert_keys else ""
+                print(f"  [DRY RUN] {data_type} ({task_type}) for {project_name}/{subfolder}{keys_note}")
                 created += 1
                 continue
 
             if is_record_based:
-                upsert_keys = get_schema_upsert_keys(syn, schema_uri)
-                if not upsert_keys:
-                    clinical_schemas = {
-                        'Demographics', 'Diagnosis', 'Therapy', 'FollowUp',
-                        'MolecularTest', 'Exposure', 'FamilyHistory', 'VitalStatus',
-                    }
-                    upsert_keys = (
-                        ["HTAN_Participant_ID"]
-                        if any(x in schema_name for x in clinical_schemas)
-                        else ["HTAN_Biospecimen_ID"]
-                    )
-
+                # project_id is deprecated (removed in v5.0.0) and is inferred from folder_id.
                 create_record_based_metadata_task(
                     synapse_client=syn,
-                    project_id=project_id,
                     folder_id=folder_id,
                     record_set_name=f"{schema_name}_Records",
                     record_set_description=f"HTAN {schema_name} metadata records for {project_name}/{subfolder}",

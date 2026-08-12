@@ -17,6 +17,7 @@ import sys
 import tempfile
 from pathlib import Path
 
+import pytest
 import yaml
 
 REPO = Path(__file__).resolve().parent.parent
@@ -26,6 +27,7 @@ import htan2_synapse.config as config  # noqa: E402
 
 CONFIG_YML = REPO / "schema_binding_config.yml"
 ARTIFACT = REPO / "htan2_synapse" / "module_structure.yml"
+REGISTRY = REPO / "htan2_synapse" / "module_registry.yml"
 FIXTURES = Path(__file__).parent / "fixtures" / "schemas"
 GENERATOR = REPO / "scripts" / "manage" / "generate_module_structure.py"
 
@@ -161,6 +163,116 @@ def test_b_generator_fails_loud_on_unregistered_schema():
         assert "BogusAssay" in r.stderr
 
 
+# ---------------------------------------------------------------------------
+# RecordSet upsert keys (primary keys)
+#
+# These previously came from a case-sensitive probe for 'HTAN_Participant_ID' that never
+# matched the data model's 'HTAN_PARTICIPANT_ID', so every record-based task silently fell
+# back to the schema's first required property — Demographics was keyed on ETHNIC_GROUP.
+# ---------------------------------------------------------------------------
+
+def _fixture_schema(class_token: str) -> dict:
+    return json.loads((FIXTURES / f"HTAN.{class_token}-v2.0.0-schema.json").read_text())
+
+
+def _run_generator(registry_path, schemas_dir, out_path):
+    return subprocess.run(
+        [sys.executable, str(GENERATOR), "--schemas-dir", str(schemas_dir),
+         "--schema-version", "v2.0.0", "--registry", str(registry_path),
+         "--output", str(out_path)],
+        capture_output=True, text=True,
+    )
+
+
+def _registry_with(class_token, mutate):
+    """Copy of the registry with `mutate` applied to the entry for `class_token`."""
+    registry = yaml.safe_load(REGISTRY.read_text())
+    for module in registry["modules"].values():
+        for entry in module["entries"]:
+            if entry["class"] == class_token:
+                mutate(entry)
+    return registry
+
+
+def test_d_every_record_binding_has_upsert_keys_that_identify_a_row():
+    """Every record-based binding resolves to keys that are all REQUIRED schema properties.
+
+    Requiredness is the load-bearing part: a nullable key column means rows with a blank
+    value collide, which is the same silent-overwrite failure as the wrong key.
+    """
+    record_names = {name for section, name, _ in _config_targets() if section == "record_based"}
+    assert record_names, "no record-based bindings found in schema_binding_config.yml"
+
+    class_by_name = {t["schema_name"]: t["class"] for t in config.iter_binding_targets()}
+    for name in sorted(record_names):
+        keys = config.upsert_keys_for_schema(name)
+        assert keys, f"{name} has no upsert keys"
+        schema = _fixture_schema(class_by_name[name])
+        required = set(schema.get("required") or [])
+        for key in keys:
+            assert key in schema["properties"], f"{name}: key {key!r} is not a schema property"
+            assert key in required, f"{name}: key {key!r} is optional, so it cannot identify a row"
+
+
+def test_d_participant_scoped_tables_are_keyed_on_the_participant():
+    """The regression that started this: clinical tables must key on the participant, not
+    on whichever clinical attribute happened to sort first in `required`."""
+    for name in ("Demographics", "Diagnosis", "Therapy", "FollowUp",
+                 "MolecularTest", "Exposure", "FamilyHistory", "VitalStatus"):
+        assert config.upsert_keys_for_schema(name)[0] == "HTAN_PARTICIPANT_ID", name
+
+
+def test_d_one_to_many_tables_carry_a_discriminator():
+    """Tables holding several rows per parent need more than the parent ID, or the rows
+    upsert over one another."""
+    one_to_many = ("Diagnosis", "Therapy", "FollowUp", "MolecularTest",
+                   "ChannelMetadata", "SpatialPanel", "MolecularAssignment")
+    for name in one_to_many:
+        keys = config.upsert_keys_for_schema(name)
+        assert len(keys) > 1, f"{name} is one-to-many but is keyed on {keys}"
+
+
+def test_d_file_based_entries_have_no_upsert_keys():
+    """File-based schemas have no RecordSet, so asking for keys is a programming error."""
+    for name in ("BulkWESLevel1", "DigitalPathology", "MultiplexMicroscopyLevel2"):
+        with pytest.raises(KeyError):
+            config.upsert_keys_for_schema(name)
+
+
+def test_d_generator_rejects_wrong_case_upsert_key():
+    """The original bug shape: a key that differs only in case must abort, with a hint."""
+    registry = _registry_with("Demographics",
+                              lambda e: e.__setitem__("upsert_keys", ["HTAN_Participant_ID"]))
+    with tempfile.TemporaryDirectory() as td:
+        reg_path = Path(td) / "registry.yml"
+        reg_path.write_text(yaml.safe_dump(registry))
+        r = _run_generator(reg_path, FIXTURES, Path(td) / "o.yml")
+    assert r.returncode == 1
+    assert "HTAN_Participant_ID" in r.stderr
+    assert "HTAN_PARTICIPANT_ID" in r.stderr  # the did-you-mean hint
+
+
+def test_d_generator_rejects_optional_upsert_key():
+    """ENSEMBL_ID is the tidier SpatialPanel discriminator but is optional — must abort."""
+    registry = _registry_with(
+        "SpatialPanel", lambda e: e.__setitem__("upsert_keys", ["HTAN_PANEL_ID", "ENSEMBL_ID"]))
+    with tempfile.TemporaryDirectory() as td:
+        reg_path = Path(td) / "registry.yml"
+        reg_path.write_text(yaml.safe_dump(registry))
+        r = _run_generator(reg_path, FIXTURES, Path(td) / "o.yml")
+    assert r.returncode == 1
+    assert "ENSEMBL_ID" in r.stderr and "optional" in r.stderr
+
+
+def test_d_generator_rejects_record_entry_with_no_upsert_keys():
+    registry = _registry_with("Demographics", lambda e: e.pop("upsert_keys", None))
+    with tempfile.TemporaryDirectory() as td:
+        reg_path = Path(td) / "registry.yml"
+        reg_path.write_text(yaml.safe_dump(registry))
+        r = _run_generator(reg_path, FIXTURES, Path(td) / "o.yml")
+    assert r.returncode == 1
+    assert "missing upsert_keys" in r.stderr
+
+
 if __name__ == "__main__":
-    import pytest
     raise SystemExit(pytest.main([__file__, "-v"]))

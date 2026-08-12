@@ -1,9 +1,77 @@
 {
-  "$id": "https://w3id.org/htan/channelmetadata",
+  "$id": "https://w3id.org/htan/multiplex_microscopy/channel_metadata",
   "type": "object",
   "properties": {
-    "HTAN_PARTICIPANT_ID": {
+    "ANTIBODY_NAME": {
+      "type": "string"
+    },
+    "CATALOG_NUMBER": {
+      "type": "string"
+    },
+    "CHANNEL_ID": {
+      "type": "string"
+    },
+    "CHANNEL_NAME": {
+      "type": "string"
+    },
+    "CLONE": {
+      "type": "string"
+    },
+    "CONCENTRATION": {
+      "type": "string"
+    },
+    "CYCLE_NUMBER": {
+      "type": "string"
+    },
+    "DILUTION": {
+      "type": "string"
+    },
+    "EMISSION_BANDWIDTH": {
+      "type": "string"
+    },
+    "EMISSION_WAVELENGTH": {
+      "type": "string"
+    },
+    "EXCITATION_BANDWIDTH": {
+      "type": "string"
+    },
+    "EXCITATION_WAVELENGTH": {
+      "type": "string"
+    },
+    "FLUOROPHORE": {
+      "type": "string"
+    },
+    "HTAN_PANEL_ID": {
+      "type": "string"
+    },
+    "LOT": {
+      "type": "string"
+    },
+    "METAL_ISOTOPE_ELEMENT_ABBREVIATION": {
+      "type": "string"
+    },
+    "METAL_ISOTOPE_ELEMENT_MASS": {
+      "type": "string"
+    },
+    "OLIGO_BARCODE_LOWER_STRAND": {
+      "type": "string"
+    },
+    "OLIGO_BARCODE_UPPER_STRAND": {
+      "type": "string"
+    },
+    "RRID_IDENTIFIER": {
+      "type": "string"
+    },
+    "SUB_CYCLE_NUMBER": {
+      "type": "string"
+    },
+    "TARGET_NAME": {
       "type": "string"
     }
-  }
+  },
+  "required": [
+    "HTAN_PANEL_ID",
+    "CHANNEL_ID",
+    "CHANNEL_NAME"
+  ]
 }

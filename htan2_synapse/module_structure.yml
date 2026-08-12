@@ -8,41 +8,65 @@ modules:
       schema_name: Demographics
       class: Demographics
       bind_to_module: false
+      upsert_keys:
+      - HTAN_PARTICIPANT_ID
     - subfolder: Diagnosis
       kind: record
       schema_name: Diagnosis
       class: Diagnosis
       bind_to_module: false
+      upsert_keys:
+      - HTAN_PARTICIPANT_ID
+      - PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID
+      - AGE_IN_DAYS_AT_DIAGNOSIS
     - subfolder: Therapy
       kind: record
       schema_name: Therapy
       class: Therapy
       bind_to_module: false
+      upsert_keys:
+      - HTAN_PARTICIPANT_ID
+      - TREATMENT_TYPE
+      - AGE_IN_DAYS_AT_TREATMENT_START
     - subfolder: FollowUp
       kind: record
       schema_name: FollowUp
       class: FollowUp
       bind_to_module: false
+      upsert_keys:
+      - HTAN_PARTICIPANT_ID
+      - AGE_IN_DAYS_AT_FOLLOWUP
     - subfolder: MolecularTest
       kind: record
       schema_name: MolecularTest
       class: MolecularTest
       bind_to_module: false
+      upsert_keys:
+      - HTAN_PARTICIPANT_ID
+      - GENE_SYMBOL
+      - MOLECULAR_ANALYSIS_METHOD
+      - AGE_IN_DAYS_AT_MOLECULAR_TEST_START
     - subfolder: Exposure
       kind: record
       schema_name: Exposure
       class: Exposure
       bind_to_module: false
+      upsert_keys:
+      - HTAN_PARTICIPANT_ID
     - subfolder: FamilyHistory
       kind: record
       schema_name: FamilyHistory
       class: FamilyHistory
       bind_to_module: false
+      upsert_keys:
+      - HTAN_PARTICIPANT_ID
     - subfolder: VitalStatus
       kind: record
       schema_name: VitalStatus
       class: VitalStatus
       bind_to_module: false
+      upsert_keys:
+      - HTAN_PARTICIPANT_ID
   Biospecimen:
     umbrella: null
     entries:
@@ -51,6 +75,8 @@ modules:
       schema_name: Biospecimen
       class: BiospecimenData
       bind_to_module: true
+      upsert_keys:
+      - HTAN_BIOSPECIMEN_ID
   WES:
     umbrella: null
     entries:
@@ -110,6 +136,9 @@ modules:
       schema_name: SpatialPanel
       class: SpatialPanel
       bind_to_module: false
+      upsert_keys:
+      - HTAN_PANEL_ID
+      - TARGET_NAME
   DigitalPathology:
     umbrella: Imaging
     entries:
@@ -141,6 +170,9 @@ modules:
       schema_name: ChannelMetadata
       class: ChannelMetadata
       bind_to_module: false
+      upsert_keys:
+      - HTAN_PANEL_ID
+      - CHANNEL_ID
   scATAC_seq:
     umbrella: null
     entries:
@@ -187,3 +219,6 @@ modules:
       schema_name: MolecularAssignment
       class: MolecularAssignment
       bind_to_module: false
+      upsert_keys:
+      - HTAN_DATA_FILE_ID
+      - CHANNEL_INDEX

@@ -1,9 +1,53 @@
 {
-  "$id": "https://w3id.org/htan/therapy",
+  "$id": "https://w3id.org/htan/clinical",
   "type": "object",
   "properties": {
+    "AGE_IN_DAYS_AT_TREATMENT_END": {
+      "type": "string"
+    },
+    "AGE_IN_DAYS_AT_TREATMENT_START": {
+      "type": "string"
+    },
     "HTAN_PARTICIPANT_ID": {
       "type": "string"
+    },
+    "INITIAL_DISEASE_STATUS": {
+      "type": "string"
+    },
+    "NUMBER_OF_CYCLES": {
+      "type": "string"
+    },
+    "OFF_TREATMENT_REASON": {
+      "type": "string"
+    },
+    "PHARMACOTHERAPY_TYPE": {
+      "type": "string"
+    },
+    "REGIMEN_OR_LINE_OF_THERAPY": {
+      "type": "string"
+    },
+    "RESPONSE": {
+      "type": "string"
+    },
+    "THERAPEUTIC_AGENTS": {
+      "type": "string"
+    },
+    "THERAPY_ANATOMIC_SITE_UBERON_CODE": {
+      "type": "string"
+    },
+    "TREATMENT_INTENT_TYPE": {
+      "type": "string"
+    },
+    "TREATMENT_TYPE": {
+      "type": "string"
     }
-  }
+  },
+  "required": [
+    "INITIAL_DISEASE_STATUS",
+    "TREATMENT_INTENT_TYPE",
+    "TREATMENT_TYPE",
+    "PHARMACOTHERAPY_TYPE",
+    "AGE_IN_DAYS_AT_TREATMENT_START",
+    "HTAN_PARTICIPANT_ID"
+  ]
 }

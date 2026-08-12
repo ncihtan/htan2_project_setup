@@ -1,9 +1,33 @@
 {
-  "$id": "https://w3id.org/htan/exposure",
+  "$id": "https://w3id.org/htan/clinical",
   "type": "object",
   "properties": {
+    "ALCOHOL_HISTORY_INDICATOR": {
+      "type": "string"
+    },
+    "ENVIRONMENTAL_EXPOSURE": {
+      "type": "string"
+    },
+    "ENVIRONMENTAL_EXPOSURE_TYPE": {
+      "type": "string"
+    },
     "HTAN_PARTICIPANT_ID": {
       "type": "string"
+    },
+    "PACK_YEARS_SMOKED": {
+      "type": "string"
+    },
+    "SMOKING_HISTORY": {
+      "type": "string"
+    },
+    "YEARS_SMOKED": {
+      "type": "string"
     }
-  }
+  },
+  "required": [
+    "SMOKING_HISTORY",
+    "ALCOHOL_HISTORY_INDICATOR",
+    "ENVIRONMENTAL_EXPOSURE",
+    "HTAN_PARTICIPANT_ID"
+  ]
 }

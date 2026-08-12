@@ -1,9 +1,68 @@
 {
-  "$id": "https://w3id.org/htan/moleculartest",
+  "$id": "https://w3id.org/htan/clinical",
   "type": "object",
   "properties": {
+    "AA_CHANGE": {
+      "type": "string"
+    },
+    "AGE_IN_DAYS_AT_MOLECULAR_TEST_START": {
+      "type": "string"
+    },
+    "AGE_IN_DAYS_AT_MOLECULAR_TEST_STOP": {
+      "type": "string"
+    },
+    "CLINICAL_BIOSPECIMEN_TYPE": {
+      "type": "string"
+    },
+    "COPY_NUMBER": {
+      "type": "string"
+    },
+    "EXON": {
+      "type": "string"
+    },
+    "GENE_SYMBOL": {
+      "type": "string"
+    },
     "HTAN_PARTICIPANT_ID": {
       "type": "string"
+    },
+    "MOLECULAR_ANALYSIS_METHOD": {
+      "type": "string"
+    },
+    "MOLECULAR_ANALYSIS_RESULT": {
+      "type": "string"
+    },
+    "MOLECULAR_CONSEQUENCE": {
+      "type": "string"
+    },
+    "PATHOGENICITY": {
+      "type": "string"
+    },
+    "TEST_ANALYTE_TYPE": {
+      "type": "string"
+    },
+    "TEST_RESULT": {
+      "type": "string"
+    },
+    "TEST_UNITS": {
+      "type": "string"
+    },
+    "TIMEPOINT_LABEL": {
+      "type": "string"
+    },
+    "VARIANT_ORIGIN": {
+      "type": "string"
+    },
+    "VARIANT_TYPE": {
+      "type": "string"
     }
-  }
+  },
+  "required": [
+    "AGE_IN_DAYS_AT_MOLECULAR_TEST_START",
+    "GENE_SYMBOL",
+    "MOLECULAR_ANALYSIS_METHOD",
+    "MOLECULAR_ANALYSIS_RESULT",
+    "CLINICAL_BIOSPECIMEN_TYPE",
+    "HTAN_PARTICIPANT_ID"
+  ]
 }

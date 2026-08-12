@@ -1,9 +1,132 @@
 {
-  "$id": "https://w3id.org/htan/biospecimendata",
+  "$id": "https://w3id.org/htan/biospecimen",
   "type": "object",
   "properties": {
-    "HTAN_PARTICIPANT_ID": {
+    "ACQUISITION_METHOD_OTHER_SPECIFY": {
+      "type": "string"
+    },
+    "ACQUISITION_METHOD_TYPE": {
+      "type": "string"
+    },
+    "ADJACENT_BIOSPECIMEN_IDS": {
+      "type": "string"
+    },
+    "AGE_IN_DAYS_AT_SECTIONING": {
+      "type": "string"
+    },
+    "AGE_IN_DAYS_AT_SPECIMEN_COLLECTION": {
+      "type": "string"
+    },
+    "AGE_IN_DAYS_AT_SPECIMEN_PROCESSING": {
+      "type": "string"
+    },
+    "ANALYTE_TYPE": {
+      "type": "string"
+    },
+    "BIOSPECIMEN_TYPE": {
+      "type": "string"
+    },
+    "DEGREE_OF_DYSPLASIA": {
+      "type": "string"
+    },
+    "FIXATION_DURATION_IN_MINUTES": {
+      "type": "string"
+    },
+    "HTAN_BIOSPECIMEN_ID": {
+      "type": "string"
+    },
+    "HTAN_PARENT_ID": {
+      "type": "string"
+    },
+    "ICD_10_DISEASE_CODE": {
+      "type": "string"
+    },
+    "ICD_O_3_TISSUE_MORPHOLOGY": {
+      "type": "string"
+    },
+    "IS_TISSUE_SECTION": {
+      "type": "string"
+    },
+    "LONGEST_DIMENSION": {
+      "type": "string"
+    },
+    "METHOD_OF_NUCLEIC_ACID_ISOLATION": {
+      "type": "string"
+    },
+    "PERCENT_NECROSIS": {
+      "type": "string"
+    },
+    "PERCENT_NORMAL_CELLS": {
+      "type": "string"
+    },
+    "PERCENT_TUMOR_CELLS": {
+      "type": "string"
+    },
+    "PERCENT_TUMOR_NUCLEI": {
+      "type": "string"
+    },
+    "PRESERVATION_MEDIUM": {
+      "type": "string"
+    },
+    "PRESERVATION_METHOD": {
+      "type": "string"
+    },
+    "PRESERVATION_METHOD_TEMPERATURE": {
+      "type": "string"
+    },
+    "PROCESSING_LOCATION": {
+      "type": "string"
+    },
+    "SECTION_NUMBER_IN_SEQUENCE": {
+      "type": "string"
+    },
+    "SECTION_THICKNESS_VALUE": {
+      "type": "string"
+    },
+    "SHIPPING_CONDITION_TYPE": {
+      "type": "string"
+    },
+    "SHORTEST_DIMENSION": {
+      "type": "string"
+    },
+    "SITE_DATA_SOURCE": {
+      "type": "string"
+    },
+    "SITE_OF_RESECTION_OR_BIOPSY": {
+      "type": "string"
+    },
+    "SLICING_METHOD": {
+      "type": "string"
+    },
+    "SLIDE_CHARGE_TYPE": {
+      "type": "string"
+    },
+    "SPECIMEN_CELLULAR_ARCHITECTURE": {
+      "type": "string"
+    },
+    "SPECIMEN_LATERALITY": {
+      "type": "string"
+    },
+    "TIMEPOINT": {
+      "type": "string"
+    },
+    "TUMOR_CLASSIFICATION": {
       "type": "string"
     }
-  }
+  },
+  "required": [
+    "HTAN_BIOSPECIMEN_ID",
+    "HTAN_PARENT_ID",
+    "BIOSPECIMEN_TYPE",
+    "AGE_IN_DAYS_AT_SPECIMEN_COLLECTION",
+    "ACQUISITION_METHOD_TYPE",
+    "SITE_OF_RESECTION_OR_BIOPSY",
+    "SPECIMEN_LATERALITY",
+    "AGE_IN_DAYS_AT_SPECIMEN_PROCESSING",
+    "PRESERVATION_METHOD",
+    "PRESERVATION_MEDIUM",
+    "PRESERVATION_METHOD_TEMPERATURE",
+    "SPECIMEN_CELLULAR_ARCHITECTURE",
+    "SHIPPING_CONDITION_TYPE"
+  ]
 }

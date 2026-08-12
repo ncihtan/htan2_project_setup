@@ -19,6 +19,15 @@
 #   schema_name      internal binding key (see above)
 #   class            data-model file stem token
 #   bind_to_module   optional; true = schema binds to the module folder itself, no subfolder
+#   upsert_keys      REQUIRED on record entries, forbidden on file entries. The column(s)
+#                    that identify a row in the RecordSet, i.e. its primary key. Synapse
+#                    treats an incoming row whose key matches an existing row as an UPDATE,
+#                    so an under-specified key silently collapses distinct rows into one.
+#                    Every listed column must appear in the schema's `required` array — the
+#                    generator enforces this, because a nullable key column breaks upserts.
+#                    For one-to-many tables (a participant has several therapy lines, a panel
+#                    has many channels) the key MUST include enough discriminator columns to
+#                    make each row unique; the parent ID alone is not sufficient.
 #
 # Module-level fields:
 #   umbrella         optional; a grouping folder the module nests under (e.g. Imaging).
@@ -28,18 +37,32 @@ modules:
 
   Clinical:
     entries:
-      - {subfolder: Demographics,  kind: record, schema_name: Demographics,  class: Demographics}
-      - {subfolder: Diagnosis,     kind: record, schema_name: Diagnosis,     class: Diagnosis}
-      - {subfolder: Therapy,       kind: record, schema_name: Therapy,       class: Therapy}
-      - {subfolder: FollowUp,      kind: record, schema_name: FollowUp,      class: FollowUp}
-      - {subfolder: MolecularTest, kind: record, schema_name: MolecularTest, class: MolecularTest}
-      - {subfolder: Exposure,      kind: record, schema_name: Exposure,      class: Exposure}
-      - {subfolder: FamilyHistory, kind: record, schema_name: FamilyHistory, class: FamilyHistory}
-      - {subfolder: VitalStatus,   kind: record, schema_name: VitalStatus,   class: VitalStatus}
+      # Demographics / Exposure / FamilyHistory / VitalStatus are one row per participant,
+      # so HTAN_PARTICIPANT_ID alone identifies a row. The rest are one-to-many and carry
+      # discriminators, so repeat diagnoses / treatment lines / visits / gene tests survive
+      # as distinct rows instead of collapsing into the participant's last-written row.
+      - {subfolder: Demographics,  kind: record, schema_name: Demographics,  class: Demographics,
+         upsert_keys: [HTAN_PARTICIPANT_ID]}
+      - {subfolder: Diagnosis,     kind: record, schema_name: Diagnosis,     class: Diagnosis,
+         upsert_keys: [HTAN_PARTICIPANT_ID, PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID, AGE_IN_DAYS_AT_DIAGNOSIS]}
+      - {subfolder: Therapy,       kind: record, schema_name: Therapy,       class: Therapy,
+         upsert_keys: [HTAN_PARTICIPANT_ID, TREATMENT_TYPE, AGE_IN_DAYS_AT_TREATMENT_START]}
+      - {subfolder: FollowUp,      kind: record, schema_name: FollowUp,      class: FollowUp,
+         upsert_keys: [HTAN_PARTICIPANT_ID, AGE_IN_DAYS_AT_FOLLOWUP]}
+      - {subfolder: MolecularTest, kind: record, schema_name: MolecularTest, class: MolecularTest,
+         upsert_keys: [HTAN_PARTICIPANT_ID, GENE_SYMBOL, MOLECULAR_ANALYSIS_METHOD, AGE_IN_DAYS_AT_MOLECULAR_TEST_START]}
+      - {subfolder: Exposure,      kind: record, schema_name: Exposure,      class: Exposure,
+         upsert_keys: [HTAN_PARTICIPANT_ID]}
+      - {subfolder: FamilyHistory, kind: record, schema_name: FamilyHistory, class: FamilyHistory,
+         upsert_keys: [HTAN_PARTICIPANT_ID]}
+      - {subfolder: VitalStatus,   kind: record, schema_name: VitalStatus,   class: VitalStatus,
+         upsert_keys: [HTAN_PARTICIPANT_ID]}
 
   Biospecimen:
     entries:
-      - {subfolder: null, bind_to_module: true, kind: record, schema_name: Biospecimen, class: BiospecimenData}
+      # HTAN_BIOSPECIMEN_ID is the natural primary key.
+      - {subfolder: null, bind_to_module: true, kind: record, schema_name: Biospecimen, class: BiospecimenData,
+         upsert_keys: [HTAN_BIOSPECIMEN_ID]}
 
   WES:
     entries:
@@ -58,7 +81,10 @@ modules:
       - {subfolder: Level_1, kind: file,   schema_name: SpatialOmicsLevel1, class: SpatialLevel1}
       - {subfolder: Level_3, kind: file,   schema_name: SpatialOmicsLevel3, class: SpatialLevel3}
       - {subfolder: Level_4, kind: file,   schema_name: SpatialOmicsLevel4, class: SpatialLevel4}
-      - {subfolder: Panel,   kind: record, schema_name: SpatialPanel,       class: SpatialPanel}
+      # One row per target within a panel. ENSEMBL_ID would be the tidier discriminator but
+      # it is optional in the schema, and a nullable column cannot serve as an upsert key.
+      - {subfolder: Panel,   kind: record, schema_name: SpatialPanel,       class: SpatialPanel,
+         upsert_keys: [HTAN_PANEL_ID, TARGET_NAME]}
 
   DigitalPathology:
     umbrella: Imaging
@@ -71,7 +97,9 @@ modules:
       - {subfolder: Level_2,         kind: file,   schema_name: MultiplexMicroscopyLevel2, class: MultiplexMicroscopyLevel2}
       - {subfolder: Level_3,         kind: file,   schema_name: MultiplexMicroscopyLevel3, class: MultiplexMicroscopyLevel3}
       - {subfolder: Level_4,         kind: file,   schema_name: MultiplexMicroscopyLevel4, class: MultiplexMicroscopyLevel4}
-      - {subfolder: ChannelMetadata, kind: record, schema_name: ChannelMetadata,          class: ChannelMetadata}
+      # One row per channel within a panel.
+      - {subfolder: ChannelMetadata, kind: record, schema_name: ChannelMetadata,          class: ChannelMetadata,
+         upsert_keys: [HTAN_PANEL_ID, CHANNEL_ID]}
 
   # ---- New in data-model v2.0.0 ----
 
@@ -87,4 +115,6 @@ modules:
       - {subfolder: Level_2, kind: file, schema_name: MassSpectrometryImagingLevel2, class: MassSpectrometryImagingLevel2}
       - {subfolder: Level_3, kind: file, schema_name: MassSpectrometryImagingLevel3, class: MassSpectrometryImagingLevel3}
       - {subfolder: Level_4, kind: file, schema_name: MassSpectrometryImagingLevel4, class: MassSpectrometryImagingLevel4}
-      - {subfolder: MolecularAssignment, kind: record, schema_name: MolecularAssignment, class: MolecularAssignment}
+      # One row per channel within a data file.
+      - {subfolder: MolecularAssignment, kind: record, schema_name: MolecularAssignment, class: MolecularAssignment,
+         upsert_keys: [HTAN_DATA_FILE_ID, CHANNEL_INDEX]}
