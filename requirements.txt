@@ -1,4 +1,6 @@
-synapseclient[curator]>=4.0.0
+# Upper bound is deliberate: the workflows install this unpinned on every run, so a new
+# major would land in production untested. v5.0.0 removes APIs the curator scripts use.
+synapseclient[curator]>=4.13,<5
 requests>=2.25.0
 pyyaml>=6.0
 pandas>=1.3.0

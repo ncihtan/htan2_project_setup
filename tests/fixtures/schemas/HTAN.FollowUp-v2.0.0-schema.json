@@ -1,9 +1,46 @@
 {
-  "$id": "https://w3id.org/htan/followup",
+  "$id": "https://w3id.org/htan/clinical",
   "type": "object",
   "properties": {
+    "AGE_IN_DAYS_AT_FOLLOWUP": {
+      "type": "string"
+    },
+    "AGE_IN_DAYS_AT_PROGRESSION_OR_RECURRENCE": {
+      "type": "string"
+    },
+    "DISEASE_RESPONSE": {
+      "type": "string"
+    },
+    "ECOG_PERFORMANCE_STATUS": {
+      "type": "string"
+    },
+    "ECOG_SCORE_PERFORMED": {
+      "type": "string"
+    },
+    "EVIDENCE_OF_RECURRENCE_TYPE": {
+      "type": "string"
+    },
     "HTAN_PARTICIPANT_ID": {
       "type": "string"
+    },
+    "MENOPAUSE_STATUS": {
+      "type": "string"
+    },
+    "PROGRESSION_OR_RECURRENCE": {
+      "type": "string"
+    },
+    "PROGRESSION_OR_RECURRENCE_ANATOMIC_SITE_UBERON_CODE": {
+      "type": "string"
+    },
+    "PROGRESSION_OR_RECURRENCE_TYPE": {
+      "type": "string"
     }
-  }
+  },
+  "required": [
+    "AGE_IN_DAYS_AT_FOLLOWUP",
+    "PROGRESSION_OR_RECURRENCE",
+    "DISEASE_RESPONSE",
+    "ECOG_SCORE_PERFORMED",
+    "HTAN_PARTICIPANT_ID"
+  ]
 }

@@ -94,7 +94,8 @@ def iter_binding_targets():
     """Yield one dict per schema-bound folder across all modules, in structure order.
 
     Each dict has: schema_name, kind ("file"|"record"), path (relative to the version
-    folder, e.g. "WES/Level_1"), class (data-model file stem), bind_to_module (bool).
+    folder, e.g. "WES/Level_1"), class (data-model file stem), bind_to_module (bool),
+    upsert_keys (list; empty for file-based entries).
     """
     for module_name, module in _MODULES.items():
         umbrella = module.get("umbrella")
@@ -105,12 +106,32 @@ def iter_binding_targets():
                 "path": _entry_path(module_name, umbrella, entry),
                 "class": entry["class"],
                 "bind_to_module": bool(entry.get("bind_to_module", False)),
+                "upsert_keys": list(entry.get("upsert_keys") or []),
             }
 
 
 #: path (relative to version folder) -> canonical internal schema_name
 SCHEMA_NAME_BY_PATH = {t["path"]: t["schema_name"] for t in iter_binding_targets()}
 _CLASS_BY_SCHEMA_NAME = {t["schema_name"]: t["class"] for t in iter_binding_targets()}
+_UPSERT_KEYS_BY_SCHEMA_NAME = {
+    t["schema_name"]: t["upsert_keys"] for t in iter_binding_targets() if t["kind"] == "record"
+}
+
+
+def upsert_keys_for_schema(schema_name: str) -> list:
+    """RecordSet primary-key column(s) for a record-based schema_name.
+
+    Raises KeyError for unknown or file-based schema names. Callers must not fall back to
+    guessing a key: an upsert key that does not identify a row makes Synapse overwrite
+    distinct records, so failing to create the task is the safer outcome.
+    """
+    try:
+        return list(_UPSERT_KEYS_BY_SCHEMA_NAME[schema_name])
+    except KeyError:
+        raise KeyError(
+            f"no upsert_keys registered for record-based schema {schema_name!r}; "
+            f"add it to htan2_synapse/module_registry.yml and regenerate module_structure.yml"
+        ) from None
 
 
 def schema_name_for_path(path: str):

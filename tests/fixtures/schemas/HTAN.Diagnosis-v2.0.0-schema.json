@@ -1,9 +1,67 @@
 {
-  "$id": "https://w3id.org/htan/diagnosis",
+  "$id": "https://w3id.org/htan/clinical",
   "type": "object",
   "properties": {
+    "AGE_IN_DAYS_AT_DIAGNOSIS": {
+      "type": "string"
+    },
+    "AGE_IN_DAYS_AT_LAST_KNOWN_DISEASE_STATUS": {
+      "type": "string"
+    },
+    "AJCC_STAGING_SYSTEM_EDITION": {
+      "type": "string"
+    },
+    "CLINICAL_M_STAGE": {
+      "type": "string"
+    },
+    "CLINICAL_N_STAGE": {
+      "type": "string"
+    },
+    "CLINICAL_T_STAGE": {
+      "type": "string"
+    },
+    "GLEASON_GRADE_GROUP": {
+      "type": "string"
+    },
     "HTAN_PARTICIPANT_ID": {
       "type": "string"
+    },
+    "LAST_KNOWN_DISEASE_STATUS": {
+      "type": "string"
+    },
+    "METASTASIS_AT_DIAGNOSIS": {
+      "type": "string"
+    },
+    "METHOD_OF_DIAGNOSIS": {
+      "type": "string"
+    },
+    "PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID": {
+      "type": "string"
+    },
+    "TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE": {
+      "type": "string"
+    },
+    "TUMOR_CLASSIFICATION_CATEGORY": {
+      "type": "string"
+    },
+    "TUMOR_GRADE": {
+      "type": "string"
+    },
+    "TUMOR_STAGED": {
+      "type": "string"
     }
-  }
+  },
+  "required": [
+    "PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID",
+    "AGE_IN_DAYS_AT_DIAGNOSIS",
+    "TISSUE_OR_ORGAN_OF_ORIGIN_UBERON_CODE",
+    "TUMOR_GRADE",
+    "TUMOR_STAGED",
+    "AGE_IN_DAYS_AT_LAST_KNOWN_DISEASE_STATUS",
+    "LAST_KNOWN_DISEASE_STATUS",
+    "TUMOR_CLASSIFICATION_CATEGORY",
+    "METASTASIS_AT_DIAGNOSIS",
+    "METHOD_OF_DIAGNOSIS",
+    "HTAN_PARTICIPANT_ID"
+  ]
 }

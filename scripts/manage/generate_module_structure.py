@@ -15,9 +15,11 @@ The downloaded schemas decide WHICH assays actually exist in this data-model ver
 via the presence of a FILENAME property, whether each is file-based or record-based.
 
 Fail-loud policy: a schema present in schemas/ whose class token is not in the registry,
-or whose detected file/record kind disagrees with the registry, aborts with exit code 1.
-This is deliberately the opposite of the previous behaviour, where an unregistered assay
-(MSI, scATAC, MolecularAssignment) was silently dropped.
+whose detected file/record kind disagrees with the registry, or whose registered
+upsert_keys are missing/optional/not real properties, aborts with exit code 1. This is
+deliberately the opposite of the previous behaviour, where an unregistered assay (MSI,
+scATAC, MolecularAssignment) was silently dropped and a bad upsert key was silently
+substituted with the schema's first required property.
 """
 
 import argparse
@@ -37,12 +39,52 @@ DEFAULT_OUTPUT = REPO_ROOT / "htan2_synapse" / "module_structure.yml"
 _FILE_RE = re.compile(r"^HTAN\.(?P<token>.+)-v[0-9][^-]*-schema\.json$")
 
 
-def detect_kind(schema_path: Path) -> str:
-    """file-based iff the schema declares a FILENAME property, else record-based."""
+def load_schema(schema_path: Path) -> dict:
     with open(schema_path) as f:
-        schema = json.load(f)
+        return json.load(f)
+
+
+def detect_kind(schema: dict) -> str:
+    """file-based iff the schema declares a FILENAME property, else record-based."""
     properties = schema.get("properties") or {}
     return "file" if "FILENAME" in properties else "record"
+
+
+def check_upsert_keys(entry: dict, schema: dict) -> list:
+    """Validate an entry's declared upsert_keys against the schema. Returns error strings.
+
+    Record entries must declare keys, and every key must be a REQUIRED property. A key
+    column that can be null cannot identify a row, so Synapse would silently mis-upsert.
+    File entries have no RecordSet and so must not declare keys.
+    """
+    token = entry["class"]
+    keys = entry.get("upsert_keys")
+
+    if entry["kind"] == "file":
+        if keys:
+            return [f"HTAN.{token}: file-based entries have no RecordSet, so upsert_keys is not allowed"]
+        return []
+
+    if not keys:
+        return [
+            f"HTAN.{token}: record-based entry is missing upsert_keys — declare the column(s) "
+            f"that identify a row (see the header of module_registry.yml)"
+        ]
+
+    properties = schema.get("properties") or {}
+    required = set(schema.get("required") or [])
+    errors = []
+    for key in keys:
+        if key not in properties:
+            close = [p for p in properties if p.upper() == key.upper()]
+            hint = f" — did you mean {close[0]!r}? (names are case-sensitive)" if close else ""
+            errors.append(f"HTAN.{token}: upsert key {key!r} is not a property of the schema{hint}")
+        elif key not in required:
+            errors.append(
+                f"HTAN.{token}: upsert key {key!r} is optional in the schema; an upsert key "
+                f"must be a required column or rows with a blank value collide"
+            )
+    return errors
 
 
 def scan_schema_files(schemas_dir: Path) -> dict:
@@ -68,6 +110,7 @@ def build_structure(registry: dict, present: dict):
 
     unknown = sorted(t for t in present if t not in registered)
     mismatches = []
+    key_errors = []
     warnings = []
 
     structure_modules = {}
@@ -81,27 +124,32 @@ def build_structure(registry: dict, present: dict):
                     f"schema HTAN.{token} not shipped in this version — skipped"
                 )
                 continue
-            detected = detect_kind(present[token])
+            schema = load_schema(present[token])
+            detected = detect_kind(schema)
             if detected != entry["kind"]:
                 mismatches.append(
                     f"HTAN.{token}: registry says '{entry['kind']}' but schema "
                     f"{'has' if detected == 'file' else 'lacks'} a FILENAME property "
                     f"(detected '{detected}')"
                 )
-            resolved_entries.append({
+            key_errors.extend(check_upsert_keys(entry, schema))
+            resolved = {
                 "subfolder": entry.get("subfolder"),
                 "kind": entry["kind"],
                 "schema_name": entry["schema_name"],
                 "class": token,
                 "bind_to_module": bool(entry.get("bind_to_module", False)),
-            })
+            }
+            if entry["kind"] == "record":
+                resolved["upsert_keys"] = list(entry.get("upsert_keys") or [])
+            resolved_entries.append(resolved)
         if resolved_entries:
             structure_modules[module_name] = {
                 "umbrella": module.get("umbrella"),
                 "entries": resolved_entries,
             }
 
-    if unknown or mismatches:
+    if unknown or mismatches or key_errors:
         print("\n❌ Module structure generation failed.\n", file=sys.stderr)
         if unknown:
             print("Unregistered schema(s) present in the data model:", file=sys.stderr)
@@ -118,6 +166,15 @@ def build_structure(registry: dict, present: dict):
             for msg in mismatches:
                 print(f"  - {msg}", file=sys.stderr)
             print("", file=sys.stderr)
+        if key_errors:
+            print("Invalid upsert_keys (RecordSet primary keys):", file=sys.stderr)
+            for msg in key_errors:
+                print(f"  - {msg}", file=sys.stderr)
+            print(
+                "\nFix the upsert_keys entry in htan2_synapse/module_registry.yml. A wrong key "
+                "makes Synapse treat distinct rows as updates of one another.\n",
+                file=sys.stderr,
+            )
         sys.exit(1)
 
     return structure_modules, warnings

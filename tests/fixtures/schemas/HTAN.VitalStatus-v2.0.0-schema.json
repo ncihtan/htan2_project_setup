@@ -1,9 +1,29 @@
 {
-  "$id": "https://w3id.org/htan/vitalstatus",
+  "$id": "https://w3id.org/htan/clinical",
   "type": "object",
   "properties": {
+    "AGE_IN_DAYS_AT_DEATH": {
+      "type": "string"
+    },
+    "AGE_IN_DAYS_AT_LAST_KNOWN_SURVIVAL_STATUS": {
+      "type": "string"
+    },
+    "CAUSE_OF_DEATH": {
+      "type": "string"
+    },
+    "CAUSE_OF_DEATH_SOURCE": {
+      "type": "string"
+    },
     "HTAN_PARTICIPANT_ID": {
       "type": "string"
+    },
+    "VITAL_STATUS": {
+      "type": "string"
     }
-  }
+  },
+  "required": [
+    "VITAL_STATUS",
+    "AGE_IN_DAYS_AT_LAST_KNOWN_SURVIVAL_STATUS",
+    "HTAN_PARTICIPANT_ID"
+  ]
 }

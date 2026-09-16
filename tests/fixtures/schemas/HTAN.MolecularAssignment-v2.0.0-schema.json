@@ -1,12 +1,57 @@
 {
-  "$id": "https://w3id.org/htan/molecularassignment",
+  "$id": "https://w3id.org/htan/mass_spectrometry_imaging/molecular_assignments",
   "type": "object",
   "properties": {
-    "HTAN_DATA_FILE_ID": {
+    "ADDUCT": {
       "type": "string"
     },
     "CHANNEL_INDEX": {
-      "type": "integer"
+      "type": "string"
+    },
+    "CONFIDENCE_LEVEL": {
+      "type": "string"
+    },
+    "DATABASE_ID": {
+      "type": "string"
+    },
+    "DATABASE_SOURCE": {
+      "type": "string"
+    },
+    "DATABASE_VERSION": {
+      "type": "string"
+    },
+    "EVIDENCE_TYPE": {
+      "type": "string"
+    },
+    "HTAN_DATA_FILE_ID": {
+      "type": "string"
+    },
+    "MASS_ERROR_PPM": {
+      "type": "string"
+    },
+    "MOLECULAR_FORMULA": {
+      "type": "string"
+    },
+    "MOLECULAR_NAME": {
+      "type": "string"
+    },
+    "MZ_OBSERVED": {
+      "type": "string"
+    },
+    "MZ_THEORETICAL": {
+      "type": "string"
+    },
+    "SOFTWARE_AND_VERSION": {
+      "type": "string"
     }
-  }
+  },
+  "required": [
+    "HTAN_DATA_FILE_ID",
+    "CHANNEL_INDEX",
+    "MZ_OBSERVED",
+    "MOLECULAR_NAME",
+    "SOFTWARE_AND_VERSION",
+    "CONFIDENCE_LEVEL",
+    "EVIDENCE_TYPE"
+  ]
 }

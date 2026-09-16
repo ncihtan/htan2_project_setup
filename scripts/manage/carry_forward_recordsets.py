@@ -19,7 +19,14 @@ matched by (schema_name, project_name).
 REQUIRES the target v9 recordsets to already exist — run in this order:
   1. setup_folders.py (creates folders + binds schemas)
   2. create_curation_tasks_from_config.py (creates the empty v9 recordsets + tasks + grids)
-  3. this tool (seeds them)
+  3. fix_recordset_upsert_keys.py (if the targets predate registry-driven upsert keys)
+  4. this tool (seeds them)
+
+Step 3 comes first because write_recordset_rows below deliberately preserves the target's
+existing upsert keys, so a wrongly-keyed target stays wrongly keyed after seeding. Note that
+the v8_ingest -> v9_ingest carry-forward was observed to preserve every row even into
+wrongly-keyed targets (2078 -> 2078, 6533 -> 6533), so this is about the target being correct
+afterwards, not about rows being lost during the copy.
 
 The tool only SEEDS existing recordsets; it does not create bare ones, so the curation
 task / grid / schema binding stay intact.
@@ -105,6 +112,9 @@ def write_recordset_rows(syn, record_set_id: str, df: pd.DataFrame) -> None:
     Fetch the existing recordset first (without downloading its CSV — download_file is a
     dataclass field, not a get() argument) so its upsert_keys and schema binding are
     preserved, then point it at the new CSV and store a new version.
+
+    Preserving upsert_keys means this inherits whatever key the target already has, right or
+    wrong — see the ordering note in the module docstring.
     """
     with tempfile.TemporaryDirectory() as td:
         csv_path = os.path.join(td, "records.csv")

@@ -1,9 +1,19 @@
 {
-  "$id": "https://w3id.org/htan/familyhistory",
+  "$id": "https://w3id.org/htan/clinical",
   "type": "object",
   "properties": {
+    "FAMILY_MEMBER_CANCER_HISTORY": {
+      "type": "string"
+    },
     "HTAN_PARTICIPANT_ID": {
       "type": "string"
+    },
+    "RELATIVES_WITH_CANCER_HISTORY": {
+      "type": "string"
     }
-  }
+  },
+  "required": [
+    "FAMILY_MEMBER_CANCER_HISTORY",
+    "HTAN_PARTICIPANT_ID"
+  ]
 }
