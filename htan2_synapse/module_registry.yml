@@ -25,9 +25,20 @@
 #                    so an under-specified key silently collapses distinct rows into one.
 #                    Every listed column must appear in the schema's `required` array — the
 #                    generator enforces this, because a nullable key column breaks upserts.
-#                    For one-to-many tables (a participant has several therapy lines, a panel
-#                    has many channels) the key MUST include enough discriminator columns to
-#                    make each row unique; the parent ID alone is not sufficient.
+#
+#                    The key comes from the DATA MODEL, not from our judgement: use the
+#                    column the model marks `identifier: true` (HTAN_PARTICIPANT_ID for the
+#                    clinical classes, HTAN_BIOSPECIMEN_ID, HTAN_PANEL_ID, HTAN_DATA_FILE_ID).
+#                    Do not add discriminator columns on a hunch — that was the mistake this
+#                    field was introduced with, and it silently changed the grain of eight
+#                    clinical tables. If the model's key looks insufficient for the data being
+#                    submitted, that is a data-model question for the DCC, not a local fix.
+#
+#                    The three per-row child RecordSets are the documented exception: their
+#                    parent ID is a FOREIGN key repeated on every row, so it cannot identify
+#                    a row on its own and a discriminator is required. Confirmed with Adam
+#                    Taylor 2026-09-16; MolecularAssignment's composite is stated outright in
+#                    modules/MassSpectrometryImaging/domains/molecular_assignments.yaml.
 #
 # Module-level fields:
 #   umbrella         optional; a grouping folder the module nests under (e.g. Imaging).
@@ -37,20 +48,19 @@ modules:
 
   Clinical:
     entries:
-      # Demographics / Exposure / FamilyHistory / VitalStatus are one row per participant,
-      # so HTAN_PARTICIPANT_ID alone identifies a row. The rest are one-to-many and carry
-      # discriminators, so repeat diagnoses / treatment lines / visits / gene tests survive
-      # as distinct rows instead of collapsing into the participant's last-written row.
+      # HTAN_PARTICIPANT_ID is the declared primary key for every clinical record class:
+      # ClinicalRecordAttributes marks it `identifier: true` in the data model
+      # (modules/Clinical/domains/clinical.yaml), and all eight classes inherit it.
       - {subfolder: Demographics,  kind: record, schema_name: Demographics,  class: Demographics,
          upsert_keys: [HTAN_PARTICIPANT_ID]}
       - {subfolder: Diagnosis,     kind: record, schema_name: Diagnosis,     class: Diagnosis,
-         upsert_keys: [HTAN_PARTICIPANT_ID, PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID, AGE_IN_DAYS_AT_DIAGNOSIS]}
+         upsert_keys: [HTAN_PARTICIPANT_ID]}
       - {subfolder: Therapy,       kind: record, schema_name: Therapy,       class: Therapy,
-         upsert_keys: [HTAN_PARTICIPANT_ID, TREATMENT_TYPE, AGE_IN_DAYS_AT_TREATMENT_START]}
+         upsert_keys: [HTAN_PARTICIPANT_ID]}
       - {subfolder: FollowUp,      kind: record, schema_name: FollowUp,      class: FollowUp,
-         upsert_keys: [HTAN_PARTICIPANT_ID, AGE_IN_DAYS_AT_FOLLOWUP]}
+         upsert_keys: [HTAN_PARTICIPANT_ID]}
       - {subfolder: MolecularTest, kind: record, schema_name: MolecularTest, class: MolecularTest,
-         upsert_keys: [HTAN_PARTICIPANT_ID, GENE_SYMBOL, MOLECULAR_ANALYSIS_METHOD, AGE_IN_DAYS_AT_MOLECULAR_TEST_START]}
+         upsert_keys: [HTAN_PARTICIPANT_ID]}
       - {subfolder: Exposure,      kind: record, schema_name: Exposure,      class: Exposure,
          upsert_keys: [HTAN_PARTICIPANT_ID]}
       - {subfolder: FamilyHistory, kind: record, schema_name: FamilyHistory, class: FamilyHistory,

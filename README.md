@@ -105,9 +105,26 @@ should be distinct.
 Keys are declared per schema in [`htan2_synapse/module_registry.yml`](htan2_synapse/module_registry.yml)
 and validated when `module_structure.yml` is regenerated: every key must be a **required**
 property of the data-model schema, so generation fails loudly on a typo, a case mismatch, or
-a nullable column. Tables holding several rows per parent (Diagnosis, Therapy, FollowUp,
-MolecularTest, ChannelMetadata, SpatialPanel, MolecularAssignment) carry discriminator
-columns alongside the parent ID.
+a nullable column.
+
+**The key is whatever the data model declares `identifier: true`** — don't infer one:
+
+| RecordSet | Primary key |
+|---|---|
+| Demographics, Diagnosis, Therapy, FollowUp, MolecularTest, Exposure, FamilyHistory, VitalStatus | `HTAN_PARTICIPANT_ID` |
+| Biospecimen | `HTAN_BIOSPECIMEN_ID` |
+| SpatialPanel | `HTAN_PANEL_ID` + `TARGET_NAME` |
+| ChannelMetadata | `HTAN_PANEL_ID` + `CHANNEL_ID` |
+| MolecularAssignment | `HTAN_DATA_FILE_ID` + `CHANNEL_INDEX` |
+
+The last three are per-row children of a parent entity, and their parent ID is a *foreign*
+key repeated on every row of the set — so it cannot identify a row alone and a discriminator
+is required. The data model says this explicitly for both channel tables. Everything else
+keys on the single declared identifier.
+
+Do not add discriminator columns because a table *looks* one-to-many. That was shipped once
+against the eight clinical tables and silently changed their grain; if the model's key looks
+insufficient for the data being submitted, raise it as a data-model question.
 
 Tasks created before this was registry-driven were keyed on whichever property sorted first
 in the schema's `required` array — Demographics was keyed on `ETHNIC_GROUP`. Fixing the

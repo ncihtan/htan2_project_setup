@@ -17,8 +17,6 @@ modules:
       bind_to_module: false
       upsert_keys:
       - HTAN_PARTICIPANT_ID
-      - PRIMARY_DIAGNOSIS_NCI_THESAURUS_ID
-      - AGE_IN_DAYS_AT_DIAGNOSIS
     - subfolder: Therapy
       kind: record
       schema_name: Therapy
@@ -26,8 +24,6 @@ modules:
       bind_to_module: false
       upsert_keys:
       - HTAN_PARTICIPANT_ID
-      - TREATMENT_TYPE
-      - AGE_IN_DAYS_AT_TREATMENT_START
     - subfolder: FollowUp
       kind: record
       schema_name: FollowUp
@@ -35,7 +31,6 @@ modules:
       bind_to_module: false
       upsert_keys:
       - HTAN_PARTICIPANT_ID
-      - AGE_IN_DAYS_AT_FOLLOWUP
     - subfolder: MolecularTest
       kind: record
       schema_name: MolecularTest
@@ -43,9 +38,6 @@ modules:
       bind_to_module: false
       upsert_keys:
       - HTAN_PARTICIPANT_ID
-      - GENE_SYMBOL
-      - MOLECULAR_ANALYSIS_METHOD
-      - AGE_IN_DAYS_AT_MOLECULAR_TEST_START
     - subfolder: Exposure
       kind: record
       schema_name: Exposure

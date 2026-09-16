@@ -222,14 +222,35 @@ def test_d_participant_scoped_tables_are_keyed_on_the_participant():
         assert config.upsert_keys_for_schema(name)[0] == "HTAN_PARTICIPANT_ID", name
 
 
-def test_d_one_to_many_tables_carry_a_discriminator():
-    """Tables holding several rows per parent need more than the parent ID, or the rows
-    upsert over one another."""
-    one_to_many = ("Diagnosis", "Therapy", "FollowUp", "MolecularTest",
-                   "ChannelMetadata", "SpatialPanel", "MolecularAssignment")
-    for name in one_to_many:
-        keys = config.upsert_keys_for_schema(name)
-        assert len(keys) > 1, f"{name} is one-to-many but is keyed on {keys}"
+def test_d_clinical_tables_are_keyed_on_the_participant_alone():
+    """Clinical keys are exactly what the data model declares — no extra columns.
+
+    Guards a regression we shipped once: discriminator columns were added to Diagnosis,
+    Therapy, FollowUp and MolecularTest on the assumption that one participant maps to many
+    rows. The model says otherwise (`identifier: true` on ClinicalRecordAttributes
+    .HTAN_PARTICIPANT_ID), and widening the key changes the grain of the table. If the data
+    really is one-to-many, that is a data-model change, not a registry change.
+    """
+    for name in ("Demographics", "Diagnosis", "Therapy", "FollowUp",
+                 "MolecularTest", "Exposure", "FamilyHistory", "VitalStatus"):
+        assert config.upsert_keys_for_schema(name) == ["HTAN_PARTICIPANT_ID"], name
+
+
+def test_d_child_recordsets_carry_a_discriminator():
+    """The three per-row child RecordSets key on parent ID + a discriminator.
+
+    Their parent ID is a foreign key repeated on every row of the set — the data model says
+    so for ChannelMetadata ("All rows in a given ChannelMetadata RecordSet share the same
+    HTAN_PANEL_ID") and MolecularAssignment ("Foreign key to the parent Level 3 OME-TIFF
+    file ID (same value for all rows in a RecordSet)"), so it cannot identify a row alone.
+    """
+    expected = {
+        "SpatialPanel": ["HTAN_PANEL_ID", "TARGET_NAME"],
+        "ChannelMetadata": ["HTAN_PANEL_ID", "CHANNEL_ID"],
+        "MolecularAssignment": ["HTAN_DATA_FILE_ID", "CHANNEL_INDEX"],
+    }
+    for name, keys in expected.items():
+        assert config.upsert_keys_for_schema(name) == keys, name
 
 
 def test_d_file_based_entries_have_no_upsert_keys():
